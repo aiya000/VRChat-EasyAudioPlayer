@@ -37,6 +37,14 @@ MITライセンス
 
 完了！
 
+- - - - -
+
+設定済み完成例
+
+[![](https://img.youtube.com/vi/HOQmMhuBhUE/0.jpg)](https://www.youtube.com/watch?v=HOQmMhuBhUE)
+
+- - - - -
+
 ## ワールドのBGMを設定する
 
 ワールドのBGMを設定したい場合は、プレイヤーに設定を合わせる必要があります。
