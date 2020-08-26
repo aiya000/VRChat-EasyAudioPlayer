@@ -9,6 +9,8 @@ MITライセンス
 1. 下記をインポート（インポート済みのものは、手順を省略してください）
     - VRCSDK3-WORLD
     - UdonSharp
+    - 下記「曲名」に日本語を使いたい場合は、下記アセットが使えるかもしれません
+        - [Selected U3D Japanese Font](https://assetstore.unity.com/packages/2d/fonts/selected-u3d-japanese-font-337)
 1. 本プレイヤーに入れたい音楽を、プロジェクトにコピー（D&D）  
    ![](1.PNG)
 1. Hierarchyを右クリックで、Empty GameObjectを作成  
