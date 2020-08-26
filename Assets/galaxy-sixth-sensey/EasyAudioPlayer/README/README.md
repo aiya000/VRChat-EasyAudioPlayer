@@ -1,3 +1,9 @@
+## ライセンス
+
+MITライセンス
+
+- [開発用リポジトリ - VRChat-EasyAudioPlayer](https://github.com/aiya000/VRChat-EasyAudioPlayer)
+
 ## 導入手順
 
 1. 下記をインポート（インポート済みのものは、手順を省略してください）
