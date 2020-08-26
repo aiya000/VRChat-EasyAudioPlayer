@@ -1556,7 +1556,7 @@ PrefabInstance:
     - target: {fileID: 7255160677944716570, guid: 4f68fabef5a51944088ff9a4f476f357,
         type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7255160677944716570, guid: 4f68fabef5a51944088ff9a4f476f357,
         type: 3}
@@ -1576,7 +1576,7 @@ PrefabInstance:
     - target: {fileID: 7255160677944716571, guid: 4f68fabef5a51944088ff9a4f476f357,
         type: 3}
       propertyPath: m_Name
-      value: EasyAudioPlayer (Original)
+      value: EasyAudioPlayer (Original. Please modify this if you'll contribute EasyAudioPlayer.)
       objectReference: {fileID: 0}
     - target: {fileID: 7255160677944716571, guid: 4f68fabef5a51944088ff9a4f476f357,
         type: 3}
@@ -1943,7 +1943,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9008714069228418604}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.812, y: 1.05, z: 2.01}
+  m_LocalPosition: {x: -1.169, y: 1.05, z: 2.01}
   m_LocalScale: {x: 30, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 9008714070233320427}
@@ -1952,7 +1952,7 @@ Transform:
   - {fileID: 9008714070108108438}
   - {fileID: 9008714068360435067}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &9008714069228418606
 MonoBehaviour:
