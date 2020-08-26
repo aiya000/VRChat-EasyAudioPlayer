@@ -13,7 +13,7 @@
    ![](3.PNG)
 1. 各AudioSourceのClipに、それぞれの音楽を指定（D&D）  
    ![](4.PNG)
-1. 各AudioSourceを、曲名にリネーム　　
+1. 各AudioSourceを、曲名にリネーム  
    ![](5.PNG)
    - この名前が、本プレイヤーの曲名表示オブジェクトに表示されます
 1. リネームした各AudioSourceを全て選択して、Inspectorの'Play On Awake'のチェックを**外す**
@@ -24,10 +24,23 @@
 1. 'Compile All UdonSharp Programs' を押下
 1. EasyAudioPlayerをクリックして、Inspectorの'Audio Source List'に**AudioSources**を指定  
    ![](8.PNG)
-1. 必要に応じて、EasyAudioPlayerのScaleを調整
+1. 必要に応じて、下記などを調節（操作によって、HierarchyのEasyAudioPlayerを'Unpack prefab'する必要があります）
+    - EasyAudioPlayerと、その子コンポーネントのScale
+    - EasyAudioPlayerと、その子コンポーネントのMaterial
+    - 等
 
 完了！
 
 ## ワールドのBGMを設定する
 
-1. TODO
+ワールドのBGMを設定したい場合は、プレイヤーに設定を合わせる必要があります。
+
+1. ワールドに設定したいBGM用のAudioSourceを、AudioSourcesの子オブジェクトとして作成する
+1. AudioSourceを設定する
+1. AudioSourceの名前に曲名を設定する
+1. AudioSourceに'Play On Awake'のチェックを**入れる**
+1. EasyAudioPlayerを'Unpack prefab'する
+1. Hierarchyの`EasyAudioPlayer > PlayingAudioName > Canvas > Text`をクリック
+1. Inspectorの`Text`に、設定したAudioSourceの曲名を入力する
+
+ありがとう！
