@@ -16,16 +16,17 @@
 1. 各AudioSourceを、曲名にリネーム　　
    ![](5.PNG)
    - この名前が、本プレイヤーの曲名表示オブジェクトに表示されます
-1 リネームした各AudioSourceを全て選択して、Inspectorの'Play On Awake'のチェックを**外す**
+1. リネームした各AudioSourceを全て選択して、Inspectorの'Play On Awake'のチェックを**外す**
    ![](6.PNG)
 1. EasyAudioPlayer.unitypackageをインポート  
    ![](7.PNG)
 1. `galaxy-sixth-sensey\EasyAudioPlayer\EasyAudioPlayer.prefab`をHierarchyに配置
-1. EasyAudioPlayerのScaleのxを60くらいに調整  
-   ![](8.PNG)
 1. 'Compile All UdonSharp Programs' を押下
 1. EasyAudioPlayerをクリックして、Inspectorの'Audio Source List'に**AudioSources**を指定  
-   ![](9.PNG)
+   ![](8.PNG)
+1. 必要に応じて、EasyAudioPlayerのScaleを調整
+
+完了！
 
 ## ワールドのBGMを設定する
 
