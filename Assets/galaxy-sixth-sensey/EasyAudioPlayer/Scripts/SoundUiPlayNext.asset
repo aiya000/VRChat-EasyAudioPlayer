@@ -1,0 +1,1976 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
+  m_Name: SoundUiPlayNext
+  m_EditorClassIdentifier: 
+  serializedUdonProgramAsset: {fileID: 11400000, guid: 55af69cad0ef0744e851916cd72b301e,
+    type: 2}
+  udonAssembly: ".data_start\n\n    .export soundUiAudioSourceStore\n\n    __refl_const_intnl_udonTypeID:
+    %SystemInt64, null\n    __refl_const_intnl_udonTypeName: %SystemString, null\n
+    \   soundUiAudioSourceStore: %VRCUdonUdonBehaviour, null\n    __0_audioSource_AudioSource:
+    %UnityEngineAudioSource, null\n    __0_audioSources_AudioSourceArray: %UnityEngineAudioSourceArray,
+    null\n    __0_i_Int32: %SystemInt32, null\n    __0_paused_Int32: %SystemInt32,
+    null\n    __0_playingNow_Int32: %SystemInt32, null\n    __0_const_intnl_SystemInt32:
+    %SystemInt32, null\n    __1_const_intnl_SystemInt32: %SystemInt32, null\n    __0_const_intnl_SystemObject:
+    %SystemObject, null\n    __0_const_intnl_SystemString: %SystemString, null\n    __1_const_intnl_SystemString:
+    %SystemString, null\n    __10_const_intnl_SystemString: %SystemString, null\n
+    \   __11_const_intnl_SystemString: %SystemString, null\n    __12_const_intnl_SystemString:
+    %SystemString, null\n    __13_const_intnl_SystemString: %SystemString, null\n
+    \   __14_const_intnl_SystemString: %SystemString, null\n    __2_const_intnl_SystemString:
+    %SystemString, null\n    __3_const_intnl_SystemString: %SystemString, null\n    __4_const_intnl_SystemString:
+    %SystemString, null\n    __5_const_intnl_SystemString: %SystemString, null\n    __6_const_intnl_SystemString:
+    %SystemString, null\n    __7_const_intnl_SystemString: %SystemString, null\n    __8_const_intnl_SystemString:
+    %SystemString, null\n    __9_const_intnl_SystemString: %SystemString, null\n    __0_const_intnl_VRCUdonCommonInterfacesIUdonEventReceiver:
+    %VRCUdonUdonBehaviour, null\n    __0_const_intnl_SystemUInt32: %SystemUInt32,
+    null\n    __0_intnl_UnityEngineAudioSource: %UnityEngineAudioSource, null\n    __0_intnl_UnityEngineAudioSourceArray:
+    %UnityEngineAudioSourceArray, null\n    __0_intnl_SystemBoolean: %SystemBoolean,
+    null\n    __1_intnl_SystemBoolean: %SystemBoolean, null\n    __10_intnl_SystemBoolean:
+    %SystemBoolean, null\n    __11_intnl_SystemBoolean: %SystemBoolean, null\n    __2_intnl_SystemBoolean:
+    %SystemBoolean, null\n    __3_intnl_SystemBoolean: %SystemBoolean, null\n    __4_intnl_SystemBoolean:
+    %SystemBoolean, null\n    __5_intnl_SystemBoolean: %SystemBoolean, null\n    __6_intnl_SystemBoolean:
+    %SystemBoolean, null\n    __7_intnl_SystemBoolean: %SystemBoolean, null\n    __8_intnl_SystemBoolean:
+    %SystemBoolean, null\n    __9_intnl_SystemBoolean: %SystemBoolean, null\n    __0_intnl_SystemInt32:
+    %SystemInt32, null\n    __1_intnl_SystemInt32: %SystemInt32, null\n    __10_intnl_SystemInt32:
+    %SystemInt32, null\n    __2_intnl_SystemInt32: %SystemInt32, null\n    __3_intnl_SystemInt32:
+    %SystemInt32, null\n    __4_intnl_SystemInt32: %SystemInt32, null\n    __5_intnl_SystemInt32:
+    %SystemInt32, null\n    __6_intnl_SystemInt32: %SystemInt32, null\n    __7_intnl_SystemInt32:
+    %SystemInt32, null\n    __8_intnl_SystemInt32: %SystemInt32, null\n    __9_intnl_SystemInt32:
+    %SystemInt32, null\n    __0_intnl_SystemObject: %SystemObject, null\n    __1_intnl_SystemObject:
+    %SystemObject, null\n    __0_intnl_interpolatedStr_String: %SystemString, null\n
+    \   __0_intnl_SystemString: %SystemString, null\n    __1_intnl_SystemString: %SystemString,
+    null\n    __2_intnl_SystemString: %SystemString, null\n    __0_intnl_returnTarget_UInt32:
+    %SystemUInt32, null\n\n.data_end\n\n        \n         # using UdonSharp;\n        \n
+    \        # using UnityEngine;\n        \n         # using VRC.SDKBase;\n        \n
+    \        # using VRC.Udon;\n        \n         # public class SoundUiPlayNext
+    : UdonSharpBehaviour {\n.code_start\n        \n         # public SoundUiAudioSourceStore
+    soundUiAudioSourceStore;\n        \n         # public override void Interact()
+    {\n    .export _interact\n        \n    _interact:\n        \n        PUSH, __0_const_intnl_SystemUInt32\n
+    \       \n         # if (this.soundUiAudioSourceStore == null) {\n        PUSH,
+    soundUiAudioSourceStore\n        PUSH, __0_const_intnl_VRCUdonCommonInterfacesIUdonEventReceiver\n
+    \       PUSH, __0_intnl_SystemBoolean\n        EXTERN, \"UnityEngineObject.__op_Equality__UnityEngineObject_UnityEngineObject__SystemBoolean\"\n
+    \       PUSH, __0_intnl_SystemBoolean\n        JUMP_IF_FALSE, 0x0000005C\n        \n
+    \        # Debug.Log(\"SoundUiPlayNext: The SoundUiAudioSourceStore has not set.\");\n
+    \       PUSH, __0_const_intnl_SystemString\n        EXTERN, \"UnityEngineDebug.__Log__SystemObject__SystemVoid\"\n
+    \       \n         # return;\n        PUSH, __0_intnl_returnTarget_UInt32 #Explicit
+    return sequence\n        COPY\n        JUMP_INDIRECT, __0_intnl_returnTarget_UInt32\n
+    \       \n         # var audioSources = this.soundUiAudioSourceStore.GetAudioSources();\n
+    \       PUSH, soundUiAudioSourceStore\n        PUSH, __1_const_intnl_SystemString\n
+    \       EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid\"\n
+    \       PUSH, soundUiAudioSourceStore\n        PUSH, __2_const_intnl_SystemString\n
+    \       PUSH, __0_intnl_SystemObject\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__GetProgramVariable__SystemString__SystemObject\"\n
+    \       PUSH, __0_intnl_SystemObject\n        PUSH, __0_intnl_UnityEngineAudioSourceArray\n
+    \       COPY\n        PUSH, __0_intnl_UnityEngineAudioSourceArray\n        PUSH,
+    __0_audioSources_AudioSourceArray\n        COPY\n        \n         # if (audioSources.Length
+    == 0) {\n        PUSH, __0_audioSources_AudioSourceArray\n        PUSH, __0_intnl_SystemInt32\n
+    \       EXTERN, \"UnityEngineAudioSourceArray.__get_Length__SystemInt32\"\n        PUSH,
+    __0_intnl_SystemInt32\n        PUSH, __0_const_intnl_SystemInt32\n        PUSH,
+    __1_intnl_SystemBoolean\n        EXTERN, \"SystemInt32.__op_Equality__SystemInt32_SystemInt32__SystemBoolean\"\n
+    \       PUSH, __1_intnl_SystemBoolean\n        JUMP_IF_FALSE, 0x00000128\n        \n
+    \        # Debug.Log(\"SoundUiPlayNext: exit for the empty audio sources.\");\n
+    \       PUSH, __3_const_intnl_SystemString\n        EXTERN, \"UnityEngineDebug.__Log__SystemObject__SystemVoid\"\n
+    \       \n         # return;\n        PUSH, __0_intnl_returnTarget_UInt32 #Explicit
+    return sequence\n        COPY\n        JUMP_INDIRECT, __0_intnl_returnTarget_UInt32\n
+    \       \n         # var paused = this.soundUiAudioSourceStore.GetPaused();\n
+    \       PUSH, soundUiAudioSourceStore\n        PUSH, __4_const_intnl_SystemString\n
+    \       EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid\"\n
+    \       PUSH, soundUiAudioSourceStore\n        PUSH, __5_const_intnl_SystemString\n
+    \       PUSH, __1_intnl_SystemObject\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__GetProgramVariable__SystemString__SystemObject\"\n
+    \       PUSH, __1_intnl_SystemObject\n        PUSH, __1_intnl_SystemInt32\n        EXTERN,
+    \"SystemConvert.__ToInt32__SystemObject__SystemInt32\"\n        PUSH, __1_intnl_SystemInt32\n
+    \       PUSH, __0_paused_Int32\n        COPY\n        \n         # if (paused
+    != -1 && paused == audioSources.Length - 1) {  // if someone has been paused &&
+    paused is the last index\n        PUSH, __1_const_intnl_SystemInt32\n        PUSH,
+    __2_intnl_SystemInt32\n        EXTERN, \"SystemInt32.__op_UnaryMinus__SystemInt32__SystemInt32\"\n
+    \       PUSH, __0_paused_Int32\n        PUSH, __2_intnl_SystemInt32\n        PUSH,
+    __3_intnl_SystemBoolean\n        EXTERN, \"SystemInt32.__op_Inequality__SystemInt32_SystemInt32__SystemBoolean\"\n
+    \       PUSH, __3_intnl_SystemBoolean\n        PUSH, __2_intnl_SystemBoolean\n
+    \       COPY\n        PUSH, __2_intnl_SystemBoolean\n        JUMP_IF_FALSE, 0x00000274\n
+    \       PUSH, __0_audioSources_AudioSourceArray\n        PUSH, __3_intnl_SystemInt32\n
+    \       EXTERN, \"UnityEngineAudioSourceArray.__get_Length__SystemInt32\"\n        PUSH,
+    __3_intnl_SystemInt32\n        PUSH, __1_const_intnl_SystemInt32\n        PUSH,
+    __4_intnl_SystemInt32\n        EXTERN, \"SystemInt32.__op_Subtraction__SystemInt32_SystemInt32__SystemInt32\"\n
+    \       PUSH, __0_paused_Int32\n        PUSH, __4_intnl_SystemInt32\n        PUSH,
+    __4_intnl_SystemBoolean\n        EXTERN, \"SystemInt32.__op_Equality__SystemInt32_SystemInt32__SystemBoolean\"\n
+    \       PUSH, __2_intnl_SystemBoolean\n        PUSH, __4_intnl_SystemBoolean\n
+    \       PUSH, __5_intnl_SystemBoolean\n        EXTERN, \"SystemBoolean.__op_ConditionalAnd__SystemBoolean_SystemBoolean__SystemBoolean\"\n
+    \       PUSH, __5_intnl_SystemBoolean\n        PUSH, __2_intnl_SystemBoolean\n
+    \       COPY\n        PUSH, __2_intnl_SystemBoolean\n        JUMP_IF_FALSE, 0x00000328\n
+    \       \n         # this.soundUiAudioSourceStore.UnsetPaused();\n        PUSH,
+    soundUiAudioSourceStore\n        PUSH, __6_const_intnl_SystemString\n        EXTERN,
+    \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid\"\n
+    \       \n         # this.soundUiAudioSourceStore.Stop(paused);\n        PUSH,
+    soundUiAudioSourceStore\n        PUSH, __7_const_intnl_SystemString\n        PUSH,
+    __0_paused_Int32\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SetProgramVariable__SystemString_SystemObject__SystemVoid\"\n
+    \       PUSH, soundUiAudioSourceStore\n        PUSH, __8_const_intnl_SystemString\n
+    \       EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid\"\n
+    \       \n         # this.soundUiAudioSourceStore.Play(0);\n        PUSH, soundUiAudioSourceStore\n
+    \       PUSH, __9_const_intnl_SystemString\n        PUSH, __0_const_intnl_SystemInt32\n
+    \       EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SetProgramVariable__SystemString_SystemObject__SystemVoid\"\n
+    \       PUSH, soundUiAudioSourceStore\n        PUSH, __10_const_intnl_SystemString\n
+    \       EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid\"\n
+    \       \n         # return;\n        PUSH, __0_intnl_returnTarget_UInt32 #Explicit
+    return sequence\n        COPY\n        JUMP_INDIRECT, __0_intnl_returnTarget_UInt32\n
+    \       JUMP, 0x0000042C\n        \n         # } else if (paused != -1) {  //
+    if '' && paused is less than the last index\n        PUSH, __1_const_intnl_SystemInt32\n
+    \       PUSH, __5_intnl_SystemInt32\n        EXTERN, \"SystemInt32.__op_UnaryMinus__SystemInt32__SystemInt32\"\n
+    \       PUSH, __0_paused_Int32\n        PUSH, __5_intnl_SystemInt32\n        PUSH,
+    __6_intnl_SystemBoolean\n        EXTERN, \"SystemInt32.__op_Inequality__SystemInt32_SystemInt32__SystemBoolean\"\n
+    \       PUSH, __6_intnl_SystemBoolean\n        JUMP_IF_FALSE, 0x0000042C\n        \n
+    \        # this.soundUiAudioSourceStore.UnsetPaused();\n        PUSH, soundUiAudioSourceStore\n
+    \       PUSH, __6_const_intnl_SystemString\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid\"\n
+    \       \n         # this.soundUiAudioSourceStore.Stop(paused);\n        PUSH,
+    soundUiAudioSourceStore\n        PUSH, __7_const_intnl_SystemString\n        PUSH,
+    __0_paused_Int32\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SetProgramVariable__SystemString_SystemObject__SystemVoid\"\n
+    \       PUSH, soundUiAudioSourceStore\n        PUSH, __8_const_intnl_SystemString\n
+    \       EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid\"\n
+    \       \n         # this.soundUiAudioSourceStore.Play(paused + 1);\n        PUSH,
+    __0_paused_Int32\n        PUSH, __1_const_intnl_SystemInt32\n        PUSH, __6_intnl_SystemInt32\n
+    \       EXTERN, \"SystemInt32.__op_Addition__SystemInt32_SystemInt32__SystemInt32\"\n
+    \       PUSH, soundUiAudioSourceStore\n        PUSH, __9_const_intnl_SystemString\n
+    \       PUSH, __6_intnl_SystemInt32\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SetProgramVariable__SystemString_SystemObject__SystemVoid\"\n
+    \       PUSH, soundUiAudioSourceStore\n        PUSH, __10_const_intnl_SystemString\n
+    \       EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid\"\n
+    \       \n         # return;\n        PUSH, __0_intnl_returnTarget_UInt32 #Explicit
+    return sequence\n        COPY\n        JUMP_INDIRECT, __0_intnl_returnTarget_UInt32\n
+    \       \n         # int playingNow = -1;\n        PUSH, __1_const_intnl_SystemInt32\n
+    \       PUSH, __0_playingNow_Int32\n        EXTERN, \"SystemInt32.__op_UnaryMinus__SystemInt32__SystemInt32\"\n
+    \       \n         # for (var i = 0; i < audioSources.Length; i++) {\n        PUSH,
+    __0_const_intnl_SystemInt32\n        PUSH, __0_i_Int32\n        COPY\n        PUSH,
+    __0_audioSources_AudioSourceArray\n        PUSH, __6_intnl_SystemInt32\n        EXTERN,
+    \"UnityEngineAudioSourceArray.__get_Length__SystemInt32\"\n        PUSH, __0_i_Int32\n
+    \       PUSH, __6_intnl_SystemInt32\n        PUSH, __7_intnl_SystemBoolean\n        EXTERN,
+    \"SystemInt32.__op_LessThan__SystemInt32_SystemInt32__SystemBoolean\"\n        PUSH,
+    __7_intnl_SystemBoolean\n        JUMP_IF_FALSE, 0x00000554\n        \n         #
+    var audioSource = audioSources[i];\n        PUSH, __0_audioSources_AudioSourceArray\n
+    \       PUSH, __0_i_Int32\n        PUSH, __0_intnl_UnityEngineAudioSource\n        EXTERN,
+    \"UnityEngineAudioSourceArray.__Get__SystemInt32__UnityEngineAudioSource\"\n        PUSH,
+    __0_intnl_UnityEngineAudioSource\n        PUSH, __0_audioSource_AudioSource\n
+    \       COPY\n        \n         # if (audioSource.isPlaying) {\n        PUSH,
+    __0_audioSource_AudioSource\n        PUSH, __8_intnl_SystemBoolean\n        EXTERN,
+    \"UnityEngineAudioSource.__get_isPlaying__SystemBoolean\"\n        PUSH, __8_intnl_SystemBoolean\n
+    \       JUMP_IF_FALSE, 0x00000518\n        \n         # playingNow = i;\n        PUSH,
+    __0_i_Int32\n        PUSH, __0_playingNow_Int32\n        COPY\n        \n         #
+    break;\n        JUMP, 0x00000554\n        PUSH, __0_i_Int32\n        PUSH, __7_intnl_SystemInt32\n
+    \       COPY\n        PUSH, __0_i_Int32\n        PUSH, __1_const_intnl_SystemInt32\n
+    \       PUSH, __0_i_Int32\n        EXTERN, \"SystemInt32.__op_Addition__SystemInt32_SystemInt32__SystemInt32\"\n
+    \       JUMP, 0x00000458\n        \n         # this.soundUiAudioSourceStore.StopAll();\n
+    \       PUSH, soundUiAudioSourceStore\n        PUSH, __11_const_intnl_SystemString\n
+    \       EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid\"\n
+    \       \n         # if (playingNow == -1 || playingNow == audioSources.Length
+    - 1) {\n        PUSH, __1_const_intnl_SystemInt32\n        PUSH, __6_intnl_SystemInt32\n
+    \       EXTERN, \"SystemInt32.__op_UnaryMinus__SystemInt32__SystemInt32\"\n        PUSH,
+    __0_playingNow_Int32\n        PUSH, __6_intnl_SystemInt32\n        PUSH, __8_intnl_SystemBoolean\n
+    \       EXTERN, \"SystemInt32.__op_Equality__SystemInt32_SystemInt32__SystemBoolean\"\n
+    \       PUSH, __8_intnl_SystemBoolean\n        PUSH, __7_intnl_SystemBoolean\n
+    \       COPY\n        PUSH, __7_intnl_SystemBoolean\n        PUSH, __9_intnl_SystemBoolean\n
+    \       EXTERN, \"SystemBoolean.__op_UnaryNegation__SystemBoolean__SystemBoolean\"\n
+    \       PUSH, __9_intnl_SystemBoolean\n        JUMP_IF_FALSE, 0x0000066C\n        PUSH,
+    __0_audioSources_AudioSourceArray\n        PUSH, __7_intnl_SystemInt32\n        EXTERN,
+    \"UnityEngineAudioSourceArray.__get_Length__SystemInt32\"\n        PUSH, __7_intnl_SystemInt32\n
+    \       PUSH, __1_const_intnl_SystemInt32\n        PUSH, __8_intnl_SystemInt32\n
+    \       EXTERN, \"SystemInt32.__op_Subtraction__SystemInt32_SystemInt32__SystemInt32\"\n
+    \       PUSH, __0_playingNow_Int32\n        PUSH, __8_intnl_SystemInt32\n        PUSH,
+    __10_intnl_SystemBoolean\n        EXTERN, \"SystemInt32.__op_Equality__SystemInt32_SystemInt32__SystemBoolean\"\n
+    \       PUSH, __7_intnl_SystemBoolean\n        PUSH, __10_intnl_SystemBoolean\n
+    \       PUSH, __11_intnl_SystemBoolean\n        EXTERN, \"SystemBoolean.__op_ConditionalOr__SystemBoolean_SystemBoolean__SystemBoolean\"\n
+    \       PUSH, __11_intnl_SystemBoolean\n        PUSH, __7_intnl_SystemBoolean\n
+    \       COPY\n        PUSH, __7_intnl_SystemBoolean\n        JUMP_IF_FALSE, 0x000006D8\n
+    \       \n         # Debug.Log(\"SoundUiPlayNext: Play the first.\");\n        PUSH,
+    __12_const_intnl_SystemString\n        EXTERN, \"UnityEngineDebug.__Log__SystemObject__SystemVoid\"\n
+    \       \n         # this.soundUiAudioSourceStore.Play(0);\n        PUSH, soundUiAudioSourceStore\n
+    \       PUSH, __9_const_intnl_SystemString\n        PUSH, __0_const_intnl_SystemInt32\n
+    \       EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SetProgramVariable__SystemString_SystemObject__SystemVoid\"\n
+    \       PUSH, soundUiAudioSourceStore\n        PUSH, __10_const_intnl_SystemString\n
+    \       EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid\"\n
+    \       \n         # return;\n        PUSH, __0_intnl_returnTarget_UInt32 #Explicit
+    return sequence\n        COPY\n        JUMP_INDIRECT, __0_intnl_returnTarget_UInt32\n
+    \       \n         # Debug.Log($\"SoundUiPlayNext: Play the ${playingNow + 1}th.\");\n
+    \       PUSH, __13_const_intnl_SystemString\n        PUSH, __0_intnl_interpolatedStr_String\n
+    \       COPY\n        PUSH, __0_playingNow_Int32\n        PUSH, __1_const_intnl_SystemInt32\n
+    \       PUSH, __9_intnl_SystemInt32\n        EXTERN, \"SystemInt32.__op_Addition__SystemInt32_SystemInt32__SystemInt32\"\n
+    \       PUSH, __9_intnl_SystemInt32\n        PUSH, __0_intnl_SystemString\n        EXTERN,
+    \"SystemInt32.__ToString__SystemString\"\n        PUSH, __0_intnl_interpolatedStr_String\n
+    \       PUSH, __0_intnl_SystemString\n        PUSH, __1_intnl_SystemString\n        EXTERN,
+    \"SystemString.__op_Addition__SystemString_SystemString__SystemString\"\n        PUSH,
+    __1_intnl_SystemString\n        PUSH, __0_intnl_interpolatedStr_String\n        COPY\n
+    \       PUSH, __0_intnl_interpolatedStr_String\n        PUSH, __14_const_intnl_SystemString\n
+    \       PUSH, __2_intnl_SystemString\n        EXTERN, \"SystemString.__op_Addition__SystemString_SystemString__SystemString\"\n
+    \       PUSH, __2_intnl_SystemString\n        PUSH, __0_intnl_interpolatedStr_String\n
+    \       COPY\n        PUSH, __0_intnl_interpolatedStr_String\n        EXTERN,
+    \"UnityEngineDebug.__Log__SystemObject__SystemVoid\"\n        \n         # this.soundUiAudioSourceStore.Play(playingNow
+    + 1);\n        PUSH, __0_playingNow_Int32\n        PUSH, __1_const_intnl_SystemInt32\n
+    \       PUSH, __10_intnl_SystemInt32\n        EXTERN, \"SystemInt32.__op_Addition__SystemInt32_SystemInt32__SystemInt32\"\n
+    \       PUSH, soundUiAudioSourceStore\n        PUSH, __9_const_intnl_SystemString\n
+    \       PUSH, __10_intnl_SystemInt32\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SetProgramVariable__SystemString_SystemObject__SystemVoid\"\n
+    \       PUSH, soundUiAudioSourceStore\n        PUSH, __10_const_intnl_SystemString\n
+    \       EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid\"\n
+    \       PUSH, __0_intnl_returnTarget_UInt32 #Function epilogue\n        COPY\n
+    \       JUMP_INDIRECT, __0_intnl_returnTarget_UInt32\n        \n.code_end\n"
+  assemblyError: 
+  sourceCsScript: {fileID: 11500000, guid: c18f86417810d3e47b31e53ac811e372, type: 3}
+  behaviourIDHeapVarName: __refl_const_intnl_udonTypeID
+  compileErrors: []
+  debugInfo:
+    serializedDebugSpans:
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 0
+      endSourceChar: 0
+      line: 0
+      lineChar: 0
+      spanCodeSection: 
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 0
+      endSourceChar: 0
+      line: 0
+      lineChar: 0
+      spanCodeSection: 
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 0
+      endSourceChar: 6
+      line: 0
+      lineChar: 0
+      spanCodeSection: 'using '
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 6
+      endSourceChar: 18
+      line: 0
+      lineChar: 6
+      spanCodeSection: "UdonSharp;\r\n"
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 18
+      endSourceChar: 24
+      line: 1
+      lineChar: 0
+      spanCodeSection: 'using '
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 24
+      endSourceChar: 38
+      line: 1
+      lineChar: 6
+      spanCodeSection: "UnityEngine;\r\n"
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 38
+      endSourceChar: 44
+      line: 2
+      lineChar: 0
+      spanCodeSection: 'using '
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 44
+      endSourceChar: 44
+      line: 2
+      lineChar: 6
+      spanCodeSection: 
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 44
+      endSourceChar: 48
+      line: 2
+      lineChar: 6
+      spanCodeSection: VRC.
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 48
+      endSourceChar: 58
+      line: 2
+      lineChar: 10
+      spanCodeSection: "SDKBase;\r\n"
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 58
+      endSourceChar: 64
+      line: 3
+      lineChar: 0
+      spanCodeSection: 'using '
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 64
+      endSourceChar: 64
+      line: 3
+      lineChar: 6
+      spanCodeSection: 
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 64
+      endSourceChar: 68
+      line: 3
+      lineChar: 6
+      spanCodeSection: VRC.
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 68
+      endSourceChar: 77
+      line: 3
+      lineChar: 10
+      spanCodeSection: "Udon;\r\n\r\n"
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 77
+      endSourceChar: 106
+      line: 5
+      lineChar: 0
+      spanCodeSection: 'public class SoundUiPlayNext '
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 106
+      endSourceChar: 108
+      line: 5
+      lineChar: 29
+      spanCodeSection: ': '
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 108
+      endSourceChar: 108
+      line: 5
+      lineChar: 31
+      spanCodeSection: 
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 108
+      endSourceChar: 134
+      line: 5
+      lineChar: 31
+      spanCodeSection: "UdonSharpBehaviour {\r\n    "
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 134
+      endSourceChar: 141
+      line: 6
+      lineChar: 4
+      spanCodeSection: 'public '
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 141
+      endSourceChar: 141
+      line: 6
+      lineChar: 11
+      spanCodeSection: 
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 141
+      endSourceChar: 452
+      line: 6
+      lineChar: 11
+      spanCodeSection: "SoundUiAudioSourceStore soundUiAudioSourceStore;\r\n\r\n    ///
+        Do nothing if soundUiAudioSourceStore is null or soundUiAudioSourceStore size
+        is 0.\r\n    /// Play the first if no one is playing now or the last is playing
+        now.\r\n    /// Or play the next of the one that is playing now or the one
+        has been paused.\r\n    "
+    - startInstruction: 0
+      endInstruction: 7
+      startSourceChar: 452
+      endSourceChar: 484
+      line: 11
+      lineChar: 4
+      spanCodeSection: 'public override void Interact() '
+    - startInstruction: 8
+      endInstruction: 7
+      startSourceChar: 484
+      endSourceChar: 495
+      line: 11
+      lineChar: 36
+      spanCodeSection: "{\r\n        "
+    - startInstruction: 8
+      endInstruction: 7
+      startSourceChar: 495
+      endSourceChar: 499
+      line: 12
+      lineChar: 8
+      spanCodeSection: if (
+    - startInstruction: 8
+      endInstruction: 7
+      startSourceChar: 499
+      endSourceChar: 499
+      line: 12
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 8
+      endInstruction: 7
+      startSourceChar: 499
+      endSourceChar: 499
+      line: 12
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 8
+      endInstruction: 7
+      startSourceChar: 499
+      endSourceChar: 504
+      line: 12
+      lineChar: 12
+      spanCodeSection: this.
+    - startInstruction: 8
+      endInstruction: 7
+      startSourceChar: 504
+      endSourceChar: 531
+      line: 12
+      lineChar: 17
+      spanCodeSection: 'soundUiAudioSourceStore == '
+    - startInstruction: 8
+      endInstruction: 55
+      startSourceChar: 531
+      endSourceChar: 537
+      line: 12
+      lineChar: 44
+      spanCodeSection: 'null) '
+    - startInstruction: 56
+      endInstruction: 55
+      startSourceChar: 537
+      endSourceChar: 552
+      line: 12
+      lineChar: 50
+      spanCodeSection: "{\r\n            "
+    - startInstruction: 56
+      endInstruction: 55
+      startSourceChar: 552
+      endSourceChar: 552
+      line: 13
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 56
+      endInstruction: 55
+      startSourceChar: 552
+      endSourceChar: 552
+      line: 13
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 56
+      endInstruction: 55
+      startSourceChar: 552
+      endSourceChar: 552
+      line: 13
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 56
+      endInstruction: 55
+      startSourceChar: 552
+      endSourceChar: 558
+      line: 13
+      lineChar: 12
+      spanCodeSection: Debug.
+    - startInstruction: 56
+      endInstruction: 55
+      startSourceChar: 558
+      endSourceChar: 562
+      line: 13
+      lineChar: 18
+      spanCodeSection: Log(
+    - startInstruction: 56
+      endInstruction: 71
+      startSourceChar: 562
+      endSourceChar: 637
+      line: 13
+      lineChar: 22
+      spanCodeSection: "\"SoundUiPlayNext: The SoundUiAudioSourceStore has not set.\");\r\n
+        \           "
+    - startInstruction: 72
+      endInstruction: 91
+      startSourceChar: 637
+      endSourceChar: 667
+      line: 14
+      lineChar: 12
+      spanCodeSection: "return;\r\n        }\r\n\r\n        "
+    - startInstruction: 92
+      endInstruction: 91
+      startSourceChar: 667
+      endSourceChar: 667
+      line: 17
+      lineChar: 8
+      spanCodeSection: 
+    - startInstruction: 92
+      endInstruction: 91
+      startSourceChar: 667
+      endSourceChar: 667
+      line: 17
+      lineChar: 8
+      spanCodeSection: 
+    - startInstruction: 92
+      endInstruction: 91
+      startSourceChar: 667
+      endSourceChar: 684
+      line: 17
+      lineChar: 8
+      spanCodeSection: 'var audioSources '
+    - startInstruction: 92
+      endInstruction: 91
+      startSourceChar: 684
+      endSourceChar: 686
+      line: 17
+      lineChar: 25
+      spanCodeSection: '= '
+    - startInstruction: 92
+      endInstruction: 91
+      startSourceChar: 686
+      endSourceChar: 686
+      line: 17
+      lineChar: 27
+      spanCodeSection: 
+    - startInstruction: 92
+      endInstruction: 91
+      startSourceChar: 686
+      endSourceChar: 686
+      line: 17
+      lineChar: 27
+      spanCodeSection: 
+    - startInstruction: 92
+      endInstruction: 91
+      startSourceChar: 686
+      endSourceChar: 686
+      line: 17
+      lineChar: 27
+      spanCodeSection: 
+    - startInstruction: 92
+      endInstruction: 91
+      startSourceChar: 686
+      endSourceChar: 691
+      line: 17
+      lineChar: 27
+      spanCodeSection: this.
+    - startInstruction: 92
+      endInstruction: 91
+      startSourceChar: 691
+      endSourceChar: 715
+      line: 17
+      lineChar: 32
+      spanCodeSection: soundUiAudioSourceStore.
+    - startInstruction: 92
+      endInstruction: 187
+      startSourceChar: 715
+      endSourceChar: 743
+      line: 17
+      lineChar: 56
+      spanCodeSection: "GetAudioSources();\r\n        "
+    - startInstruction: 188
+      endInstruction: 187
+      startSourceChar: 743
+      endSourceChar: 747
+      line: 18
+      lineChar: 8
+      spanCodeSection: if (
+    - startInstruction: 188
+      endInstruction: 187
+      startSourceChar: 747
+      endSourceChar: 747
+      line: 18
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 188
+      endInstruction: 187
+      startSourceChar: 747
+      endSourceChar: 747
+      line: 18
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 188
+      endInstruction: 187
+      startSourceChar: 747
+      endSourceChar: 760
+      line: 18
+      lineChar: 12
+      spanCodeSection: audioSources.
+    - startInstruction: 188
+      endInstruction: 211
+      startSourceChar: 760
+      endSourceChar: 770
+      line: 18
+      lineChar: 25
+      spanCodeSection: 'Length == '
+    - startInstruction: 212
+      endInstruction: 259
+      startSourceChar: 770
+      endSourceChar: 773
+      line: 18
+      lineChar: 35
+      spanCodeSection: '0) '
+    - startInstruction: 260
+      endInstruction: 259
+      startSourceChar: 773
+      endSourceChar: 788
+      line: 18
+      lineChar: 38
+      spanCodeSection: "{\r\n            "
+    - startInstruction: 260
+      endInstruction: 259
+      startSourceChar: 788
+      endSourceChar: 788
+      line: 19
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 260
+      endInstruction: 259
+      startSourceChar: 788
+      endSourceChar: 788
+      line: 19
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 260
+      endInstruction: 259
+      startSourceChar: 788
+      endSourceChar: 788
+      line: 19
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 260
+      endInstruction: 259
+      startSourceChar: 788
+      endSourceChar: 794
+      line: 19
+      lineChar: 12
+      spanCodeSection: Debug.
+    - startInstruction: 260
+      endInstruction: 259
+      startSourceChar: 794
+      endSourceChar: 798
+      line: 19
+      lineChar: 18
+      spanCodeSection: Log(
+    - startInstruction: 260
+      endInstruction: 275
+      startSourceChar: 798
+      endSourceChar: 866
+      line: 19
+      lineChar: 22
+      spanCodeSection: "\"SoundUiPlayNext: exit for the empty audio sources.\");\r\n
+        \           "
+    - startInstruction: 276
+      endInstruction: 295
+      startSourceChar: 866
+      endSourceChar: 896
+      line: 20
+      lineChar: 12
+      spanCodeSection: "return;\r\n        }\r\n\r\n        "
+    - startInstruction: 296
+      endInstruction: 295
+      startSourceChar: 896
+      endSourceChar: 896
+      line: 23
+      lineChar: 8
+      spanCodeSection: 
+    - startInstruction: 296
+      endInstruction: 295
+      startSourceChar: 896
+      endSourceChar: 896
+      line: 23
+      lineChar: 8
+      spanCodeSection: 
+    - startInstruction: 296
+      endInstruction: 295
+      startSourceChar: 896
+      endSourceChar: 907
+      line: 23
+      lineChar: 8
+      spanCodeSection: 'var paused '
+    - startInstruction: 296
+      endInstruction: 295
+      startSourceChar: 907
+      endSourceChar: 909
+      line: 23
+      lineChar: 19
+      spanCodeSection: '= '
+    - startInstruction: 296
+      endInstruction: 295
+      startSourceChar: 909
+      endSourceChar: 909
+      line: 23
+      lineChar: 21
+      spanCodeSection: 
+    - startInstruction: 296
+      endInstruction: 295
+      startSourceChar: 909
+      endSourceChar: 909
+      line: 23
+      lineChar: 21
+      spanCodeSection: 
+    - startInstruction: 296
+      endInstruction: 295
+      startSourceChar: 909
+      endSourceChar: 909
+      line: 23
+      lineChar: 21
+      spanCodeSection: 
+    - startInstruction: 296
+      endInstruction: 295
+      startSourceChar: 909
+      endSourceChar: 914
+      line: 23
+      lineChar: 21
+      spanCodeSection: this.
+    - startInstruction: 296
+      endInstruction: 295
+      startSourceChar: 914
+      endSourceChar: 938
+      line: 23
+      lineChar: 26
+      spanCodeSection: soundUiAudioSourceStore.
+    - startInstruction: 296
+      endInstruction: 395
+      startSourceChar: 938
+      endSourceChar: 960
+      line: 23
+      lineChar: 50
+      spanCodeSection: "GetPaused();\r\n        "
+    - startInstruction: 396
+      endInstruction: 395
+      startSourceChar: 960
+      endSourceChar: 964
+      line: 24
+      lineChar: 8
+      spanCodeSection: if (
+    - startInstruction: 396
+      endInstruction: 395
+      startSourceChar: 964
+      endSourceChar: 964
+      line: 24
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 396
+      endInstruction: 395
+      startSourceChar: 964
+      endSourceChar: 964
+      line: 24
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 396
+      endInstruction: 395
+      startSourceChar: 964
+      endSourceChar: 974
+      line: 24
+      lineChar: 12
+      spanCodeSection: 'paused != '
+    - startInstruction: 396
+      endInstruction: 395
+      startSourceChar: 974
+      endSourceChar: 975
+      line: 24
+      lineChar: 22
+      spanCodeSection: '-'
+    - startInstruction: 396
+      endInstruction: 487
+      startSourceChar: 975
+      endSourceChar: 980
+      line: 24
+      lineChar: 23
+      spanCodeSection: '1 && '
+    - startInstruction: 488
+      endInstruction: 487
+      startSourceChar: 980
+      endSourceChar: 980
+      line: 24
+      lineChar: 28
+      spanCodeSection: 
+    - startInstruction: 488
+      endInstruction: 487
+      startSourceChar: 980
+      endSourceChar: 990
+      line: 24
+      lineChar: 28
+      spanCodeSection: 'paused == '
+    - startInstruction: 488
+      endInstruction: 487
+      startSourceChar: 990
+      endSourceChar: 990
+      line: 24
+      lineChar: 38
+      spanCodeSection: 
+    - startInstruction: 488
+      endInstruction: 487
+      startSourceChar: 990
+      endSourceChar: 990
+      line: 24
+      lineChar: 38
+      spanCodeSection: 
+    - startInstruction: 488
+      endInstruction: 487
+      startSourceChar: 990
+      endSourceChar: 1003
+      line: 24
+      lineChar: 38
+      spanCodeSection: audioSources.
+    - startInstruction: 488
+      endInstruction: 511
+      startSourceChar: 1003
+      endSourceChar: 1012
+      line: 24
+      lineChar: 51
+      spanCodeSection: 'Length - '
+    - startInstruction: 512
+      endInstruction: 643
+      startSourceChar: 1012
+      endSourceChar: 1015
+      line: 24
+      lineChar: 60
+      spanCodeSection: '1) '
+    - startInstruction: 644
+      endInstruction: 643
+      startSourceChar: 1015
+      endSourceChar: 1089
+      line: 24
+      lineChar: 63
+      spanCodeSection: "{  // if someone has been paused && paused is the last index\r\n
+        \           "
+    - startInstruction: 644
+      endInstruction: 643
+      startSourceChar: 1089
+      endSourceChar: 1089
+      line: 25
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 644
+      endInstruction: 643
+      startSourceChar: 1089
+      endSourceChar: 1089
+      line: 25
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 644
+      endInstruction: 643
+      startSourceChar: 1089
+      endSourceChar: 1089
+      line: 25
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 644
+      endInstruction: 643
+      startSourceChar: 1089
+      endSourceChar: 1089
+      line: 25
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 644
+      endInstruction: 643
+      startSourceChar: 1089
+      endSourceChar: 1094
+      line: 25
+      lineChar: 12
+      spanCodeSection: this.
+    - startInstruction: 644
+      endInstruction: 643
+      startSourceChar: 1094
+      endSourceChar: 1118
+      line: 25
+      lineChar: 17
+      spanCodeSection: soundUiAudioSourceStore.
+    - startInstruction: 644
+      endInstruction: 667
+      startSourceChar: 1118
+      endSourceChar: 1146
+      line: 25
+      lineChar: 41
+      spanCodeSection: "UnsetPaused();\r\n            "
+    - startInstruction: 668
+      endInstruction: 667
+      startSourceChar: 1146
+      endSourceChar: 1146
+      line: 26
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 668
+      endInstruction: 667
+      startSourceChar: 1146
+      endSourceChar: 1146
+      line: 26
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 668
+      endInstruction: 667
+      startSourceChar: 1146
+      endSourceChar: 1146
+      line: 26
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 668
+      endInstruction: 667
+      startSourceChar: 1146
+      endSourceChar: 1146
+      line: 26
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 668
+      endInstruction: 667
+      startSourceChar: 1146
+      endSourceChar: 1151
+      line: 26
+      lineChar: 12
+      spanCodeSection: this.
+    - startInstruction: 668
+      endInstruction: 667
+      startSourceChar: 1151
+      endSourceChar: 1175
+      line: 26
+      lineChar: 17
+      spanCodeSection: soundUiAudioSourceStore.
+    - startInstruction: 668
+      endInstruction: 667
+      startSourceChar: 1175
+      endSourceChar: 1180
+      line: 26
+      lineChar: 41
+      spanCodeSection: Stop(
+    - startInstruction: 668
+      endInstruction: 723
+      startSourceChar: 1180
+      endSourceChar: 1202
+      line: 26
+      lineChar: 46
+      spanCodeSection: "paused);\r\n            "
+    - startInstruction: 724
+      endInstruction: 723
+      startSourceChar: 1202
+      endSourceChar: 1202
+      line: 27
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 724
+      endInstruction: 723
+      startSourceChar: 1202
+      endSourceChar: 1202
+      line: 27
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 724
+      endInstruction: 723
+      startSourceChar: 1202
+      endSourceChar: 1202
+      line: 27
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 724
+      endInstruction: 723
+      startSourceChar: 1202
+      endSourceChar: 1202
+      line: 27
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 724
+      endInstruction: 723
+      startSourceChar: 1202
+      endSourceChar: 1207
+      line: 27
+      lineChar: 12
+      spanCodeSection: this.
+    - startInstruction: 724
+      endInstruction: 723
+      startSourceChar: 1207
+      endSourceChar: 1231
+      line: 27
+      lineChar: 17
+      spanCodeSection: soundUiAudioSourceStore.
+    - startInstruction: 724
+      endInstruction: 723
+      startSourceChar: 1231
+      endSourceChar: 1236
+      line: 27
+      lineChar: 41
+      spanCodeSection: Play(
+    - startInstruction: 724
+      endInstruction: 779
+      startSourceChar: 1236
+      endSourceChar: 1253
+      line: 27
+      lineChar: 46
+      spanCodeSection: "0);\r\n            "
+    - startInstruction: 780
+      endInstruction: 807
+      startSourceChar: 1253
+      endSourceChar: 1272
+      line: 28
+      lineChar: 12
+      spanCodeSection: "return;\r\n        } "
+    - startInstruction: 808
+      endInstruction: 807
+      startSourceChar: 1272
+      endSourceChar: 1277
+      line: 29
+      lineChar: 10
+      spanCodeSection: 'else '
+    - startInstruction: 808
+      endInstruction: 807
+      startSourceChar: 1277
+      endSourceChar: 1281
+      line: 29
+      lineChar: 15
+      spanCodeSection: if (
+    - startInstruction: 808
+      endInstruction: 807
+      startSourceChar: 1281
+      endSourceChar: 1281
+      line: 29
+      lineChar: 19
+      spanCodeSection: 
+    - startInstruction: 808
+      endInstruction: 807
+      startSourceChar: 1281
+      endSourceChar: 1291
+      line: 29
+      lineChar: 19
+      spanCodeSection: 'paused != '
+    - startInstruction: 808
+      endInstruction: 807
+      startSourceChar: 1291
+      endSourceChar: 1292
+      line: 29
+      lineChar: 29
+      spanCodeSection: '-'
+    - startInstruction: 808
+      endInstruction: 879
+      startSourceChar: 1292
+      endSourceChar: 1295
+      line: 29
+      lineChar: 30
+      spanCodeSection: '1) '
+    - startInstruction: 880
+      endInstruction: 879
+      startSourceChar: 1295
+      endSourceChar: 1358
+      line: 29
+      lineChar: 33
+      spanCodeSection: "{  // if '' && paused is less than the last index\r\n            "
+    - startInstruction: 880
+      endInstruction: 879
+      startSourceChar: 1358
+      endSourceChar: 1358
+      line: 30
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 880
+      endInstruction: 879
+      startSourceChar: 1358
+      endSourceChar: 1358
+      line: 30
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 880
+      endInstruction: 879
+      startSourceChar: 1358
+      endSourceChar: 1358
+      line: 30
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 880
+      endInstruction: 879
+      startSourceChar: 1358
+      endSourceChar: 1358
+      line: 30
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 880
+      endInstruction: 879
+      startSourceChar: 1358
+      endSourceChar: 1363
+      line: 30
+      lineChar: 12
+      spanCodeSection: this.
+    - startInstruction: 880
+      endInstruction: 879
+      startSourceChar: 1363
+      endSourceChar: 1387
+      line: 30
+      lineChar: 17
+      spanCodeSection: soundUiAudioSourceStore.
+    - startInstruction: 880
+      endInstruction: 903
+      startSourceChar: 1387
+      endSourceChar: 1415
+      line: 30
+      lineChar: 41
+      spanCodeSection: "UnsetPaused();\r\n            "
+    - startInstruction: 904
+      endInstruction: 903
+      startSourceChar: 1415
+      endSourceChar: 1415
+      line: 31
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 904
+      endInstruction: 903
+      startSourceChar: 1415
+      endSourceChar: 1415
+      line: 31
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 904
+      endInstruction: 903
+      startSourceChar: 1415
+      endSourceChar: 1415
+      line: 31
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 904
+      endInstruction: 903
+      startSourceChar: 1415
+      endSourceChar: 1415
+      line: 31
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 904
+      endInstruction: 903
+      startSourceChar: 1415
+      endSourceChar: 1420
+      line: 31
+      lineChar: 12
+      spanCodeSection: this.
+    - startInstruction: 904
+      endInstruction: 903
+      startSourceChar: 1420
+      endSourceChar: 1444
+      line: 31
+      lineChar: 17
+      spanCodeSection: soundUiAudioSourceStore.
+    - startInstruction: 904
+      endInstruction: 903
+      startSourceChar: 1444
+      endSourceChar: 1449
+      line: 31
+      lineChar: 41
+      spanCodeSection: Stop(
+    - startInstruction: 904
+      endInstruction: 959
+      startSourceChar: 1449
+      endSourceChar: 1471
+      line: 31
+      lineChar: 46
+      spanCodeSection: "paused);\r\n            "
+    - startInstruction: 960
+      endInstruction: 959
+      startSourceChar: 1471
+      endSourceChar: 1471
+      line: 32
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 960
+      endInstruction: 959
+      startSourceChar: 1471
+      endSourceChar: 1471
+      line: 32
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 960
+      endInstruction: 959
+      startSourceChar: 1471
+      endSourceChar: 1471
+      line: 32
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 960
+      endInstruction: 959
+      startSourceChar: 1471
+      endSourceChar: 1471
+      line: 32
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 960
+      endInstruction: 959
+      startSourceChar: 1471
+      endSourceChar: 1476
+      line: 32
+      lineChar: 12
+      spanCodeSection: this.
+    - startInstruction: 960
+      endInstruction: 959
+      startSourceChar: 1476
+      endSourceChar: 1500
+      line: 32
+      lineChar: 17
+      spanCodeSection: soundUiAudioSourceStore.
+    - startInstruction: 960
+      endInstruction: 959
+      startSourceChar: 1500
+      endSourceChar: 1505
+      line: 32
+      lineChar: 41
+      spanCodeSection: Play(
+    - startInstruction: 960
+      endInstruction: 959
+      startSourceChar: 1505
+      endSourceChar: 1505
+      line: 32
+      lineChar: 46
+      spanCodeSection: 
+    - startInstruction: 960
+      endInstruction: 959
+      startSourceChar: 1505
+      endSourceChar: 1514
+      line: 32
+      lineChar: 46
+      spanCodeSection: 'paused + '
+    - startInstruction: 960
+      endInstruction: 1047
+      startSourceChar: 1514
+      endSourceChar: 1531
+      line: 32
+      lineChar: 55
+      spanCodeSection: "1);\r\n            "
+    - startInstruction: 1048
+      endInstruction: 1067
+      startSourceChar: 1531
+      endSourceChar: 1561
+      line: 33
+      lineChar: 12
+      spanCodeSection: "return;\r\n        }\r\n\r\n        "
+    - startInstruction: 1068
+      endInstruction: 1067
+      startSourceChar: 1561
+      endSourceChar: 1561
+      line: 36
+      lineChar: 8
+      spanCodeSection: 
+    - startInstruction: 1068
+      endInstruction: 1067
+      startSourceChar: 1561
+      endSourceChar: 1561
+      line: 36
+      lineChar: 8
+      spanCodeSection: 
+    - startInstruction: 1068
+      endInstruction: 1067
+      startSourceChar: 1561
+      endSourceChar: 1561
+      line: 36
+      lineChar: 8
+      spanCodeSection: 
+    - startInstruction: 1068
+      endInstruction: 1067
+      startSourceChar: 1561
+      endSourceChar: 1576
+      line: 36
+      lineChar: 8
+      spanCodeSection: 'int playingNow '
+    - startInstruction: 1068
+      endInstruction: 1067
+      startSourceChar: 1576
+      endSourceChar: 1578
+      line: 36
+      lineChar: 23
+      spanCodeSection: '= '
+    - startInstruction: 1068
+      endInstruction: 1067
+      startSourceChar: 1578
+      endSourceChar: 1579
+      line: 36
+      lineChar: 25
+      spanCodeSection: '-'
+    - startInstruction: 1068
+      endInstruction: 1091
+      startSourceChar: 1579
+      endSourceChar: 1591
+      line: 36
+      lineChar: 26
+      spanCodeSection: "1;\r\n        "
+    - startInstruction: 1092
+      endInstruction: 1091
+      startSourceChar: 1591
+      endSourceChar: 1596
+      line: 37
+      lineChar: 8
+      spanCodeSection: for (
+    - startInstruction: 1092
+      endInstruction: 1091
+      startSourceChar: 1596
+      endSourceChar: 1596
+      line: 37
+      lineChar: 13
+      spanCodeSection: 
+    - startInstruction: 1092
+      endInstruction: 1091
+      startSourceChar: 1596
+      endSourceChar: 1602
+      line: 37
+      lineChar: 13
+      spanCodeSection: 'var i '
+    - startInstruction: 1092
+      endInstruction: 1091
+      startSourceChar: 1602
+      endSourceChar: 1604
+      line: 37
+      lineChar: 19
+      spanCodeSection: '= '
+    - startInstruction: 1092
+      endInstruction: 1111
+      startSourceChar: 1604
+      endSourceChar: 1607
+      line: 37
+      lineChar: 21
+      spanCodeSection: '0; '
+    - startInstruction: 1112
+      endInstruction: 1111
+      startSourceChar: 1607
+      endSourceChar: 1607
+      line: 37
+      lineChar: 24
+      spanCodeSection: 
+    - startInstruction: 1112
+      endInstruction: 1111
+      startSourceChar: 1607
+      endSourceChar: 1611
+      line: 37
+      lineChar: 24
+      spanCodeSection: 'i < '
+    - startInstruction: 1112
+      endInstruction: 1111
+      startSourceChar: 1611
+      endSourceChar: 1611
+      line: 37
+      lineChar: 28
+      spanCodeSection: 
+    - startInstruction: 1112
+      endInstruction: 1111
+      startSourceChar: 1611
+      endSourceChar: 1624
+      line: 37
+      lineChar: 28
+      spanCodeSection: audioSources.
+    - startInstruction: 1112
+      endInstruction: 1183
+      startSourceChar: 1624
+      endSourceChar: 1637
+      line: 37
+      lineChar: 41
+      spanCodeSection: 'Length; i++) '
+    - startInstruction: 1184
+      endInstruction: 1183
+      startSourceChar: 1637
+      endSourceChar: 1652
+      line: 37
+      lineChar: 54
+      spanCodeSection: "{\r\n            "
+    - startInstruction: 1184
+      endInstruction: 1183
+      startSourceChar: 1652
+      endSourceChar: 1652
+      line: 38
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 1184
+      endInstruction: 1183
+      startSourceChar: 1652
+      endSourceChar: 1652
+      line: 38
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 1184
+      endInstruction: 1183
+      startSourceChar: 1652
+      endSourceChar: 1668
+      line: 38
+      lineChar: 12
+      spanCodeSection: 'var audioSource '
+    - startInstruction: 1184
+      endInstruction: 1183
+      startSourceChar: 1668
+      endSourceChar: 1670
+      line: 38
+      lineChar: 28
+      spanCodeSection: '= '
+    - startInstruction: 1184
+      endInstruction: 1183
+      startSourceChar: 1670
+      endSourceChar: 1670
+      line: 38
+      lineChar: 30
+      spanCodeSection: 
+    - startInstruction: 1184
+      endInstruction: 1183
+      startSourceChar: 1670
+      endSourceChar: 1683
+      line: 38
+      lineChar: 30
+      spanCodeSection: audioSources[
+    - startInstruction: 1184
+      endInstruction: 1183
+      startSourceChar: 1683
+      endSourceChar: 1683
+      line: 38
+      lineChar: 43
+      spanCodeSection: 
+    - startInstruction: 1184
+      endInstruction: 1235
+      startSourceChar: 1683
+      endSourceChar: 1702
+      line: 38
+      lineChar: 43
+      spanCodeSection: "i];\r\n\r\n            "
+    - startInstruction: 1236
+      endInstruction: 1235
+      startSourceChar: 1702
+      endSourceChar: 1706
+      line: 40
+      lineChar: 12
+      spanCodeSection: if (
+    - startInstruction: 1236
+      endInstruction: 1235
+      startSourceChar: 1706
+      endSourceChar: 1706
+      line: 40
+      lineChar: 16
+      spanCodeSection: 
+    - startInstruction: 1236
+      endInstruction: 1235
+      startSourceChar: 1706
+      endSourceChar: 1718
+      line: 40
+      lineChar: 16
+      spanCodeSection: audioSource.
+    - startInstruction: 1236
+      endInstruction: 1275
+      startSourceChar: 1718
+      endSourceChar: 1729
+      line: 40
+      lineChar: 28
+      spanCodeSection: 'isPlaying) '
+    - startInstruction: 1276
+      endInstruction: 1275
+      startSourceChar: 1729
+      endSourceChar: 1748
+      line: 40
+      lineChar: 39
+      spanCodeSection: "{\r\n                "
+    - startInstruction: 1276
+      endInstruction: 1275
+      startSourceChar: 1748
+      endSourceChar: 1748
+      line: 41
+      lineChar: 16
+      spanCodeSection: 
+    - startInstruction: 1276
+      endInstruction: 1275
+      startSourceChar: 1748
+      endSourceChar: 1748
+      line: 41
+      lineChar: 16
+      spanCodeSection: 
+    - startInstruction: 1276
+      endInstruction: 1275
+      startSourceChar: 1748
+      endSourceChar: 1761
+      line: 41
+      lineChar: 16
+      spanCodeSection: 'playingNow = '
+    - startInstruction: 1276
+      endInstruction: 1295
+      startSourceChar: 1761
+      endSourceChar: 1781
+      line: 41
+      lineChar: 29
+      spanCodeSection: "i;\r\n                "
+    - startInstruction: 1296
+      endInstruction: 1363
+      startSourceChar: 1781
+      endSourceChar: 1823
+      line: 42
+      lineChar: 16
+      spanCodeSection: "break;\r\n            }\r\n        }\r\n        "
+    - startInstruction: 1364
+      endInstruction: 1363
+      startSourceChar: 1823
+      endSourceChar: 1823
+      line: 45
+      lineChar: 8
+      spanCodeSection: 
+    - startInstruction: 1364
+      endInstruction: 1363
+      startSourceChar: 1823
+      endSourceChar: 1823
+      line: 45
+      lineChar: 8
+      spanCodeSection: 
+    - startInstruction: 1364
+      endInstruction: 1363
+      startSourceChar: 1823
+      endSourceChar: 1823
+      line: 45
+      lineChar: 8
+      spanCodeSection: 
+    - startInstruction: 1364
+      endInstruction: 1363
+      startSourceChar: 1823
+      endSourceChar: 1823
+      line: 45
+      lineChar: 8
+      spanCodeSection: 
+    - startInstruction: 1364
+      endInstruction: 1363
+      startSourceChar: 1823
+      endSourceChar: 1828
+      line: 45
+      lineChar: 8
+      spanCodeSection: this.
+    - startInstruction: 1364
+      endInstruction: 1363
+      startSourceChar: 1828
+      endSourceChar: 1852
+      line: 45
+      lineChar: 13
+      spanCodeSection: soundUiAudioSourceStore.
+    - startInstruction: 1364
+      endInstruction: 1387
+      startSourceChar: 1852
+      endSourceChar: 1874
+      line: 45
+      lineChar: 37
+      spanCodeSection: "StopAll();\r\n\r\n        "
+    - startInstruction: 1388
+      endInstruction: 1387
+      startSourceChar: 1874
+      endSourceChar: 1878
+      line: 47
+      lineChar: 8
+      spanCodeSection: if (
+    - startInstruction: 1388
+      endInstruction: 1387
+      startSourceChar: 1878
+      endSourceChar: 1878
+      line: 47
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 1388
+      endInstruction: 1387
+      startSourceChar: 1878
+      endSourceChar: 1878
+      line: 47
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 1388
+      endInstruction: 1387
+      startSourceChar: 1878
+      endSourceChar: 1892
+      line: 47
+      lineChar: 12
+      spanCodeSection: 'playingNow == '
+    - startInstruction: 1388
+      endInstruction: 1387
+      startSourceChar: 1892
+      endSourceChar: 1893
+      line: 47
+      lineChar: 26
+      spanCodeSection: '-'
+    - startInstruction: 1388
+      endInstruction: 1503
+      startSourceChar: 1893
+      endSourceChar: 1898
+      line: 47
+      lineChar: 27
+      spanCodeSection: '1 || '
+    - startInstruction: 1504
+      endInstruction: 1503
+      startSourceChar: 1898
+      endSourceChar: 1898
+      line: 47
+      lineChar: 32
+      spanCodeSection: 
+    - startInstruction: 1504
+      endInstruction: 1503
+      startSourceChar: 1898
+      endSourceChar: 1912
+      line: 47
+      lineChar: 32
+      spanCodeSection: 'playingNow == '
+    - startInstruction: 1504
+      endInstruction: 1503
+      startSourceChar: 1912
+      endSourceChar: 1912
+      line: 47
+      lineChar: 46
+      spanCodeSection: 
+    - startInstruction: 1504
+      endInstruction: 1503
+      startSourceChar: 1912
+      endSourceChar: 1912
+      line: 47
+      lineChar: 46
+      spanCodeSection: 
+    - startInstruction: 1504
+      endInstruction: 1503
+      startSourceChar: 1912
+      endSourceChar: 1925
+      line: 47
+      lineChar: 46
+      spanCodeSection: audioSources.
+    - startInstruction: 1504
+      endInstruction: 1527
+      startSourceChar: 1925
+      endSourceChar: 1934
+      line: 47
+      lineChar: 59
+      spanCodeSection: 'Length - '
+    - startInstruction: 1528
+      endInstruction: 1659
+      startSourceChar: 1934
+      endSourceChar: 1937
+      line: 47
+      lineChar: 68
+      spanCodeSection: '1) '
+    - startInstruction: 1660
+      endInstruction: 1659
+      startSourceChar: 1937
+      endSourceChar: 1952
+      line: 47
+      lineChar: 71
+      spanCodeSection: "{\r\n            "
+    - startInstruction: 1660
+      endInstruction: 1659
+      startSourceChar: 1952
+      endSourceChar: 1952
+      line: 48
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 1660
+      endInstruction: 1659
+      startSourceChar: 1952
+      endSourceChar: 1952
+      line: 48
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 1660
+      endInstruction: 1659
+      startSourceChar: 1952
+      endSourceChar: 1952
+      line: 48
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 1660
+      endInstruction: 1659
+      startSourceChar: 1952
+      endSourceChar: 1958
+      line: 48
+      lineChar: 12
+      spanCodeSection: Debug.
+    - startInstruction: 1660
+      endInstruction: 1659
+      startSourceChar: 1958
+      endSourceChar: 1962
+      line: 48
+      lineChar: 18
+      spanCodeSection: Log(
+    - startInstruction: 1660
+      endInstruction: 1675
+      startSourceChar: 1962
+      endSourceChar: 2012
+      line: 48
+      lineChar: 22
+      spanCodeSection: "\"SoundUiPlayNext: Play the first.\");\r\n            "
+    - startInstruction: 1676
+      endInstruction: 1675
+      startSourceChar: 2012
+      endSourceChar: 2012
+      line: 49
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 1676
+      endInstruction: 1675
+      startSourceChar: 2012
+      endSourceChar: 2012
+      line: 49
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 1676
+      endInstruction: 1675
+      startSourceChar: 2012
+      endSourceChar: 2012
+      line: 49
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 1676
+      endInstruction: 1675
+      startSourceChar: 2012
+      endSourceChar: 2012
+      line: 49
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 1676
+      endInstruction: 1675
+      startSourceChar: 2012
+      endSourceChar: 2017
+      line: 49
+      lineChar: 12
+      spanCodeSection: this.
+    - startInstruction: 1676
+      endInstruction: 1675
+      startSourceChar: 2017
+      endSourceChar: 2041
+      line: 49
+      lineChar: 17
+      spanCodeSection: soundUiAudioSourceStore.
+    - startInstruction: 1676
+      endInstruction: 1675
+      startSourceChar: 2041
+      endSourceChar: 2046
+      line: 49
+      lineChar: 41
+      spanCodeSection: Play(
+    - startInstruction: 1676
+      endInstruction: 1731
+      startSourceChar: 2046
+      endSourceChar: 2063
+      line: 49
+      lineChar: 46
+      spanCodeSection: "0);\r\n            "
+    - startInstruction: 1732
+      endInstruction: 1751
+      startSourceChar: 2063
+      endSourceChar: 2093
+      line: 50
+      lineChar: 12
+      spanCodeSection: "return;\r\n        }\r\n\r\n        "
+    - startInstruction: 1752
+      endInstruction: 1751
+      startSourceChar: 2093
+      endSourceChar: 2093
+      line: 53
+      lineChar: 8
+      spanCodeSection: 
+    - startInstruction: 1752
+      endInstruction: 1751
+      startSourceChar: 2093
+      endSourceChar: 2093
+      line: 53
+      lineChar: 8
+      spanCodeSection: 
+    - startInstruction: 1752
+      endInstruction: 1751
+      startSourceChar: 2093
+      endSourceChar: 2093
+      line: 53
+      lineChar: 8
+      spanCodeSection: 
+    - startInstruction: 1752
+      endInstruction: 1751
+      startSourceChar: 2093
+      endSourceChar: 2099
+      line: 53
+      lineChar: 8
+      spanCodeSection: Debug.
+    - startInstruction: 1752
+      endInstruction: 1751
+      startSourceChar: 2099
+      endSourceChar: 2103
+      line: 53
+      lineChar: 14
+      spanCodeSection: Log(
+    - startInstruction: 1752
+      endInstruction: 1751
+      startSourceChar: 2103
+      endSourceChar: 2105
+      line: 53
+      lineChar: 18
+      spanCodeSection: $"
+    - startInstruction: 1752
+      endInstruction: 1771
+      startSourceChar: 2105
+      endSourceChar: 2132
+      line: 53
+      lineChar: 20
+      spanCodeSection: 'SoundUiPlayNext: Play the $'
+    - startInstruction: 1772
+      endInstruction: 1771
+      startSourceChar: 2132
+      endSourceChar: 2133
+      line: 53
+      lineChar: 47
+      spanCodeSection: '{'
+    - startInstruction: 1772
+      endInstruction: 1771
+      startSourceChar: 2133
+      endSourceChar: 2133
+      line: 53
+      lineChar: 48
+      spanCodeSection: 
+    - startInstruction: 1772
+      endInstruction: 1771
+      startSourceChar: 2133
+      endSourceChar: 2146
+      line: 53
+      lineChar: 48
+      spanCodeSection: 'playingNow + '
+    - startInstruction: 1772
+      endInstruction: 1879
+      startSourceChar: 2146
+      endSourceChar: 2148
+      line: 53
+      lineChar: 61
+      spanCodeSection: 1}
+    - startInstruction: 1880
+      endInstruction: 1947
+      startSourceChar: 2148
+      endSourceChar: 2164
+      line: 53
+      lineChar: 63
+      spanCodeSection: "th.\");\r\n        "
+    - startInstruction: 1948
+      endInstruction: 1947
+      startSourceChar: 2164
+      endSourceChar: 2164
+      line: 54
+      lineChar: 8
+      spanCodeSection: 
+    - startInstruction: 1948
+      endInstruction: 1947
+      startSourceChar: 2164
+      endSourceChar: 2164
+      line: 54
+      lineChar: 8
+      spanCodeSection: 
+    - startInstruction: 1948
+      endInstruction: 1947
+      startSourceChar: 2164
+      endSourceChar: 2164
+      line: 54
+      lineChar: 8
+      spanCodeSection: 
+    - startInstruction: 1948
+      endInstruction: 1947
+      startSourceChar: 2164
+      endSourceChar: 2164
+      line: 54
+      lineChar: 8
+      spanCodeSection: 
+    - startInstruction: 1948
+      endInstruction: 1947
+      startSourceChar: 2164
+      endSourceChar: 2169
+      line: 54
+      lineChar: 8
+      spanCodeSection: this.
+    - startInstruction: 1948
+      endInstruction: 1947
+      startSourceChar: 2169
+      endSourceChar: 2193
+      line: 54
+      lineChar: 13
+      spanCodeSection: soundUiAudioSourceStore.
+    - startInstruction: 1948
+      endInstruction: 1947
+      startSourceChar: 2193
+      endSourceChar: 2198
+      line: 54
+      lineChar: 37
+      spanCodeSection: Play(
+    - startInstruction: 1948
+      endInstruction: 1947
+      startSourceChar: 2198
+      endSourceChar: 2198
+      line: 54
+      lineChar: 42
+      spanCodeSection: 
+    - startInstruction: 1948
+      endInstruction: 1947
+      startSourceChar: 2198
+      endSourceChar: 2211
+      line: 54
+      lineChar: 42
+      spanCodeSection: 'playingNow + '
+    - startInstruction: 1948
+      endInstruction: 1948
+      startSourceChar: 2211
+      endSourceChar: 2211
+      line: 54
+      lineChar: 55
+      spanCodeSection: 
+  hasInteractEvent: 1
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 11500000, guid: 09458a02dd843804989536cee671c1f1, type: 3}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: fieldDefinitions
+      Entry: 7
+      Data: 0|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[UdonSharp.FieldDefinition,
+        UdonSharp.Editor]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 1|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
+        mscorlib]], mscorlib
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: soundUiAudioSourceStore
+    - Name: $v
+      Entry: 7
+      Data: 2|UdonSharp.FieldDefinition, UdonSharp.Editor
+    - Name: fieldSymbol
+      Entry: 7
+      Data: 3|UdonSharp.SymbolDefinition, UdonSharp.Editor
+    - Name: internalType
+      Entry: 7
+      Data: 4|System.RuntimeType, mscorlib
+    - Name: 
+      Entry: 1
+      Data: SoundUiAudioSourceStore, Assembly-CSharp
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: declarationType
+      Entry: 3
+      Data: 1
+    - Name: syncMode
+      Entry: 3
+      Data: 0
+    - Name: symbolResolvedTypeName
+      Entry: 1
+      Data: VRCUdonUdonBehaviour
+    - Name: symbolOriginalName
+      Entry: 1
+      Data: soundUiAudioSourceStore
+    - Name: symbolUniqueName
+      Entry: 1
+      Data: soundUiAudioSourceStore
+    - Name: symbolDefaultValue
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: fieldAttributes
+      Entry: 7
+      Data: 5|System.Collections.Generic.List`1[[System.Attribute, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: userBehaviourSource
+      Entry: 10
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 

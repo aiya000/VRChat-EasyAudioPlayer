@@ -1,0 +1,431 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
+  m_Name: InteractToggle
+  m_EditorClassIdentifier: 
+  serializedUdonProgramAsset: {fileID: 11400000, guid: 0fb2c4fdb524832489b603d16c5150dc,
+    type: 2}
+  udonAssembly: ".data_start\n\n    .export toggleObjects\n\n    __refl_const_intnl_udonTypeID:
+    %SystemInt64, null\n    __refl_const_intnl_udonTypeName: %SystemString, null\n
+    \   toggleObjects: %UnityEngineGameObjectArray, null\n    __0_toggleObject_GameObject:
+    %UnityEngineGameObject, null\n    __0_const_intnl_SystemInt32: %SystemInt32, null\n
+    \   __1_const_intnl_SystemInt32: %SystemInt32, null\n    __0_const_intnl_SystemString:
+    %SystemString, null\n    __0_const_intnl_SystemUInt32: %SystemUInt32, null\n    __0_intnl_SystemBoolean:
+    %SystemBoolean, null\n    __1_intnl_SystemBoolean: %SystemBoolean, null\n    __2_intnl_SystemBoolean:
+    %SystemBoolean, null\n    __0_intnl_SystemInt32: %SystemInt32, null\n    __1_intnl_SystemInt32:
+    %SystemInt32, null\n    __0_intnl_returnTarget_UInt32: %SystemUInt32, null\n\n.data_end\n\n
+    \       \n         # using UnityEngine;\n        \n         # using VRC.SDK3.Components;\n
+    \       \n         # namespace UdonSharp.Examples.Utilities\n        \n         #
+    [AddComponentMenu(\"Udon Sharp/Utilities/Interact Toggle\")]\n        \n         #
+    public class InteractToggle : UdonSharpBehaviour\n.code_start\n        \n         #
+    [Tooltip(\"List of objects to toggle on and off\")]\n        \n         # public
+    GameObject[] toggleObjects;\n        \n         # public override void Interact()\n
+    \   .export _interact\n        \n    _interact:\n        \n        PUSH, __0_const_intnl_SystemUInt32\n
+    \       \n         # {\n        \n         # foreach (GameObject toggleObject
+    in toggleObjects)\n        PUSH, __0_const_intnl_SystemInt32\n        PUSH, __0_intnl_SystemInt32\n
+    \       COPY\n        PUSH, toggleObjects\n        PUSH, __1_intnl_SystemInt32\n
+    \       EXTERN, \"UnityEngineGameObjectArray.__get_Length__SystemInt32\"\n        PUSH,
+    __0_intnl_SystemInt32\n        PUSH, __1_intnl_SystemInt32\n        PUSH, __0_intnl_SystemBoolean\n
+    \       EXTERN, \"SystemInt32.__op_LessThan__SystemInt32_SystemInt32__SystemBoolean\"\n
+    \       PUSH, __0_intnl_SystemBoolean\n        JUMP_IF_FALSE, 0x000000F4\n        PUSH,
+    toggleObjects\n        PUSH, __0_intnl_SystemInt32\n        PUSH, __0_toggleObject_GameObject\n
+    \       EXTERN, \"UnityEngineGameObjectArray.__Get__SystemInt32__UnityEngineGameObject\"\n
+    \       \n         # {\n        \n         # toggleObject.SetActive(!toggleObject.activeSelf);\n
+    \       PUSH, __0_toggleObject_GameObject\n        PUSH, __1_intnl_SystemBoolean\n
+    \       EXTERN, \"UnityEngineGameObject.__get_activeSelf__SystemBoolean\"\n        PUSH,
+    __1_intnl_SystemBoolean\n        PUSH, __2_intnl_SystemBoolean\n        EXTERN,
+    \"SystemBoolean.__op_UnaryNegation__SystemBoolean__SystemBoolean\"\n        PUSH,
+    __0_toggleObject_GameObject\n        PUSH, __2_intnl_SystemBoolean\n        EXTERN,
+    \"UnityEngineGameObject.__SetActive__SystemBoolean__SystemVoid\"\n        PUSH,
+    __0_intnl_SystemInt32\n        PUSH, __1_const_intnl_SystemInt32\n        PUSH,
+    __0_intnl_SystemInt32\n        EXTERN, \"SystemInt32.__op_Addition__SystemInt32_SystemInt32__SystemInt32\"\n
+    \       JUMP, 0x00000034\n        PUSH, __0_intnl_returnTarget_UInt32 #Function
+    epilogue\n        COPY\n        JUMP_INDIRECT, __0_intnl_returnTarget_UInt32\n
+    \       \n.code_end\n"
+  assemblyError: 
+  sourceCsScript: {fileID: 11500000, guid: c145dd4792c31da4b83d542b11ca2b66, type: 3}
+  behaviourIDHeapVarName: __refl_const_intnl_udonTypeID
+  compileErrors: []
+  debugInfo:
+    serializedDebugSpans:
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 0
+      endSourceChar: 2
+      line: 0
+      lineChar: 0
+      spanCodeSection: "\r\n"
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 2
+      endSourceChar: 2
+      line: 1
+      lineChar: 0
+      spanCodeSection: 
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 2
+      endSourceChar: 8
+      line: 1
+      lineChar: 0
+      spanCodeSection: 'using '
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 8
+      endSourceChar: 22
+      line: 1
+      lineChar: 6
+      spanCodeSection: "UnityEngine;\r\n"
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 22
+      endSourceChar: 28
+      line: 2
+      lineChar: 0
+      spanCodeSection: 'using '
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 28
+      endSourceChar: 28
+      line: 2
+      lineChar: 6
+      spanCodeSection: 
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 28
+      endSourceChar: 28
+      line: 2
+      lineChar: 6
+      spanCodeSection: 
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 28
+      endSourceChar: 32
+      line: 2
+      lineChar: 6
+      spanCodeSection: VRC.
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 32
+      endSourceChar: 37
+      line: 2
+      lineChar: 10
+      spanCodeSection: SDK3.
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 37
+      endSourceChar: 52
+      line: 2
+      lineChar: 15
+      spanCodeSection: "Components;\r\n\r\n"
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 52
+      endSourceChar: 315
+      line: 4
+      lineChar: 0
+      spanCodeSection: "namespace UdonSharp.Examples.Utilities\r\n{\r\n    /// <summary>\r\n
+        \   /// A Basic example class that demonstrates how to toggle a list of object
+        on and off when someone interacts with the UdonBehaviour\r\n    /// This toggle
+        only works locally\r\n    /// </summary>\r\n    "
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 315
+      endSourceChar: 407
+      line: 10
+      lineChar: 4
+      spanCodeSection: "[AddComponentMenu(\"Udon Sharp/Utilities/Interact Toggle\")]\r\n
+        \   public class InteractToggle "
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 407
+      endSourceChar: 409
+      line: 11
+      lineChar: 32
+      spanCodeSection: ': '
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 409
+      endSourceChar: 409
+      line: 11
+      lineChar: 34
+      spanCodeSection: 
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 409
+      endSourceChar: 445
+      line: 11
+      lineChar: 34
+      spanCodeSection: "UdonSharpBehaviour \r\n    {\r\n        "
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 445
+      endSourceChar: 446
+      line: 13
+      lineChar: 8
+      spanCodeSection: '['
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 446
+      endSourceChar: 446
+      line: 13
+      lineChar: 9
+      spanCodeSection: 
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 446
+      endSourceChar: 454
+      line: 13
+      lineChar: 9
+      spanCodeSection: Tooltip(
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 454
+      endSourceChar: 454
+      line: 13
+      lineChar: 17
+      spanCodeSection: 
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 454
+      endSourceChar: 511
+      line: 13
+      lineChar: 17
+      spanCodeSection: "\"List of objects to toggle on and off\")]\r\n        public "
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 511
+      endSourceChar: 511
+      line: 14
+      lineChar: 15
+      spanCodeSection: 
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 511
+      endSourceChar: 511
+      line: 14
+      lineChar: 15
+      spanCodeSection: 
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 511
+      endSourceChar: 550
+      line: 14
+      lineChar: 15
+      spanCodeSection: "GameObject[] toggleObjects;\r\n\r\n        "
+    - startInstruction: 0
+      endInstruction: 7
+      startSourceChar: 550
+      endSourceChar: 591
+      line: 16
+      lineChar: 8
+      spanCodeSection: "public override void Interact()\r\n        "
+    - startInstruction: 8
+      endInstruction: 7
+      startSourceChar: 591
+      endSourceChar: 606
+      line: 17
+      lineChar: 8
+      spanCodeSection: "{\r\n            "
+    - startInstruction: 8
+      endInstruction: 7
+      startSourceChar: 606
+      endSourceChar: 615
+      line: 18
+      lineChar: 12
+      spanCodeSection: foreach (
+    - startInstruction: 8
+      endInstruction: 7
+      startSourceChar: 615
+      endSourceChar: 642
+      line: 18
+      lineChar: 21
+      spanCodeSection: 'GameObject toggleObject in '
+    - startInstruction: 8
+      endInstruction: 131
+      startSourceChar: 642
+      endSourceChar: 670
+      line: 18
+      lineChar: 48
+      spanCodeSection: "toggleObjects)\r\n            "
+    - startInstruction: 132
+      endInstruction: 131
+      startSourceChar: 670
+      endSourceChar: 689
+      line: 19
+      lineChar: 12
+      spanCodeSection: "{\r\n                "
+    - startInstruction: 132
+      endInstruction: 131
+      startSourceChar: 689
+      endSourceChar: 689
+      line: 20
+      lineChar: 16
+      spanCodeSection: 
+    - startInstruction: 132
+      endInstruction: 131
+      startSourceChar: 689
+      endSourceChar: 689
+      line: 20
+      lineChar: 16
+      spanCodeSection: 
+    - startInstruction: 132
+      endInstruction: 131
+      startSourceChar: 689
+      endSourceChar: 689
+      line: 20
+      lineChar: 16
+      spanCodeSection: 
+    - startInstruction: 132
+      endInstruction: 131
+      startSourceChar: 689
+      endSourceChar: 702
+      line: 20
+      lineChar: 16
+      spanCodeSection: toggleObject.
+    - startInstruction: 132
+      endInstruction: 131
+      startSourceChar: 702
+      endSourceChar: 712
+      line: 20
+      lineChar: 29
+      spanCodeSection: SetActive(
+    - startInstruction: 132
+      endInstruction: 131
+      startSourceChar: 712
+      endSourceChar: 713
+      line: 20
+      lineChar: 39
+      spanCodeSection: '!'
+    - startInstruction: 132
+      endInstruction: 131
+      startSourceChar: 713
+      endSourceChar: 713
+      line: 20
+      lineChar: 40
+      spanCodeSection: 
+    - startInstruction: 132
+      endInstruction: 131
+      startSourceChar: 713
+      endSourceChar: 726
+      line: 20
+      lineChar: 40
+      spanCodeSection: toggleObject.
+    - startInstruction: 132
+      endInstruction: 132
+      startSourceChar: 726
+      endSourceChar: 726
+      line: 20
+      lineChar: 53
+      spanCodeSection: 
+  hasInteractEvent: 1
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: fieldDefinitions
+      Entry: 7
+      Data: 0|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[UdonSharp.FieldDefinition,
+        UdonSharp.Editor]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 1|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
+        mscorlib]], mscorlib
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: toggleObjects
+    - Name: $v
+      Entry: 7
+      Data: 2|UdonSharp.FieldDefinition, UdonSharp.Editor
+    - Name: fieldSymbol
+      Entry: 7
+      Data: 3|UdonSharp.SymbolDefinition, UdonSharp.Editor
+    - Name: internalType
+      Entry: 7
+      Data: 4|System.RuntimeType, mscorlib
+    - Name: 
+      Entry: 1
+      Data: UnityEngine.GameObject[], UnityEngine.CoreModule
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: declarationType
+      Entry: 3
+      Data: 1
+    - Name: syncMode
+      Entry: 3
+      Data: 0
+    - Name: symbolResolvedTypeName
+      Entry: 1
+      Data: UnityEngineGameObjectArray
+    - Name: symbolOriginalName
+      Entry: 1
+      Data: toggleObjects
+    - Name: symbolUniqueName
+      Entry: 1
+      Data: toggleObjects
+    - Name: symbolDefaultValue
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: fieldAttributes
+      Entry: 7
+      Data: 5|System.Collections.Generic.List`1[[System.Attribute, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 6|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
+    - Name: tooltip
+      Entry: 1
+      Data: List of objects to toggle on and off
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: userBehaviourSource
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
