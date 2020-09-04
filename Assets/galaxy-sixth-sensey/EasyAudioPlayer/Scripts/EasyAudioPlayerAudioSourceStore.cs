@@ -52,6 +52,29 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
         }
     }
 
+    public void Update() {
+        if (this.playing == -1) {
+            return;
+        }
+
+        if (this.audioSources == null) {
+            Debug.Log("EasyAudioPlayerAudioSourceStore: Update(): The audio sources has not set.");
+            return;
+        } else if (!this.IsNotOutOfBoundsOnAudioSources(this.playing)) {
+            Debug.Log($"EasyAudioPlayerAudioSourceStore: Update(): '{this.playing}' is out of bounds. Skip.");
+            return;
+        }
+
+        if (this.playing == this.audioSources.Length - 1) {
+            this.playingAudioName.text = NOT_PLAYING_NOW;
+            return;
+        }
+
+        if (!this.audioSources[this.playing].isPlaying) {
+            this.Play(this.playing + 1);
+        }
+    }
+
     /// <summary>
     /// Returns audio sources that is audioSourceList's children.
     /// Or return the empty array if audioSourceList has not set.

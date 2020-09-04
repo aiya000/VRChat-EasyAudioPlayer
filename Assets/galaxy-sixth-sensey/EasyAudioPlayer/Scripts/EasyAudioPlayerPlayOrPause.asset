@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
-  m_Name: SoundUiPlayOrPause
+  m_Name: EasyAudioPlayerPlayOrPause
   m_EditorClassIdentifier: 
   serializedUdonProgramAsset: {fileID: 11400000, guid: fca4826e87c8d5e4181fd1032602563c,
     type: 2}
@@ -28,16 +28,16 @@ MonoBehaviour:
     %SystemObject, null\n    __1_intnl_SystemObject: %SystemObject, null\n    __0_intnl_returnTarget_UInt32:
     %SystemUInt32, null\n\n.data_end\n\n        \n         # using UdonSharp;\n        \n
     \        # using UnityEngine;\n        \n         # using VRC.SDKBase;\n        \n
-    \        # using VRC.Udon;\n        \n         # public class SoundUiPlayOrPause
-    : UdonSharpBehaviour {\n.code_start\n        \n         # public SoundUiAudioSourceStore
+    \        # using VRC.Udon;\n        \n         # public class EasyAudioPlayerPlayOrPause
+    : UdonSharpBehaviour {\n.code_start\n        \n         # public EasyAudioPlayerAudioSourceStore
     core;\n        \n         # public override void Interact() {\n    .export _interact\n
     \       \n    _interact:\n        \n        PUSH, __0_const_intnl_SystemUInt32\n
     \       \n         # if (this.core == null) {\n        PUSH, core\n        PUSH,
     __0_const_intnl_VRCUdonCommonInterfacesIUdonEventReceiver\n        PUSH, __0_intnl_SystemBoolean\n
     \       EXTERN, \"UnityEngineObject.__op_Equality__UnityEngineObject_UnityEngineObject__SystemBoolean\"\n
     \       PUSH, __0_intnl_SystemBoolean\n        JUMP_IF_FALSE, 0x0000005C\n        \n
-    \        # Debug.Log(\"SoundUiPlayOrPause: The core has not set.\");\n        PUSH,
-    __0_const_intnl_SystemString\n        EXTERN, \"UnityEngineDebug.__Log__SystemObject__SystemVoid\"\n
+    \        # Debug.Log(\"EasyAudioPlayerPlayOrPause: The core has not set.\");\n
+    \       PUSH, __0_const_intnl_SystemString\n        EXTERN, \"UnityEngineDebug.__Log__SystemObject__SystemVoid\"\n
     \       \n         # return;\n        PUSH, __0_intnl_returnTarget_UInt32 #Explicit
     return sequence\n        COPY\n        JUMP_INDIRECT, __0_intnl_returnTarget_UInt32\n
     \       \n         # if (this.core.UnPauseLatest()) {\n        PUSH, core\n        PUSH,
@@ -171,346 +171,347 @@ MonoBehaviour:
     - startInstruction: 0
       endInstruction: -1
       startSourceChar: 77
-      endSourceChar: 109
+      endSourceChar: 117
       line: 5
       lineChar: 0
-      spanCodeSection: 'public class SoundUiPlayOrPause '
+      spanCodeSection: 'public class EasyAudioPlayerPlayOrPause '
     - startInstruction: 0
       endInstruction: -1
-      startSourceChar: 109
-      endSourceChar: 111
+      startSourceChar: 117
+      endSourceChar: 119
       line: 5
-      lineChar: 32
+      lineChar: 40
       spanCodeSection: ': '
     - startInstruction: 0
       endInstruction: -1
-      startSourceChar: 111
-      endSourceChar: 111
+      startSourceChar: 119
+      endSourceChar: 119
       line: 5
-      lineChar: 34
+      lineChar: 42
       spanCodeSection: 
     - startInstruction: 0
       endInstruction: -1
-      startSourceChar: 111
-      endSourceChar: 137
+      startSourceChar: 119
+      endSourceChar: 145
       line: 5
-      lineChar: 34
+      lineChar: 42
       spanCodeSection: "UdonSharpBehaviour {\r\n    "
     - startInstruction: 0
       endInstruction: -1
-      startSourceChar: 137
-      endSourceChar: 144
+      startSourceChar: 145
+      endSourceChar: 152
       line: 6
       lineChar: 4
       spanCodeSection: 'public '
     - startInstruction: 0
       endInstruction: -1
-      startSourceChar: 144
-      endSourceChar: 144
+      startSourceChar: 152
+      endSourceChar: 152
       line: 6
       lineChar: 11
       spanCodeSection: 
     - startInstruction: 0
       endInstruction: -1
-      startSourceChar: 144
-      endSourceChar: 404
+      startSourceChar: 152
+      endSourceChar: 420
       line: 6
       lineChar: 11
-      spanCodeSection: "SoundUiAudioSourceStore core;\r\n\r\n    /// <summary>\r\n
+      spanCodeSection: "EasyAudioPlayerAudioSourceStore core;\r\n\r\n    /// <summary>\r\n
         \   /// Plays (Unpauses) an audio source that has been paused.\r\n    ///
         Pauses an audio source that is playing now.\r\n    /// Or plays the first
         audio source if no one is playing now.\r\n    /// </summary>\r\n    "
     - startInstruction: 0
       endInstruction: 7
-      startSourceChar: 404
-      endSourceChar: 436
+      startSourceChar: 420
+      endSourceChar: 452
       line: 13
       lineChar: 4
       spanCodeSection: 'public override void Interact() '
     - startInstruction: 8
       endInstruction: 7
-      startSourceChar: 436
-      endSourceChar: 447
+      startSourceChar: 452
+      endSourceChar: 463
       line: 13
       lineChar: 36
       spanCodeSection: "{\r\n        "
     - startInstruction: 8
       endInstruction: 7
-      startSourceChar: 447
-      endSourceChar: 451
+      startSourceChar: 463
+      endSourceChar: 467
       line: 14
       lineChar: 8
       spanCodeSection: if (
     - startInstruction: 8
       endInstruction: 7
-      startSourceChar: 451
-      endSourceChar: 451
+      startSourceChar: 467
+      endSourceChar: 467
       line: 14
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 8
       endInstruction: 7
-      startSourceChar: 451
-      endSourceChar: 451
+      startSourceChar: 467
+      endSourceChar: 467
       line: 14
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 8
       endInstruction: 7
-      startSourceChar: 451
-      endSourceChar: 456
+      startSourceChar: 467
+      endSourceChar: 472
       line: 14
       lineChar: 12
       spanCodeSection: this.
     - startInstruction: 8
       endInstruction: 7
-      startSourceChar: 456
-      endSourceChar: 464
+      startSourceChar: 472
+      endSourceChar: 480
       line: 14
       lineChar: 17
       spanCodeSection: 'core == '
     - startInstruction: 8
       endInstruction: 55
-      startSourceChar: 464
-      endSourceChar: 470
+      startSourceChar: 480
+      endSourceChar: 486
       line: 14
       lineChar: 25
       spanCodeSection: 'null) '
     - startInstruction: 56
       endInstruction: 55
-      startSourceChar: 470
-      endSourceChar: 485
+      startSourceChar: 486
+      endSourceChar: 501
       line: 14
       lineChar: 31
       spanCodeSection: "{\r\n            "
     - startInstruction: 56
       endInstruction: 55
-      startSourceChar: 485
-      endSourceChar: 485
+      startSourceChar: 501
+      endSourceChar: 501
       line: 15
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 56
       endInstruction: 55
-      startSourceChar: 485
-      endSourceChar: 485
+      startSourceChar: 501
+      endSourceChar: 501
       line: 15
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 56
       endInstruction: 55
-      startSourceChar: 485
-      endSourceChar: 485
+      startSourceChar: 501
+      endSourceChar: 501
       line: 15
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 56
       endInstruction: 55
-      startSourceChar: 485
-      endSourceChar: 491
+      startSourceChar: 501
+      endSourceChar: 507
       line: 15
       lineChar: 12
       spanCodeSection: Debug.
     - startInstruction: 56
       endInstruction: 55
-      startSourceChar: 491
-      endSourceChar: 495
+      startSourceChar: 507
+      endSourceChar: 511
       line: 15
       lineChar: 18
       spanCodeSection: Log(
     - startInstruction: 56
       endInstruction: 71
-      startSourceChar: 495
-      endSourceChar: 554
+      startSourceChar: 511
+      endSourceChar: 578
       line: 15
       lineChar: 22
-      spanCodeSection: "\"SoundUiPlayOrPause: The core has not set.\");\r\n            "
+      spanCodeSection: "\"EasyAudioPlayerPlayOrPause: The core has not set.\");\r\n
+        \           "
     - startInstruction: 72
       endInstruction: 91
-      startSourceChar: 554
-      endSourceChar: 584
+      startSourceChar: 578
+      endSourceChar: 608
       line: 16
       lineChar: 12
       spanCodeSection: "return;\r\n        }\r\n\r\n        "
     - startInstruction: 92
       endInstruction: 91
-      startSourceChar: 584
-      endSourceChar: 588
+      startSourceChar: 608
+      endSourceChar: 612
       line: 19
       lineChar: 8
       spanCodeSection: if (
     - startInstruction: 92
       endInstruction: 91
-      startSourceChar: 588
-      endSourceChar: 588
+      startSourceChar: 612
+      endSourceChar: 612
       line: 19
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 92
       endInstruction: 91
-      startSourceChar: 588
-      endSourceChar: 588
+      startSourceChar: 612
+      endSourceChar: 612
       line: 19
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 92
       endInstruction: 91
-      startSourceChar: 588
-      endSourceChar: 588
+      startSourceChar: 612
+      endSourceChar: 612
       line: 19
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 92
       endInstruction: 91
-      startSourceChar: 588
-      endSourceChar: 593
+      startSourceChar: 612
+      endSourceChar: 617
       line: 19
       lineChar: 12
       spanCodeSection: this.
     - startInstruction: 92
       endInstruction: 91
-      startSourceChar: 593
-      endSourceChar: 598
+      startSourceChar: 617
+      endSourceChar: 622
       line: 19
       lineChar: 17
       spanCodeSection: core.
     - startInstruction: 92
       endInstruction: 187
-      startSourceChar: 598
-      endSourceChar: 615
+      startSourceChar: 622
+      endSourceChar: 639
       line: 19
       lineChar: 22
       spanCodeSection: 'UnPauseLatest()) '
     - startInstruction: 188
       endInstruction: 187
-      startSourceChar: 615
-      endSourceChar: 630
+      startSourceChar: 639
+      endSourceChar: 654
       line: 19
       lineChar: 39
       spanCodeSection: "{\r\n            "
     - startInstruction: 188
       endInstruction: 207
-      startSourceChar: 630
-      endSourceChar: 660
+      startSourceChar: 654
+      endSourceChar: 684
       line: 20
       lineChar: 12
       spanCodeSection: "return;\r\n        }\r\n\r\n        "
     - startInstruction: 208
       endInstruction: 207
-      startSourceChar: 660
-      endSourceChar: 664
+      startSourceChar: 684
+      endSourceChar: 688
       line: 23
       lineChar: 8
       spanCodeSection: if (
     - startInstruction: 208
       endInstruction: 207
-      startSourceChar: 664
-      endSourceChar: 664
+      startSourceChar: 688
+      endSourceChar: 688
       line: 23
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 208
       endInstruction: 207
-      startSourceChar: 664
-      endSourceChar: 664
+      startSourceChar: 688
+      endSourceChar: 688
       line: 23
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 208
       endInstruction: 207
-      startSourceChar: 664
-      endSourceChar: 664
+      startSourceChar: 688
+      endSourceChar: 688
       line: 23
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 208
       endInstruction: 207
-      startSourceChar: 664
-      endSourceChar: 669
+      startSourceChar: 688
+      endSourceChar: 693
       line: 23
       lineChar: 12
       spanCodeSection: this.
     - startInstruction: 208
       endInstruction: 207
-      startSourceChar: 669
-      endSourceChar: 674
+      startSourceChar: 693
+      endSourceChar: 698
       line: 23
       lineChar: 17
       spanCodeSection: core.
     - startInstruction: 208
       endInstruction: 303
-      startSourceChar: 674
-      endSourceChar: 690
+      startSourceChar: 698
+      endSourceChar: 714
       line: 23
       lineChar: 22
       spanCodeSection: 'PausePlaying()) '
     - startInstruction: 304
       endInstruction: 303
-      startSourceChar: 690
-      endSourceChar: 705
+      startSourceChar: 714
+      endSourceChar: 729
       line: 23
       lineChar: 38
       spanCodeSection: "{\r\n            "
     - startInstruction: 304
       endInstruction: 323
-      startSourceChar: 705
-      endSourceChar: 735
+      startSourceChar: 729
+      endSourceChar: 759
       line: 24
       lineChar: 12
       spanCodeSection: "return;\r\n        }\r\n\r\n        "
     - startInstruction: 324
       endInstruction: 323
-      startSourceChar: 735
-      endSourceChar: 735
+      startSourceChar: 759
+      endSourceChar: 759
       line: 27
       lineChar: 8
       spanCodeSection: 
     - startInstruction: 324
       endInstruction: 323
-      startSourceChar: 735
-      endSourceChar: 735
+      startSourceChar: 759
+      endSourceChar: 759
       line: 27
       lineChar: 8
       spanCodeSection: 
     - startInstruction: 324
       endInstruction: 323
-      startSourceChar: 735
-      endSourceChar: 735
+      startSourceChar: 759
+      endSourceChar: 759
       line: 27
       lineChar: 8
       spanCodeSection: 
     - startInstruction: 324
       endInstruction: 323
-      startSourceChar: 735
-      endSourceChar: 735
+      startSourceChar: 759
+      endSourceChar: 759
       line: 27
       lineChar: 8
       spanCodeSection: 
     - startInstruction: 324
       endInstruction: 323
-      startSourceChar: 735
-      endSourceChar: 740
+      startSourceChar: 759
+      endSourceChar: 764
       line: 27
       lineChar: 8
       spanCodeSection: this.
     - startInstruction: 324
       endInstruction: 323
-      startSourceChar: 740
-      endSourceChar: 745
+      startSourceChar: 764
+      endSourceChar: 769
       line: 27
       lineChar: 13
       spanCodeSection: core.
     - startInstruction: 324
       endInstruction: 323
-      startSourceChar: 745
-      endSourceChar: 750
+      startSourceChar: 769
+      endSourceChar: 774
       line: 27
       lineChar: 18
       spanCodeSection: Play(
     - startInstruction: 324
       endInstruction: 324
-      startSourceChar: 750
-      endSourceChar: 750
+      startSourceChar: 774
+      endSourceChar: 774
       line: 27
       lineChar: 23
       spanCodeSection: 
@@ -556,7 +557,7 @@ MonoBehaviour:
       Data: 4|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: SoundUiAudioSourceStore, Assembly-CSharp
+      Data: EasyAudioPlayerAudioSourceStore, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 

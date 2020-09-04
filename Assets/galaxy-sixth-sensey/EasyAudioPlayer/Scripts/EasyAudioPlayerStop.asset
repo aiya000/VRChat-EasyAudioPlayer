@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
-  m_Name: SoundUiStop
+  m_Name: EasyAudioPlayerStop
   m_EditorClassIdentifier: 
   serializedUdonProgramAsset: {fileID: 11400000, guid: 55a230a54ba240b4ca79b105aff393ce,
     type: 2}
@@ -23,17 +23,18 @@ MonoBehaviour:
     null\n    __0_intnl_SystemBoolean: %SystemBoolean, null\n    __0_intnl_returnTarget_UInt32:
     %SystemUInt32, null\n\n.data_end\n\n        \n         # using UdonSharp;\n        \n
     \        # using UnityEngine;\n        \n         # using VRC.SDKBase;\n        \n
-    \        # using VRC.Udon;\n        \n         # public class SoundUiStop : UdonSharpBehaviour
-    {\n.code_start\n        \n         # public SoundUiAudioSourceStore core;\n        \n
-    \        # public override void Interact() {\n    .export _interact\n        \n
-    \   _interact:\n        \n        PUSH, __0_const_intnl_SystemUInt32\n        \n
-    \        # if (this.core == null) {\n        PUSH, core\n        PUSH, __0_const_intnl_VRCUdonCommonInterfacesIUdonEventReceiver\n
-    \       PUSH, __0_intnl_SystemBoolean\n        EXTERN, \"UnityEngineObject.__op_Equality__UnityEngineObject_UnityEngineObject__SystemBoolean\"\n
+    \        # using VRC.Udon;\n        \n         # public class EasyAudioPlayerStop
+    : UdonSharpBehaviour {\n.code_start\n        \n         # public EasyAudioPlayerAudioSourceStore
+    core;\n        \n         # public override void Interact() {\n    .export _interact\n
+    \       \n    _interact:\n        \n        PUSH, __0_const_intnl_SystemUInt32\n
+    \       \n         # if (this.core == null) {\n        PUSH, core\n        PUSH,
+    __0_const_intnl_VRCUdonCommonInterfacesIUdonEventReceiver\n        PUSH, __0_intnl_SystemBoolean\n
+    \       EXTERN, \"UnityEngineObject.__op_Equality__UnityEngineObject_UnityEngineObject__SystemBoolean\"\n
     \       PUSH, __0_intnl_SystemBoolean\n        JUMP_IF_FALSE, 0x0000005C\n        \n
-    \        # Debug.Log(\"SoundUiStop: The core has not set.\");\n        PUSH, __0_const_intnl_SystemString\n
-    \       EXTERN, \"UnityEngineDebug.__Log__SystemObject__SystemVoid\"\n        \n
-    \        # return;\n        PUSH, __0_intnl_returnTarget_UInt32 #Explicit return
-    sequence\n        COPY\n        JUMP_INDIRECT, __0_intnl_returnTarget_UInt32\n
+    \        # Debug.Log(\"EasyAudioPlayerStop: The core has not set.\");\n        PUSH,
+    __0_const_intnl_SystemString\n        EXTERN, \"UnityEngineDebug.__Log__SystemObject__SystemVoid\"\n
+    \       \n         # return;\n        PUSH, __0_intnl_returnTarget_UInt32 #Explicit
+    return sequence\n        COPY\n        JUMP_INDIRECT, __0_intnl_returnTarget_UInt32\n
     \       \n         # this.core.StopAll();\n        PUSH, core\n        PUSH, __1_const_intnl_SystemString\n
     \       EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid\"\n
     \       PUSH, __0_intnl_returnTarget_UInt32 #Function epilogue\n        COPY\n
@@ -145,210 +146,210 @@ MonoBehaviour:
     - startInstruction: 0
       endInstruction: -1
       startSourceChar: 77
-      endSourceChar: 102
+      endSourceChar: 110
       line: 5
       lineChar: 0
-      spanCodeSection: 'public class SoundUiStop '
+      spanCodeSection: 'public class EasyAudioPlayerStop '
     - startInstruction: 0
       endInstruction: -1
-      startSourceChar: 102
-      endSourceChar: 104
+      startSourceChar: 110
+      endSourceChar: 112
       line: 5
-      lineChar: 25
+      lineChar: 33
       spanCodeSection: ': '
     - startInstruction: 0
       endInstruction: -1
-      startSourceChar: 104
-      endSourceChar: 104
+      startSourceChar: 112
+      endSourceChar: 112
       line: 5
-      lineChar: 27
+      lineChar: 35
       spanCodeSection: 
     - startInstruction: 0
       endInstruction: -1
-      startSourceChar: 104
-      endSourceChar: 130
+      startSourceChar: 112
+      endSourceChar: 138
       line: 5
-      lineChar: 27
+      lineChar: 35
       spanCodeSection: "UdonSharpBehaviour {\r\n    "
     - startInstruction: 0
       endInstruction: -1
-      startSourceChar: 130
-      endSourceChar: 137
+      startSourceChar: 138
+      endSourceChar: 145
       line: 6
       lineChar: 4
       spanCodeSection: 'public '
     - startInstruction: 0
       endInstruction: -1
-      startSourceChar: 137
-      endSourceChar: 137
+      startSourceChar: 145
+      endSourceChar: 145
       line: 6
       lineChar: 11
       spanCodeSection: 
     - startInstruction: 0
       endInstruction: -1
-      startSourceChar: 137
-      endSourceChar: 174
+      startSourceChar: 145
+      endSourceChar: 190
       line: 6
       lineChar: 11
-      spanCodeSection: "SoundUiAudioSourceStore core;\r\n\r\n    "
+      spanCodeSection: "EasyAudioPlayerAudioSourceStore core;\r\n\r\n    "
     - startInstruction: 0
       endInstruction: 7
-      startSourceChar: 174
-      endSourceChar: 206
+      startSourceChar: 190
+      endSourceChar: 222
       line: 8
       lineChar: 4
       spanCodeSection: 'public override void Interact() '
     - startInstruction: 8
       endInstruction: 7
-      startSourceChar: 206
-      endSourceChar: 217
+      startSourceChar: 222
+      endSourceChar: 233
       line: 8
       lineChar: 36
       spanCodeSection: "{\r\n        "
     - startInstruction: 8
       endInstruction: 7
-      startSourceChar: 217
-      endSourceChar: 221
+      startSourceChar: 233
+      endSourceChar: 237
       line: 9
       lineChar: 8
       spanCodeSection: if (
     - startInstruction: 8
       endInstruction: 7
-      startSourceChar: 221
-      endSourceChar: 221
+      startSourceChar: 237
+      endSourceChar: 237
       line: 9
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 8
       endInstruction: 7
-      startSourceChar: 221
-      endSourceChar: 221
+      startSourceChar: 237
+      endSourceChar: 237
       line: 9
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 8
       endInstruction: 7
-      startSourceChar: 221
-      endSourceChar: 226
+      startSourceChar: 237
+      endSourceChar: 242
       line: 9
       lineChar: 12
       spanCodeSection: this.
     - startInstruction: 8
       endInstruction: 7
-      startSourceChar: 226
-      endSourceChar: 234
+      startSourceChar: 242
+      endSourceChar: 250
       line: 9
       lineChar: 17
       spanCodeSection: 'core == '
     - startInstruction: 8
       endInstruction: 55
-      startSourceChar: 234
-      endSourceChar: 240
+      startSourceChar: 250
+      endSourceChar: 256
       line: 9
       lineChar: 25
       spanCodeSection: 'null) '
     - startInstruction: 56
       endInstruction: 55
-      startSourceChar: 240
-      endSourceChar: 255
+      startSourceChar: 256
+      endSourceChar: 271
       line: 9
       lineChar: 31
       spanCodeSection: "{\r\n            "
     - startInstruction: 56
       endInstruction: 55
-      startSourceChar: 255
-      endSourceChar: 255
+      startSourceChar: 271
+      endSourceChar: 271
       line: 10
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 56
       endInstruction: 55
-      startSourceChar: 255
-      endSourceChar: 255
+      startSourceChar: 271
+      endSourceChar: 271
       line: 10
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 56
       endInstruction: 55
-      startSourceChar: 255
-      endSourceChar: 255
+      startSourceChar: 271
+      endSourceChar: 271
       line: 10
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 56
       endInstruction: 55
-      startSourceChar: 255
-      endSourceChar: 261
+      startSourceChar: 271
+      endSourceChar: 277
       line: 10
       lineChar: 12
       spanCodeSection: Debug.
     - startInstruction: 56
       endInstruction: 55
-      startSourceChar: 261
-      endSourceChar: 265
+      startSourceChar: 277
+      endSourceChar: 281
       line: 10
       lineChar: 18
       spanCodeSection: Log(
     - startInstruction: 56
       endInstruction: 71
-      startSourceChar: 265
-      endSourceChar: 317
+      startSourceChar: 281
+      endSourceChar: 341
       line: 10
       lineChar: 22
-      spanCodeSection: "\"SoundUiStop: The core has not set.\");\r\n            "
+      spanCodeSection: "\"EasyAudioPlayerStop: The core has not set.\");\r\n            "
     - startInstruction: 72
       endInstruction: 91
-      startSourceChar: 317
-      endSourceChar: 345
+      startSourceChar: 341
+      endSourceChar: 369
       line: 11
       lineChar: 12
       spanCodeSection: "return;\r\n        }\r\n        "
     - startInstruction: 92
       endInstruction: 91
-      startSourceChar: 345
-      endSourceChar: 345
+      startSourceChar: 369
+      endSourceChar: 369
       line: 13
       lineChar: 8
       spanCodeSection: 
     - startInstruction: 92
       endInstruction: 91
-      startSourceChar: 345
-      endSourceChar: 345
+      startSourceChar: 369
+      endSourceChar: 369
       line: 13
       lineChar: 8
       spanCodeSection: 
     - startInstruction: 92
       endInstruction: 91
-      startSourceChar: 345
-      endSourceChar: 345
+      startSourceChar: 369
+      endSourceChar: 369
       line: 13
       lineChar: 8
       spanCodeSection: 
     - startInstruction: 92
       endInstruction: 91
-      startSourceChar: 345
-      endSourceChar: 345
+      startSourceChar: 369
+      endSourceChar: 369
       line: 13
       lineChar: 8
       spanCodeSection: 
     - startInstruction: 92
       endInstruction: 91
-      startSourceChar: 345
-      endSourceChar: 350
+      startSourceChar: 369
+      endSourceChar: 374
       line: 13
       lineChar: 8
       spanCodeSection: this.
     - startInstruction: 92
       endInstruction: 91
-      startSourceChar: 350
-      endSourceChar: 355
+      startSourceChar: 374
+      endSourceChar: 379
       line: 13
       lineChar: 13
       spanCodeSection: core.
     - startInstruction: 92
       endInstruction: 92
-      startSourceChar: 355
-      endSourceChar: 355
+      startSourceChar: 379
+      endSourceChar: 379
       line: 13
       lineChar: 18
       spanCodeSection: 
@@ -394,7 +395,7 @@ MonoBehaviour:
       Data: 4|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: SoundUiAudioSourceStore, Assembly-CSharp
+      Data: EasyAudioPlayerAudioSourceStore, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
