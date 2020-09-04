@@ -3,30 +3,30 @@ using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
 
-public class SoundUiPlayPrevious : UdonSharpBehaviour {
-    public SoundUiAudioSourceStore core;
+public class EasyAudioPlayerPlayPrevious : UdonSharpBehaviour {
+    public EasyAudioPlayerAudioSourceStore core;
 
     public override void Interact() {
         if (this.core == null) {
-            Debug.Log("SoundUiPlayPrevious: The core has not set.");
+            Debug.Log("EasyAudioPlayerPlayPrevious: The core has not set.");
             return;
         }
 
         var audioSources = this.core.GetAudioSources();
         if (audioSources.Length == 0) {
-            Debug.Log("SoundUiPlayPrevious: exit for the empty audio sources.");
+            Debug.Log("EasyAudioPlayerPlayPrevious: exit for the empty audio sources.");
             return;
         }
 
         var stoppedIndex = this.core.StopLatest();
         if (!this.core.IsNotOutOfBoundsOnAudioSources(stoppedIndex)) {
-            Debug.Log($"SoundUiPlayPrevious: Illegal stopped index '{stoppedIndex}. Exit.");
+            Debug.Log($"EasyAudioPlayerPlayPrevious: Illegal stopped index '{stoppedIndex}. Exit.");
             return;
         }
 
         var previousIndex = this.getPreviousIndex(stoppedIndex, audioSources.Length);
         if (previousIndex == -1) {
-            Debug.Log($"SoundUiPlayPrevious: The previous index of '{stoppedIndex}' couldn't be gotten. Exit.");
+            Debug.Log($"EasyAudioPlayerPlayPrevious: The previous index of '{stoppedIndex}' couldn't be gotten. Exit.");
         }
 
         this.core.Play(previousIndex);

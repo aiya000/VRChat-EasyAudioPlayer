@@ -3,12 +3,12 @@ using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
 
-public class SoundUiStop : UdonSharpBehaviour {
-    public SoundUiAudioSourceStore core;
+public class EasyAudioPlayerStop : UdonSharpBehaviour {
+    public EasyAudioPlayerAudioSourceStore core;
 
     public override void Interact() {
         if (this.core == null) {
-            Debug.Log("SoundUiStop: The core has not set.");
+            Debug.Log("EasyAudioPlayerStop: The core has not set.");
             return;
         }
         this.core.StopAll();

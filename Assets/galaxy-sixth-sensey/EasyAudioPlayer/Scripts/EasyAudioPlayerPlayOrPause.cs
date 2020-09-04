@@ -3,8 +3,8 @@ using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
 
-public class SoundUiPlayOrPause : UdonSharpBehaviour {
-    public SoundUiAudioSourceStore core;
+public class EasyAudioPlayerPlayOrPause : UdonSharpBehaviour {
+    public EasyAudioPlayerAudioSourceStore core;
 
     /// <summary>
     /// Plays (Unpauses) an audio source that has been paused.
@@ -13,7 +13,7 @@ public class SoundUiPlayOrPause : UdonSharpBehaviour {
     /// </summary>
     public override void Interact() {
         if (this.core == null) {
-            Debug.Log("SoundUiPlayOrPause: The core has not set.");
+            Debug.Log("EasyAudioPlayerPlayOrPause: The core has not set.");
             return;
         }
 

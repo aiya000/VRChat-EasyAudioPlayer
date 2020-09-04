@@ -10,7 +10,7 @@ using VRC.Udon;
 /// - The EasyAudioPlayer's state
 /// - Operations for the audio sources (EasyAudioPlayer scripts should use this instead of AudioSource methods.)
 /// </summary>
-public class SoundUiAudioSourceStore : UdonSharpBehaviour {
+public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
     public GameObject audioSourceList;
     public Text playingAudioName;
 
@@ -22,16 +22,16 @@ public class SoundUiAudioSourceStore : UdonSharpBehaviour {
 
     public void Start() {
         if (this.audioSourceList == null) {
-            Debug.Log("SoundUiAudioSourceStore: The audio source list has not set.");
+            Debug.Log("EasyAudioPlayerAudioSourceStore: The audio source list has not set.");
             return;
         }
 
         var components = this.audioSourceList.GetComponentsInChildren(typeof(AudioSource));
         if (components == null) {
-            Debug.Log("SoundUiAudioSourceStore: Gotten components is null.");
+            Debug.Log("EasyAudioPlayerAudioSourceStore: Gotten components is null.");
             return;
         }
-        Debug.Log($"SoundUiAudioSourceStore: Gotten components size is {components.Length}");
+        Debug.Log($"EasyAudioPlayerAudioSourceStore: Gotten components size is {components.Length}");
 
         this.audioSources = new AudioSource[components.Length];
         for (var i = 0; i < components.Length; i++) {
@@ -39,7 +39,7 @@ public class SoundUiAudioSourceStore : UdonSharpBehaviour {
 
             // Set this.playing to the first one which is playing
             if (this.playing == -1 && this.audioSources[i].isPlaying) {
-                Debug.Log($"SoundUiAudioSourceStore: Start(): Set this.playing to {i}");
+                Debug.Log($"EasyAudioPlayerAudioSourceStore: Start(): Set this.playing to {i}");
                 this.playing = i;
             }
         }
@@ -60,10 +60,10 @@ public class SoundUiAudioSourceStore : UdonSharpBehaviour {
     /// </summary>
     public AudioSource[] GetAudioSources() {
         if (this.audioSources == null) {
-            Debug.Log("SoundUiAudioSourceStore: Gotten audio sources is null. Return the empty array instead.");
+            Debug.Log("EasyAudioPlayerAudioSourceStore: Gotten audio sources is null. Return the empty array instead.");
             return new AudioSource[0];
         }
-        Debug.Log($"SoundUiAudioSourceStore: Gotten audio sources size is {this.audioSources.Length}");
+        Debug.Log($"EasyAudioPlayerAudioSourceStore: Gotten audio sources size is {this.audioSources.Length}");
 
         return this.audioSources;
     }
@@ -85,7 +85,7 @@ public class SoundUiAudioSourceStore : UdonSharpBehaviour {
         this.playingAudioName.text = audioSource.name;
 
         this.paused = i;
-        Debug.Log($"SoundUiAudioSourceStore: Pause(): {i}-th is paused.");
+        Debug.Log($"EasyAudioPlayerAudioSourceStore: Pause(): {i}-th is paused.");
     }
 
     /// <summary>
@@ -94,13 +94,13 @@ public class SoundUiAudioSourceStore : UdonSharpBehaviour {
     /// </summary>
     public bool PausePlaying() {
         if (!IsNotOutOfBoundsOnAudioSources(this.playing)) {
-            Debug.Log($"SoundUiAudioSourceStore: PausePlaying(): {this.playing} is out of bounds. Skip.");
+            Debug.Log($"EasyAudioPlayerAudioSourceStore: PausePlaying(): {this.playing} is out of bounds. Skip.");
             return false;
         }
 
         var result = this.audioSources[this.playing].isPlaying;
         this.Pause(this.playing);
-        Debug.Log($"SoundUiAudioSourceStore: PausePlaying(): {this.playing} is paused.");
+        Debug.Log($"EasyAudioPlayerAudioSourceStore: PausePlaying(): {this.playing} is paused.");
         return result;
     }
 
@@ -114,7 +114,7 @@ public class SoundUiAudioSourceStore : UdonSharpBehaviour {
     /// </summary>
     public bool UnPauseLatest() {
         if (this.paused == -1) {
-            Debug.Log("SoundUiAudioSourceStore: UnPauseLatest(): no one was playing. Skip.");
+            Debug.Log("EasyAudioPlayerAudioSourceStore: UnPauseLatest(): no one was playing. Skip.");
             return false;
         }
 
@@ -122,7 +122,7 @@ public class SoundUiAudioSourceStore : UdonSharpBehaviour {
         audioSource.UnPause();
         this.playingAudioName.text = audioSource.name;
 
-        Debug.Log($"SoundUiAudioSourceStore: UnPauseLatest(): {this.paused} is unpaused.");
+        Debug.Log($"EasyAudioPlayerAudioSourceStore: UnPauseLatest(): {this.paused} is unpaused.");
         this.paused = -1;
         return true;
     }
@@ -133,21 +133,21 @@ public class SoundUiAudioSourceStore : UdonSharpBehaviour {
     /// </summary>
     public void Play(int i) {
         if (i < 0 || this.audioSources.Length <= i) {
-            Debug.Log($"SoundUiAudioSourceStore: Play(): A got index is out of bounds: {i}");
+            Debug.Log($"EasyAudioPlayerAudioSourceStore: Play(): A got index is out of bounds: {i}");
             return;
         }
 
         var audioSource = this.audioSources[i];
         audioSource.Play();
         this.playing = i;
-        Debug.Log($"SoundUiAudioSourceStore: Play(): {i} started to play.");
+        Debug.Log($"EasyAudioPlayerAudioSourceStore: Play(): {i} started to play.");
 
         this.playingAudioName.text = audioSource.name;
     }
 
     public int StopLatest() {
         if (this.playing < 0 || this.audioSources.Length <= this.playing) {
-            Debug.Log($"SoundUiAudioSourceStore: Stop(): A got index is out of bounds: {this.playing}. Skip.");
+            Debug.Log($"EasyAudioPlayerAudioSourceStore: Stop(): A got index is out of bounds: {this.playing}. Skip.");
             return -1;
         }
 
