@@ -14,10 +14,19 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
     public GameObject audioSourceList;
     public Text playingAudioName;
 
+    /// <summary>
+    /// To be referenced by other classes.
+    /// </summary>
+    public bool isWorkingOnlyOnLocal = false;
+
     private readonly string NOT_PLAYING_NOW = "<Not playing now>";
 
     private AudioSource[] audioSources;
+
+    [UdonSynced(UdonSyncMode.None)]
     private int paused = -1;
+
+    [UdonSynced(UdonSyncMode.None)]
     private int playing = -1;  // Now playing AudioSource's index
 
     public void Start() {
@@ -40,7 +49,7 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
             // Set this.playing to the first one which is playing
             if (this.playing == -1 && this.audioSources[i].isPlaying) {
                 Debug.Log($"EasyAudioPlayerAudioSourceStore: Start(): Set this.playing to {i}");
-                this.playing = i;
+                this.setPlaying(i);
             }
         }
 
@@ -107,7 +116,7 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
         audioSource.Pause();
         this.playingAudioName.text = audioSource.name;
 
-        this.paused = i;
+        this.setPaused(i);
         Debug.Log($"EasyAudioPlayerAudioSourceStore: Pause(): {i}-th is paused.");
     }
 
@@ -146,7 +155,7 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
         this.playingAudioName.text = audioSource.name;
 
         Debug.Log($"EasyAudioPlayerAudioSourceStore: UnPauseLatest(): {this.paused} is unpaused.");
-        this.paused = -1;
+        this.setPaused(-1);
         return true;
     }
 
@@ -162,7 +171,7 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
 
         var audioSource = this.audioSources[i];
         audioSource.Play();
-        this.playing = i;
+        this.setPlaying(i);
         Debug.Log($"EasyAudioPlayerAudioSourceStore: Play(): {i} started to play.");
 
         this.playingAudioName.text = audioSource.name;
@@ -178,7 +187,7 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
         this.playingAudioName.text = NOT_PLAYING_NOW;
 
         var playing = this.playing;
-        this.playing = -1;
+        this.setPlaying(-1);
         return playing;
     }
 
@@ -188,8 +197,22 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
         }
 
         this.playingAudioName.text = NOT_PLAYING_NOW;
-        this.paused = -1;
-        this.playing = -1;
+        this.setPaused(-1);
+        this.setPlaying(-1);
+    }
+
+    private void setPaused(int val) {
+        if (!Networking.IsOwner(Networking.LocalPlayer, this.gameObject)) {
+            Networking.SetOwner(Networking.LocalPlayer, this.gameObject);
+        }
+        this.paused = val;
+    }
+
+    private void setPlaying(int val) {
+        if (!Networking.IsOwner(Networking.LocalPlayer, this.gameObject)) {
+            Networking.SetOwner(Networking.LocalPlayer, this.gameObject);
+        }
+        this.playing = val;
     }
 
     private AudioSource getAudioSource(GameObject x) {

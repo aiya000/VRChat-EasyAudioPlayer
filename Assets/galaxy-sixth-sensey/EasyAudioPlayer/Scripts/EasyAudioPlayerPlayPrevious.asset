@@ -16,41 +16,47 @@ MonoBehaviour:
     type: 2}
   udonAssembly: ".data_start\n\n    .export core\n\n    __refl_const_intnl_udonTypeID:
     %SystemInt64, null\n    __refl_const_intnl_udonTypeName: %SystemString, null\n
-    \   core: %VRCUdonUdonBehaviour, null\n    __0_audioSources_AudioSourceArray:
-    %UnityEngineAudioSourceArray, null\n    __0_baseIndex_Int32: %SystemInt32, null\n
-    \   __0_length_Int32: %SystemInt32, null\n    __0_previousIndex_Int32: %SystemInt32,
-    null\n    __0_stoppedIndex_Int32: %SystemInt32, null\n    __0_const_intnl_SystemInt32:
-    %SystemInt32, null\n    __1_const_intnl_SystemInt32: %SystemInt32, null\n    __2_const_intnl_SystemInt32:
-    %SystemInt32, null\n    __0_const_intnl_SystemObject: %SystemObject, null\n    __0_const_intnl_SystemString:
-    %SystemString, null\n    __1_const_intnl_SystemString: %SystemString, null\n    __10_const_intnl_SystemString:
-    %SystemString, null\n    __11_const_intnl_SystemString: %SystemString, null\n
-    \   __12_const_intnl_SystemString: %SystemString, null\n    __13_const_intnl_SystemString:
-    %SystemString, null\n    __14_const_intnl_SystemString: %SystemString, null\n
+    \   core: %VRCUdonUdonBehaviour, null\n    __0_this_intnl_EasyAudioPlayerPlayPrevious:
+    %VRCUdonUdonBehaviour, this\n    __0_audioSources_AudioSourceArray: %UnityEngineAudioSourceArray,
+    null\n    __0_baseIndex_Int32: %SystemInt32, null\n    __0_length_Int32: %SystemInt32,
+    null\n    __0_previousIndex_Int32: %SystemInt32, null\n    __0_stoppedIndex_Int32:
+    %SystemInt32, null\n    __0_const_intnl_SystemInt32: %SystemInt32, null\n    __1_const_intnl_SystemInt32:
+    %SystemInt32, null\n    __2_const_intnl_SystemInt32: %SystemInt32, null\n    __0_const_intnl_VRCUdonCommonInterfacesNetworkEventTarget:
+    %VRCUdonCommonInterfacesNetworkEventTarget, null\n    __0_const_intnl_SystemObject:
+    %SystemObject, null\n    __0_const_intnl_SystemString: %SystemString, null\n    __1_const_intnl_SystemString:
+    %SystemString, null\n    __10_const_intnl_SystemString: %SystemString, null\n
+    \   __11_const_intnl_SystemString: %SystemString, null\n    __12_const_intnl_SystemString:
+    %SystemString, null\n    __13_const_intnl_SystemString: %SystemString, null\n
+    \   __14_const_intnl_SystemString: %SystemString, null\n    __15_const_intnl_SystemString:
+    %SystemString, null\n    __16_const_intnl_SystemString: %SystemString, null\n
     \   __2_const_intnl_SystemString: %SystemString, null\n    __3_const_intnl_SystemString:
     %SystemString, null\n    __4_const_intnl_SystemString: %SystemString, null\n    __5_const_intnl_SystemString:
     %SystemString, null\n    __6_const_intnl_SystemString: %SystemString, null\n    __7_const_intnl_SystemString:
     %SystemString, null\n    __8_const_intnl_SystemString: %SystemString, null\n    __9_const_intnl_SystemString:
     %SystemString, null\n    __0_const_intnl_VRCUdonCommonInterfacesIUdonEventReceiver:
     %VRCUdonUdonBehaviour, null\n    __0_const_intnl_exitJumpLoc_UInt32: %SystemUInt32,
-    null\n    __0_const_intnl_SystemUInt32: %SystemUInt32, null\n    __0_intnl_UnityEngineAudioSourceArray:
-    %UnityEngineAudioSourceArray, null\n    __0_intnl_SystemBoolean: %SystemBoolean,
-    null\n    __1_intnl_SystemBoolean: %SystemBoolean, null\n    __10_intnl_SystemBoolean:
-    %SystemBoolean, null\n    __2_intnl_SystemBoolean: %SystemBoolean, null\n    __3_intnl_SystemBoolean:
-    %SystemBoolean, null\n    __4_intnl_SystemBoolean: %SystemBoolean, null\n    __5_intnl_SystemBoolean:
-    %SystemBoolean, null\n    __6_intnl_SystemBoolean: %SystemBoolean, null\n    __7_intnl_SystemBoolean:
-    %SystemBoolean, null\n    __8_intnl_SystemBoolean: %SystemBoolean, null\n    __9_intnl_SystemBoolean:
-    %SystemBoolean, null\n    __0_intnl_returnValSymbol_Int32: %SystemInt32, null\n
-    \   __0_intnl_SystemInt32: %SystemInt32, null\n    __1_intnl_SystemInt32: %SystemInt32,
-    null\n    __2_intnl_SystemInt32: %SystemInt32, null\n    __3_intnl_SystemInt32:
+    null\n    __0_const_intnl_SystemUInt32: %SystemUInt32, null\n    __1_const_intnl_exitJumpLoc_UInt32:
+    %SystemUInt32, null\n    __0_intnl_UnityEngineAudioSourceArray: %UnityEngineAudioSourceArray,
+    null\n    __0_intnl_SystemBoolean: %SystemBoolean, null\n    __1_intnl_SystemBoolean:
+    %SystemBoolean, null\n    __10_intnl_SystemBoolean: %SystemBoolean, null\n    __11_intnl_SystemBoolean:
+    %SystemBoolean, null\n    __12_intnl_SystemBoolean: %SystemBoolean, null\n    __2_intnl_SystemBoolean:
+    %SystemBoolean, null\n    __3_intnl_SystemBoolean: %SystemBoolean, null\n    __4_intnl_SystemBoolean:
+    %SystemBoolean, null\n    __5_intnl_SystemBoolean: %SystemBoolean, null\n    __6_intnl_SystemBoolean:
+    %SystemBoolean, null\n    __7_intnl_SystemBoolean: %SystemBoolean, null\n    __8_intnl_SystemBoolean:
+    %SystemBoolean, null\n    __9_intnl_SystemBoolean: %SystemBoolean, null\n    __0_intnl_returnValSymbol_Int32:
+    %SystemInt32, null\n    __0_intnl_SystemInt32: %SystemInt32, null\n    __1_intnl_SystemInt32:
+    %SystemInt32, null\n    __2_intnl_SystemInt32: %SystemInt32, null\n    __3_intnl_SystemInt32:
     %SystemInt32, null\n    __0_intnl_SystemObject: %SystemObject, null\n    __1_intnl_SystemObject:
-    %SystemObject, null\n    __2_intnl_SystemObject: %SystemObject, null\n    __0_intnl_interpolatedStr_String:
-    %SystemString, null\n    __0_intnl_SystemString: %SystemString, null\n    __1_intnl_SystemString:
-    %SystemString, null\n    __2_intnl_SystemString: %SystemString, null\n    __0_intnl_returnTarget_UInt32:
+    %SystemObject, null\n    __2_intnl_SystemObject: %SystemObject, null\n    __3_intnl_SystemObject:
+    %SystemObject, null\n    __0_intnl_interpolatedStr_String: %SystemString, null\n
+    \   __0_intnl_SystemString: %SystemString, null\n    __1_intnl_SystemString: %SystemString,
+    null\n    __2_intnl_SystemString: %SystemString, null\n    __0_intnl_returnTarget_UInt32:
     %SystemUInt32, null\n\n.data_end\n\n        \n         # using UdonSharp;\n        \n
     \        # using UnityEngine;\n        \n         # using VRC.SDKBase;\n        \n
-    \        # using VRC.Udon;\n        \n         # public class EasyAudioPlayerPlayPrevious
-    : UdonSharpBehaviour {\n.code_start\n        \n         # public EasyAudioPlayerAudioSourceStore
-    core;\n        \n         # public override void Interact() {\n    .export _interact\n
+    \        # using VRC.Udon.Common.Interfaces;\n        \n         # using VRC.Udon;\n
+    \       \n         # public class EasyAudioPlayerPlayPrevious : UdonSharpBehaviour
+    {\n.code_start\n        \n         # public EasyAudioPlayerAudioSourceStore core;\n
+    \       \n         # public override void Interact() {\n    .export _interact\n
     \       \n    _interact:\n        \n        PUSH, __0_const_intnl_SystemUInt32\n
     \       \n         # if (this.core == null) {\n        PUSH, core\n        PUSH,
     __0_const_intnl_VRCUdonCommonInterfacesIUdonEventReceiver\n        PUSH, __0_intnl_SystemBoolean\n
@@ -60,48 +66,63 @@ MonoBehaviour:
     \       PUSH, __0_const_intnl_SystemString\n        EXTERN, \"UnityEngineDebug.__Log__SystemObject__SystemVoid\"\n
     \       \n         # return;\n        PUSH, __0_intnl_returnTarget_UInt32 #Explicit
     return sequence\n        COPY\n        JUMP_INDIRECT, __0_intnl_returnTarget_UInt32\n
-    \       \n         # var audioSources = this.core.GetAudioSources();\n        PUSH,
-    core\n        PUSH, __1_const_intnl_SystemString\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid\"\n
-    \       PUSH, core\n        PUSH, __2_const_intnl_SystemString\n        PUSH,
-    __0_intnl_SystemObject\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__GetProgramVariable__SystemString__SystemObject\"\n
-    \       PUSH, __0_intnl_SystemObject\n        PUSH, __0_intnl_UnityEngineAudioSourceArray\n
+    \       \n         # if (this.core.isWorkingOnlyOnLocal) {\n        PUSH, core\n
+    \       PUSH, __1_const_intnl_SystemString\n        PUSH, __0_intnl_SystemObject\n
+    \       EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__GetProgramVariable__SystemString__SystemObject\"\n
+    \       PUSH, __0_intnl_SystemObject\n        PUSH, __2_intnl_SystemBoolean\n
+    \       EXTERN, \"SystemConvert.__ToBoolean__SystemObject__SystemBoolean\"\n        PUSH,
+    __2_intnl_SystemBoolean\n        JUMP_IF_FALSE, 0x000000BC\n        \n         #
+    this.PlayPrevious();\n        PUSH, __0_const_intnl_exitJumpLoc_UInt32\n        JUMP,
+    0x000000F8\n        JUMP, 0x000000DC\n        \n         # } else {\n        \n
+    \        # this.SendCustomNetworkEvent(NetworkEventTarget.All, \"PlayPrevious\");\n
+    \       PUSH, __0_this_intnl_EasyAudioPlayerPlayPrevious\n        PUSH, __0_const_intnl_VRCUdonCommonInterfacesNetworkEventTarget\n
+    \       PUSH, __2_const_intnl_SystemString\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomNetworkEvent__VRCUdonCommonInterfacesNetworkEventTarget_SystemString__SystemVoid\"\n
+    \       PUSH, __0_intnl_returnTarget_UInt32 #Function epilogue\n        COPY\n
+    \       JUMP_INDIRECT, __0_intnl_returnTarget_UInt32\n        \n        \n         #
+    public void PlayPrevious() {\n    .export PlayPrevious\n        \n    PlayPrevious:\n
+    \       \n        PUSH, __0_const_intnl_SystemUInt32\n        \n         # var
+    audioSources = this.core.GetAudioSources();\n        PUSH, core\n        PUSH,
+    __3_const_intnl_SystemString\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid\"\n
+    \       PUSH, core\n        PUSH, __4_const_intnl_SystemString\n        PUSH,
+    __1_intnl_SystemObject\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__GetProgramVariable__SystemString__SystemObject\"\n
+    \       PUSH, __1_intnl_SystemObject\n        PUSH, __0_intnl_UnityEngineAudioSourceArray\n
     \       COPY\n        PUSH, __0_intnl_UnityEngineAudioSourceArray\n        PUSH,
     __0_audioSources_AudioSourceArray\n        COPY\n        \n         # if (audioSources.Length
     == 0) {\n        PUSH, __0_audioSources_AudioSourceArray\n        PUSH, __0_intnl_SystemInt32\n
     \       EXTERN, \"UnityEngineAudioSourceArray.__get_Length__SystemInt32\"\n        PUSH,
     __0_intnl_SystemInt32\n        PUSH, __0_const_intnl_SystemInt32\n        PUSH,
-    __1_intnl_SystemBoolean\n        EXTERN, \"SystemInt32.__op_Equality__SystemInt32_SystemInt32__SystemBoolean\"\n
-    \       PUSH, __1_intnl_SystemBoolean\n        JUMP_IF_FALSE, 0x00000128\n        \n
+    __3_intnl_SystemBoolean\n        EXTERN, \"SystemInt32.__op_Equality__SystemInt32_SystemInt32__SystemBoolean\"\n
+    \       PUSH, __3_intnl_SystemBoolean\n        JUMP_IF_FALSE, 0x000001C4\n        \n
     \        # Debug.Log(\"EasyAudioPlayerPlayPrevious: exit for the empty audio sources.\");\n
-    \       PUSH, __3_const_intnl_SystemString\n        EXTERN, \"UnityEngineDebug.__Log__SystemObject__SystemVoid\"\n
+    \       PUSH, __5_const_intnl_SystemString\n        EXTERN, \"UnityEngineDebug.__Log__SystemObject__SystemVoid\"\n
     \       \n         # return;\n        PUSH, __0_intnl_returnTarget_UInt32 #Explicit
     return sequence\n        COPY\n        JUMP_INDIRECT, __0_intnl_returnTarget_UInt32\n
     \       \n         # var stoppedIndex = this.core.StopLatest();\n        PUSH,
-    core\n        PUSH, __4_const_intnl_SystemString\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid\"\n
-    \       PUSH, core\n        PUSH, __5_const_intnl_SystemString\n        PUSH,
-    __1_intnl_SystemObject\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__GetProgramVariable__SystemString__SystemObject\"\n
-    \       PUSH, __1_intnl_SystemObject\n        PUSH, __1_intnl_SystemInt32\n        EXTERN,
+    core\n        PUSH, __6_const_intnl_SystemString\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid\"\n
+    \       PUSH, core\n        PUSH, __7_const_intnl_SystemString\n        PUSH,
+    __2_intnl_SystemObject\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__GetProgramVariable__SystemString__SystemObject\"\n
+    \       PUSH, __2_intnl_SystemObject\n        PUSH, __1_intnl_SystemInt32\n        EXTERN,
     \"SystemConvert.__ToInt32__SystemObject__SystemInt32\"\n        PUSH, __1_intnl_SystemInt32\n
     \       PUSH, __0_stoppedIndex_Int32\n        COPY\n        \n         # if (!this.core.IsNotOutOfBoundsOnAudioSources(stoppedIndex))
-    {\n        PUSH, core\n        PUSH, __6_const_intnl_SystemString\n        PUSH,
+    {\n        PUSH, core\n        PUSH, __8_const_intnl_SystemString\n        PUSH,
     __0_stoppedIndex_Int32\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SetProgramVariable__SystemString_SystemObject__SystemVoid\"\n
-    \       PUSH, core\n        PUSH, __7_const_intnl_SystemString\n        EXTERN,
+    \       PUSH, core\n        PUSH, __9_const_intnl_SystemString\n        EXTERN,
     \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid\"\n
-    \       PUSH, core\n        PUSH, __8_const_intnl_SystemString\n        PUSH,
-    __2_intnl_SystemObject\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__GetProgramVariable__SystemString__SystemObject\"\n
-    \       PUSH, __2_intnl_SystemObject\n        PUSH, __2_intnl_SystemBoolean\n
+    \       PUSH, core\n        PUSH, __10_const_intnl_SystemString\n        PUSH,
+    __3_intnl_SystemObject\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__GetProgramVariable__SystemString__SystemObject\"\n
+    \       PUSH, __3_intnl_SystemObject\n        PUSH, __4_intnl_SystemBoolean\n
     \       EXTERN, \"SystemConvert.__ToBoolean__SystemObject__SystemBoolean\"\n        PUSH,
-    __2_intnl_SystemBoolean\n        PUSH, __3_intnl_SystemBoolean\n        EXTERN,
+    __4_intnl_SystemBoolean\n        PUSH, __5_intnl_SystemBoolean\n        EXTERN,
     \"SystemBoolean.__op_UnaryNegation__SystemBoolean__SystemBoolean\"\n        PUSH,
-    __3_intnl_SystemBoolean\n        JUMP_IF_FALSE, 0x000002DC\n        \n         #
+    __5_intnl_SystemBoolean\n        JUMP_IF_FALSE, 0x00000378\n        \n         #
     Debug.Log($\"EasyAudioPlayerPlayPrevious: Illegal stopped index '{stoppedIndex}.
-    Exit.\");\n        PUSH, __9_const_intnl_SystemString\n        PUSH, __0_intnl_interpolatedStr_String\n
+    Exit.\");\n        PUSH, __11_const_intnl_SystemString\n        PUSH, __0_intnl_interpolatedStr_String\n
     \       COPY\n        PUSH, __0_stoppedIndex_Int32\n        PUSH, __0_intnl_SystemString\n
     \       EXTERN, \"SystemInt32.__ToString__SystemString\"\n        PUSH, __0_intnl_interpolatedStr_String\n
     \       PUSH, __0_intnl_SystemString\n        PUSH, __1_intnl_SystemString\n        EXTERN,
     \"SystemString.__op_Addition__SystemString_SystemString__SystemString\"\n        PUSH,
     __1_intnl_SystemString\n        PUSH, __0_intnl_interpolatedStr_String\n        COPY\n
-    \       PUSH, __0_intnl_interpolatedStr_String\n        PUSH, __10_const_intnl_SystemString\n
+    \       PUSH, __0_intnl_interpolatedStr_String\n        PUSH, __12_const_intnl_SystemString\n
     \       PUSH, __2_intnl_SystemString\n        EXTERN, \"SystemString.__op_Addition__SystemString_SystemString__SystemString\"\n
     \       PUSH, __2_intnl_SystemString\n        PUSH, __0_intnl_interpolatedStr_String\n
     \       COPY\n        PUSH, __0_intnl_interpolatedStr_String\n        EXTERN,
@@ -111,29 +132,31 @@ MonoBehaviour:
     previousIndex = this.getPreviousIndex(stoppedIndex, audioSources.Length);\n        PUSH,
     __0_audioSources_AudioSourceArray\n        PUSH, __0_length_Int32\n        EXTERN,
     \"UnityEngineAudioSourceArray.__get_Length__SystemInt32\"\n        PUSH, __0_stoppedIndex_Int32\n
-    \       PUSH, __0_baseIndex_Int32\n        COPY\n        PUSH, __0_const_intnl_exitJumpLoc_UInt32\n
-    \       JUMP, 0x0000046C\n        PUSH, __0_intnl_returnValSymbol_Int32\n        PUSH,
+    \       PUSH, __0_baseIndex_Int32\n        COPY\n        PUSH, __1_const_intnl_exitJumpLoc_UInt32\n
+    \       JUMP, 0x0000051C\n        PUSH, __0_intnl_returnValSymbol_Int32\n        PUSH,
     __0_previousIndex_Int32\n        COPY\n        \n         # if (previousIndex
     == -1) {\n        PUSH, __1_const_intnl_SystemInt32\n        PUSH, __2_intnl_SystemInt32\n
     \       EXTERN, \"SystemInt32.__op_UnaryMinus__SystemInt32__SystemInt32\"\n        PUSH,
-    __0_previousIndex_Int32\n        PUSH, __2_intnl_SystemInt32\n        PUSH, __4_intnl_SystemBoolean\n
+    __0_previousIndex_Int32\n        PUSH, __2_intnl_SystemInt32\n        PUSH, __6_intnl_SystemBoolean\n
     \       EXTERN, \"SystemInt32.__op_Equality__SystemInt32_SystemInt32__SystemBoolean\"\n
-    \       PUSH, __4_intnl_SystemBoolean\n        JUMP_IF_FALSE, 0x00000418\n        \n
+    \       PUSH, __6_intnl_SystemBoolean\n        JUMP_IF_FALSE, 0x000004C8\n        \n
     \        # Debug.Log($\"EasyAudioPlayerPlayPrevious: The previous index of '{stoppedIndex}'
-    couldn't be gotten. Exit.\");\n        PUSH, __11_const_intnl_SystemString\n        PUSH,
+    couldn't be gotten. Exit.\");\n        PUSH, __13_const_intnl_SystemString\n        PUSH,
     __0_intnl_interpolatedStr_String\n        COPY\n        PUSH, __0_stoppedIndex_Int32\n
     \       PUSH, __0_intnl_SystemString\n        EXTERN, \"SystemInt32.__ToString__SystemString\"\n
     \       PUSH, __0_intnl_interpolatedStr_String\n        PUSH, __0_intnl_SystemString\n
     \       PUSH, __1_intnl_SystemString\n        EXTERN, \"SystemString.__op_Addition__SystemString_SystemString__SystemString\"\n
     \       PUSH, __1_intnl_SystemString\n        PUSH, __0_intnl_interpolatedStr_String\n
-    \       COPY\n        PUSH, __0_intnl_interpolatedStr_String\n        PUSH, __12_const_intnl_SystemString\n
+    \       COPY\n        PUSH, __0_intnl_interpolatedStr_String\n        PUSH, __14_const_intnl_SystemString\n
     \       PUSH, __2_intnl_SystemString\n        EXTERN, \"SystemString.__op_Addition__SystemString_SystemString__SystemString\"\n
     \       PUSH, __2_intnl_SystemString\n        PUSH, __0_intnl_interpolatedStr_String\n
     \       COPY\n        PUSH, __0_intnl_interpolatedStr_String\n        EXTERN,
-    \"UnityEngineDebug.__Log__SystemObject__SystemVoid\"\n        \n         # this.core.Play(previousIndex);\n
-    \       PUSH, core\n        PUSH, __13_const_intnl_SystemString\n        PUSH,
+    \"UnityEngineDebug.__Log__SystemObject__SystemVoid\"\n        \n         # return;\n
+    \       PUSH, __0_intnl_returnTarget_UInt32 #Explicit return sequence\n        COPY\n
+    \       JUMP_INDIRECT, __0_intnl_returnTarget_UInt32\n        \n         # this.core.Play(previousIndex);\n
+    \       PUSH, core\n        PUSH, __15_const_intnl_SystemString\n        PUSH,
     __0_previousIndex_Int32\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SetProgramVariable__SystemString_SystemObject__SystemVoid\"\n
-    \       PUSH, core\n        PUSH, __14_const_intnl_SystemString\n        EXTERN,
+    \       PUSH, core\n        PUSH, __16_const_intnl_SystemString\n        EXTERN,
     \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid\"\n
     \       PUSH, __0_intnl_returnTarget_UInt32 #Function epilogue\n        COPY\n
     \       JUMP_INDIRECT, __0_intnl_returnTarget_UInt32\n        \n        \n         #
@@ -142,28 +165,28 @@ MonoBehaviour:
     (baseIndex <= -2 || length <= baseIndex) {\n        PUSH, __2_const_intnl_SystemInt32\n
     \       PUSH, __3_intnl_SystemInt32\n        EXTERN, \"SystemInt32.__op_UnaryMinus__SystemInt32__SystemInt32\"\n
     \       PUSH, __0_baseIndex_Int32\n        PUSH, __3_intnl_SystemInt32\n        PUSH,
-    __6_intnl_SystemBoolean\n        EXTERN, \"SystemInt32.__op_LessThanOrEqual__SystemInt32_SystemInt32__SystemBoolean\"\n
-    \       PUSH, __6_intnl_SystemBoolean\n        PUSH, __5_intnl_SystemBoolean\n
-    \       COPY\n        PUSH, __5_intnl_SystemBoolean\n        PUSH, __7_intnl_SystemBoolean\n
+    __8_intnl_SystemBoolean\n        EXTERN, \"SystemInt32.__op_LessThanOrEqual__SystemInt32_SystemInt32__SystemBoolean\"\n
+    \       PUSH, __8_intnl_SystemBoolean\n        PUSH, __7_intnl_SystemBoolean\n
+    \       COPY\n        PUSH, __7_intnl_SystemBoolean\n        PUSH, __9_intnl_SystemBoolean\n
     \       EXTERN, \"SystemBoolean.__op_UnaryNegation__SystemBoolean__SystemBoolean\"\n
-    \       PUSH, __7_intnl_SystemBoolean\n        JUMP_IF_FALSE, 0x00000534\n        PUSH,
-    __0_length_Int32\n        PUSH, __0_baseIndex_Int32\n        PUSH, __8_intnl_SystemBoolean\n
+    \       PUSH, __9_intnl_SystemBoolean\n        JUMP_IF_FALSE, 0x000005E4\n        PUSH,
+    __0_length_Int32\n        PUSH, __0_baseIndex_Int32\n        PUSH, __10_intnl_SystemBoolean\n
     \       EXTERN, \"SystemInt32.__op_LessThanOrEqual__SystemInt32_SystemInt32__SystemBoolean\"\n
-    \       PUSH, __5_intnl_SystemBoolean\n        PUSH, __8_intnl_SystemBoolean\n
-    \       PUSH, __9_intnl_SystemBoolean\n        EXTERN, \"SystemBoolean.__op_ConditionalOr__SystemBoolean_SystemBoolean__SystemBoolean\"\n
-    \       PUSH, __9_intnl_SystemBoolean\n        PUSH, __5_intnl_SystemBoolean\n
-    \       COPY\n        PUSH, __5_intnl_SystemBoolean\n        JUMP_IF_FALSE, 0x00000570\n
+    \       PUSH, __7_intnl_SystemBoolean\n        PUSH, __10_intnl_SystemBoolean\n
+    \       PUSH, __11_intnl_SystemBoolean\n        EXTERN, \"SystemBoolean.__op_ConditionalOr__SystemBoolean_SystemBoolean__SystemBoolean\"\n
+    \       PUSH, __11_intnl_SystemBoolean\n        PUSH, __7_intnl_SystemBoolean\n
+    \       COPY\n        PUSH, __7_intnl_SystemBoolean\n        JUMP_IF_FALSE, 0x00000620\n
     \       \n         # return -1;\n        PUSH, __1_const_intnl_SystemInt32\n        PUSH,
     __0_intnl_returnValSymbol_Int32\n        EXTERN, \"SystemInt32.__op_UnaryMinus__SystemInt32__SystemInt32\"\n
     \       PUSH, __0_intnl_returnTarget_UInt32 #Explicit return sequence\n        COPY\n
     \       JUMP_INDIRECT, __0_intnl_returnTarget_UInt32\n        \n         # return
     (baseIndex == 0) ? (length - 1) : (baseIndex - 1);\n        PUSH, __0_baseIndex_Int32\n
-    \       PUSH, __0_const_intnl_SystemInt32\n        PUSH, __10_intnl_SystemBoolean\n
+    \       PUSH, __0_const_intnl_SystemInt32\n        PUSH, __12_intnl_SystemBoolean\n
     \       EXTERN, \"SystemInt32.__op_Equality__SystemInt32_SystemInt32__SystemBoolean\"\n
-    \       PUSH, __10_intnl_SystemBoolean\n        JUMP_IF_FALSE, 0x000005C8\n        PUSH,
+    \       PUSH, __12_intnl_SystemBoolean\n        JUMP_IF_FALSE, 0x00000678\n        PUSH,
     __0_length_Int32\n        PUSH, __1_const_intnl_SystemInt32\n        PUSH, __0_intnl_returnValSymbol_Int32\n
     \       EXTERN, \"SystemInt32.__op_Subtraction__SystemInt32_SystemInt32__SystemInt32\"\n
-    \       JUMP, 0x000005E8\n        PUSH, __0_baseIndex_Int32\n        PUSH, __1_const_intnl_SystemInt32\n
+    \       JUMP, 0x00000698\n        PUSH, __0_baseIndex_Int32\n        PUSH, __1_const_intnl_SystemInt32\n
     \       PUSH, __0_intnl_returnValSymbol_Int32\n        EXTERN, \"SystemInt32.__op_Subtraction__SystemInt32_SystemInt32__SystemInt32\"\n
     \       PUSH, __0_intnl_returnTarget_UInt32 #Explicit return sequence\n        COPY\n
     \       JUMP_INDIRECT, __0_intnl_returnTarget_UInt32\n        PUSH, __0_intnl_returnTarget_UInt32
@@ -262,6 +285,20 @@ MonoBehaviour:
     - startInstruction: 0
       endInstruction: -1
       startSourceChar: 64
+      endSourceChar: 64
+      line: 3
+      lineChar: 6
+      spanCodeSection: 
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 64
+      endSourceChar: 64
+      line: 3
+      lineChar: 6
+      spanCodeSection: 
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 64
       endSourceChar: 68
       line: 3
       lineChar: 6
@@ -269,1025 +306,1249 @@ MonoBehaviour:
     - startInstruction: 0
       endInstruction: -1
       startSourceChar: 68
-      endSourceChar: 77
+      endSourceChar: 73
       line: 3
+      lineChar: 10
+      spanCodeSection: Udon.
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 73
+      endSourceChar: 80
+      line: 3
+      lineChar: 15
+      spanCodeSection: Common.
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 80
+      endSourceChar: 93
+      line: 3
+      lineChar: 22
+      spanCodeSection: "Interfaces;\r\n"
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 93
+      endSourceChar: 99
+      line: 4
+      lineChar: 0
+      spanCodeSection: 'using '
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 99
+      endSourceChar: 99
+      line: 4
+      lineChar: 6
+      spanCodeSection: 
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 99
+      endSourceChar: 103
+      line: 4
+      lineChar: 6
+      spanCodeSection: VRC.
+    - startInstruction: 0
+      endInstruction: -1
+      startSourceChar: 103
+      endSourceChar: 112
+      line: 4
       lineChar: 10
       spanCodeSection: "Udon;\r\n\r\n"
     - startInstruction: 0
       endInstruction: -1
-      startSourceChar: 77
-      endSourceChar: 118
-      line: 5
+      startSourceChar: 112
+      endSourceChar: 153
+      line: 6
       lineChar: 0
       spanCodeSection: 'public class EasyAudioPlayerPlayPrevious '
     - startInstruction: 0
       endInstruction: -1
-      startSourceChar: 118
-      endSourceChar: 120
-      line: 5
+      startSourceChar: 153
+      endSourceChar: 155
+      line: 6
       lineChar: 41
       spanCodeSection: ': '
     - startInstruction: 0
       endInstruction: -1
-      startSourceChar: 120
-      endSourceChar: 120
-      line: 5
+      startSourceChar: 155
+      endSourceChar: 155
+      line: 6
       lineChar: 43
       spanCodeSection: 
     - startInstruction: 0
       endInstruction: -1
-      startSourceChar: 120
-      endSourceChar: 146
-      line: 5
+      startSourceChar: 155
+      endSourceChar: 181
+      line: 6
       lineChar: 43
       spanCodeSection: "UdonSharpBehaviour {\r\n    "
     - startInstruction: 0
       endInstruction: -1
-      startSourceChar: 146
-      endSourceChar: 153
-      line: 6
+      startSourceChar: 181
+      endSourceChar: 188
+      line: 7
       lineChar: 4
       spanCodeSection: 'public '
     - startInstruction: 0
       endInstruction: -1
-      startSourceChar: 153
-      endSourceChar: 153
-      line: 6
+      startSourceChar: 188
+      endSourceChar: 188
+      line: 7
       lineChar: 11
       spanCodeSection: 
     - startInstruction: 0
       endInstruction: -1
-      startSourceChar: 153
-      endSourceChar: 198
-      line: 6
+      startSourceChar: 188
+      endSourceChar: 233
+      line: 7
       lineChar: 11
       spanCodeSection: "EasyAudioPlayerAudioSourceStore core;\r\n\r\n    "
     - startInstruction: 0
       endInstruction: 7
-      startSourceChar: 198
-      endSourceChar: 230
-      line: 8
+      startSourceChar: 233
+      endSourceChar: 265
+      line: 9
       lineChar: 4
       spanCodeSection: 'public override void Interact() '
     - startInstruction: 8
       endInstruction: 7
-      startSourceChar: 230
-      endSourceChar: 241
-      line: 8
+      startSourceChar: 265
+      endSourceChar: 276
+      line: 9
       lineChar: 36
       spanCodeSection: "{\r\n        "
     - startInstruction: 8
       endInstruction: 7
-      startSourceChar: 241
-      endSourceChar: 245
-      line: 9
+      startSourceChar: 276
+      endSourceChar: 280
+      line: 10
       lineChar: 8
       spanCodeSection: if (
     - startInstruction: 8
       endInstruction: 7
-      startSourceChar: 245
-      endSourceChar: 245
-      line: 9
+      startSourceChar: 280
+      endSourceChar: 280
+      line: 10
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 8
       endInstruction: 7
-      startSourceChar: 245
-      endSourceChar: 245
-      line: 9
+      startSourceChar: 280
+      endSourceChar: 280
+      line: 10
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 8
       endInstruction: 7
-      startSourceChar: 245
-      endSourceChar: 250
-      line: 9
+      startSourceChar: 280
+      endSourceChar: 285
+      line: 10
       lineChar: 12
       spanCodeSection: this.
     - startInstruction: 8
       endInstruction: 7
-      startSourceChar: 250
-      endSourceChar: 258
-      line: 9
+      startSourceChar: 285
+      endSourceChar: 293
+      line: 10
       lineChar: 17
       spanCodeSection: 'core == '
     - startInstruction: 8
       endInstruction: 55
-      startSourceChar: 258
-      endSourceChar: 264
-      line: 9
+      startSourceChar: 293
+      endSourceChar: 299
+      line: 10
       lineChar: 25
       spanCodeSection: 'null) '
     - startInstruction: 56
       endInstruction: 55
-      startSourceChar: 264
-      endSourceChar: 279
-      line: 9
+      startSourceChar: 299
+      endSourceChar: 314
+      line: 10
       lineChar: 31
       spanCodeSection: "{\r\n            "
     - startInstruction: 56
       endInstruction: 55
-      startSourceChar: 279
-      endSourceChar: 279
-      line: 10
+      startSourceChar: 314
+      endSourceChar: 314
+      line: 11
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 56
       endInstruction: 55
-      startSourceChar: 279
-      endSourceChar: 279
-      line: 10
+      startSourceChar: 314
+      endSourceChar: 314
+      line: 11
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 56
       endInstruction: 55
-      startSourceChar: 279
-      endSourceChar: 279
-      line: 10
+      startSourceChar: 314
+      endSourceChar: 314
+      line: 11
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 56
       endInstruction: 55
-      startSourceChar: 279
-      endSourceChar: 285
-      line: 10
+      startSourceChar: 314
+      endSourceChar: 320
+      line: 11
       lineChar: 12
       spanCodeSection: Debug.
     - startInstruction: 56
       endInstruction: 55
-      startSourceChar: 285
-      endSourceChar: 289
-      line: 10
+      startSourceChar: 320
+      endSourceChar: 324
+      line: 11
       lineChar: 18
       spanCodeSection: Log(
     - startInstruction: 56
       endInstruction: 71
-      startSourceChar: 289
-      endSourceChar: 357
-      line: 10
+      startSourceChar: 324
+      endSourceChar: 392
+      line: 11
       lineChar: 22
       spanCodeSection: "\"EasyAudioPlayerPlayPrevious: The core has not set.\");\r\n
         \           "
     - startInstruction: 72
       endInstruction: 91
-      startSourceChar: 357
-      endSourceChar: 387
-      line: 11
+      startSourceChar: 392
+      endSourceChar: 422
+      line: 12
       lineChar: 12
       spanCodeSection: "return;\r\n        }\r\n\r\n        "
     - startInstruction: 92
       endInstruction: 91
-      startSourceChar: 387
-      endSourceChar: 387
-      line: 14
-      lineChar: 8
-      spanCodeSection: 
-    - startInstruction: 92
-      endInstruction: 91
-      startSourceChar: 387
-      endSourceChar: 387
-      line: 14
-      lineChar: 8
-      spanCodeSection: 
-    - startInstruction: 92
-      endInstruction: 91
-      startSourceChar: 387
-      endSourceChar: 404
-      line: 14
-      lineChar: 8
-      spanCodeSection: 'var audioSources '
-    - startInstruction: 92
-      endInstruction: 91
-      startSourceChar: 404
-      endSourceChar: 406
-      line: 14
-      lineChar: 25
-      spanCodeSection: '= '
-    - startInstruction: 92
-      endInstruction: 91
-      startSourceChar: 406
-      endSourceChar: 406
-      line: 14
-      lineChar: 27
-      spanCodeSection: 
-    - startInstruction: 92
-      endInstruction: 91
-      startSourceChar: 406
-      endSourceChar: 406
-      line: 14
-      lineChar: 27
-      spanCodeSection: 
-    - startInstruction: 92
-      endInstruction: 91
-      startSourceChar: 406
-      endSourceChar: 406
-      line: 14
-      lineChar: 27
-      spanCodeSection: 
-    - startInstruction: 92
-      endInstruction: 91
-      startSourceChar: 406
-      endSourceChar: 411
-      line: 14
-      lineChar: 27
-      spanCodeSection: this.
-    - startInstruction: 92
-      endInstruction: 91
-      startSourceChar: 411
-      endSourceChar: 416
-      line: 14
-      lineChar: 32
-      spanCodeSection: core.
-    - startInstruction: 92
-      endInstruction: 187
-      startSourceChar: 416
-      endSourceChar: 444
-      line: 14
-      lineChar: 37
-      spanCodeSection: "GetAudioSources();\r\n        "
-    - startInstruction: 188
-      endInstruction: 187
-      startSourceChar: 444
-      endSourceChar: 448
+      startSourceChar: 422
+      endSourceChar: 426
       line: 15
       lineChar: 8
       spanCodeSection: if (
+    - startInstruction: 92
+      endInstruction: 91
+      startSourceChar: 426
+      endSourceChar: 426
+      line: 15
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 92
+      endInstruction: 91
+      startSourceChar: 426
+      endSourceChar: 426
+      line: 15
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 92
+      endInstruction: 91
+      startSourceChar: 426
+      endSourceChar: 431
+      line: 15
+      lineChar: 12
+      spanCodeSection: this.
+    - startInstruction: 92
+      endInstruction: 91
+      startSourceChar: 431
+      endSourceChar: 436
+      line: 15
+      lineChar: 17
+      spanCodeSection: core.
+    - startInstruction: 92
+      endInstruction: 163
+      startSourceChar: 436
+      endSourceChar: 458
+      line: 15
+      lineChar: 22
+      spanCodeSection: 'isWorkingOnlyOnLocal) '
+    - startInstruction: 164
+      endInstruction: 163
+      startSourceChar: 458
+      endSourceChar: 473
+      line: 15
+      lineChar: 44
+      spanCodeSection: "{\r\n            "
+    - startInstruction: 164
+      endInstruction: 163
+      startSourceChar: 473
+      endSourceChar: 473
+      line: 16
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 164
+      endInstruction: 163
+      startSourceChar: 473
+      endSourceChar: 473
+      line: 16
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 164
+      endInstruction: 163
+      startSourceChar: 473
+      endSourceChar: 473
+      line: 16
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 164
+      endInstruction: 163
+      startSourceChar: 473
+      endSourceChar: 478
+      line: 16
+      lineChar: 12
+      spanCodeSection: this.
+    - startInstruction: 164
+      endInstruction: 187
+      startSourceChar: 478
+      endSourceChar: 505
+      line: 16
+      lineChar: 17
+      spanCodeSection: "PlayPrevious();\r\n        } "
     - startInstruction: 188
       endInstruction: 187
-      startSourceChar: 448
-      endSourceChar: 448
-      line: 15
+      startSourceChar: 505
+      endSourceChar: 510
+      line: 17
+      lineChar: 10
+      spanCodeSection: 'else '
+    - startInstruction: 188
+      endInstruction: 187
+      startSourceChar: 510
+      endSourceChar: 525
+      line: 17
+      lineChar: 15
+      spanCodeSection: "{\r\n            "
+    - startInstruction: 188
+      endInstruction: 187
+      startSourceChar: 525
+      endSourceChar: 525
+      line: 18
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 188
       endInstruction: 187
-      startSourceChar: 448
-      endSourceChar: 448
-      line: 15
+      startSourceChar: 525
+      endSourceChar: 525
+      line: 18
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 188
       endInstruction: 187
-      startSourceChar: 448
-      endSourceChar: 461
-      line: 15
+      startSourceChar: 525
+      endSourceChar: 525
+      line: 18
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 188
+      endInstruction: 187
+      startSourceChar: 525
+      endSourceChar: 530
+      line: 18
+      lineChar: 12
+      spanCodeSection: this.
+    - startInstruction: 188
+      endInstruction: 187
+      startSourceChar: 530
+      endSourceChar: 553
+      line: 18
+      lineChar: 17
+      spanCodeSection: SendCustomNetworkEvent(
+    - startInstruction: 188
+      endInstruction: 187
+      startSourceChar: 553
+      endSourceChar: 553
+      line: 18
+      lineChar: 40
+      spanCodeSection: 
+    - startInstruction: 188
+      endInstruction: 187
+      startSourceChar: 553
+      endSourceChar: 572
+      line: 18
+      lineChar: 40
+      spanCodeSection: NetworkEventTarget.
+    - startInstruction: 188
+      endInstruction: 187
+      startSourceChar: 572
+      endSourceChar: 577
+      line: 18
+      lineChar: 59
+      spanCodeSection: 'All, '
+    - startInstruction: 188
+      endInstruction: 239
+      startSourceChar: 577
+      endSourceChar: 619
+      line: 18
+      lineChar: 64
+      spanCodeSection: "\"PlayPrevious\");\r\n        }\r\n    }\r\n\r\n    "
+    - startInstruction: 240
+      endInstruction: 247
+      startSourceChar: 619
+      endSourceChar: 646
+      line: 22
+      lineChar: 4
+      spanCodeSection: 'public void PlayPrevious() '
+    - startInstruction: 248
+      endInstruction: 247
+      startSourceChar: 646
+      endSourceChar: 657
+      line: 22
+      lineChar: 31
+      spanCodeSection: "{\r\n        "
+    - startInstruction: 248
+      endInstruction: 247
+      startSourceChar: 657
+      endSourceChar: 657
+      line: 23
+      lineChar: 8
+      spanCodeSection: 
+    - startInstruction: 248
+      endInstruction: 247
+      startSourceChar: 657
+      endSourceChar: 657
+      line: 23
+      lineChar: 8
+      spanCodeSection: 
+    - startInstruction: 248
+      endInstruction: 247
+      startSourceChar: 657
+      endSourceChar: 674
+      line: 23
+      lineChar: 8
+      spanCodeSection: 'var audioSources '
+    - startInstruction: 248
+      endInstruction: 247
+      startSourceChar: 674
+      endSourceChar: 676
+      line: 23
+      lineChar: 25
+      spanCodeSection: '= '
+    - startInstruction: 248
+      endInstruction: 247
+      startSourceChar: 676
+      endSourceChar: 676
+      line: 23
+      lineChar: 27
+      spanCodeSection: 
+    - startInstruction: 248
+      endInstruction: 247
+      startSourceChar: 676
+      endSourceChar: 676
+      line: 23
+      lineChar: 27
+      spanCodeSection: 
+    - startInstruction: 248
+      endInstruction: 247
+      startSourceChar: 676
+      endSourceChar: 676
+      line: 23
+      lineChar: 27
+      spanCodeSection: 
+    - startInstruction: 248
+      endInstruction: 247
+      startSourceChar: 676
+      endSourceChar: 681
+      line: 23
+      lineChar: 27
+      spanCodeSection: this.
+    - startInstruction: 248
+      endInstruction: 247
+      startSourceChar: 681
+      endSourceChar: 686
+      line: 23
+      lineChar: 32
+      spanCodeSection: core.
+    - startInstruction: 248
+      endInstruction: 343
+      startSourceChar: 686
+      endSourceChar: 714
+      line: 23
+      lineChar: 37
+      spanCodeSection: "GetAudioSources();\r\n        "
+    - startInstruction: 344
+      endInstruction: 343
+      startSourceChar: 714
+      endSourceChar: 718
+      line: 24
+      lineChar: 8
+      spanCodeSection: if (
+    - startInstruction: 344
+      endInstruction: 343
+      startSourceChar: 718
+      endSourceChar: 718
+      line: 24
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 344
+      endInstruction: 343
+      startSourceChar: 718
+      endSourceChar: 718
+      line: 24
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 344
+      endInstruction: 343
+      startSourceChar: 718
+      endSourceChar: 731
+      line: 24
       lineChar: 12
       spanCodeSection: audioSources.
-    - startInstruction: 188
-      endInstruction: 211
-      startSourceChar: 461
-      endSourceChar: 471
-      line: 15
+    - startInstruction: 344
+      endInstruction: 367
+      startSourceChar: 731
+      endSourceChar: 741
+      line: 24
       lineChar: 25
       spanCodeSection: 'Length == '
-    - startInstruction: 212
-      endInstruction: 259
-      startSourceChar: 471
-      endSourceChar: 474
-      line: 15
+    - startInstruction: 368
+      endInstruction: 415
+      startSourceChar: 741
+      endSourceChar: 744
+      line: 24
       lineChar: 35
       spanCodeSection: '0) '
-    - startInstruction: 260
-      endInstruction: 259
-      startSourceChar: 474
-      endSourceChar: 489
-      line: 15
+    - startInstruction: 416
+      endInstruction: 415
+      startSourceChar: 744
+      endSourceChar: 759
+      line: 24
       lineChar: 38
       spanCodeSection: "{\r\n            "
-    - startInstruction: 260
-      endInstruction: 259
-      startSourceChar: 489
-      endSourceChar: 489
-      line: 16
+    - startInstruction: 416
+      endInstruction: 415
+      startSourceChar: 759
+      endSourceChar: 759
+      line: 25
       lineChar: 12
       spanCodeSection: 
-    - startInstruction: 260
-      endInstruction: 259
-      startSourceChar: 489
-      endSourceChar: 489
-      line: 16
+    - startInstruction: 416
+      endInstruction: 415
+      startSourceChar: 759
+      endSourceChar: 759
+      line: 25
       lineChar: 12
       spanCodeSection: 
-    - startInstruction: 260
-      endInstruction: 259
-      startSourceChar: 489
-      endSourceChar: 489
-      line: 16
+    - startInstruction: 416
+      endInstruction: 415
+      startSourceChar: 759
+      endSourceChar: 759
+      line: 25
       lineChar: 12
       spanCodeSection: 
-    - startInstruction: 260
-      endInstruction: 259
-      startSourceChar: 489
-      endSourceChar: 495
-      line: 16
+    - startInstruction: 416
+      endInstruction: 415
+      startSourceChar: 759
+      endSourceChar: 765
+      line: 25
       lineChar: 12
       spanCodeSection: Debug.
-    - startInstruction: 260
-      endInstruction: 259
-      startSourceChar: 495
-      endSourceChar: 499
-      line: 16
+    - startInstruction: 416
+      endInstruction: 415
+      startSourceChar: 765
+      endSourceChar: 769
+      line: 25
       lineChar: 18
       spanCodeSection: Log(
-    - startInstruction: 260
-      endInstruction: 275
-      startSourceChar: 499
-      endSourceChar: 579
-      line: 16
+    - startInstruction: 416
+      endInstruction: 431
+      startSourceChar: 769
+      endSourceChar: 849
+      line: 25
       lineChar: 22
       spanCodeSection: "\"EasyAudioPlayerPlayPrevious: exit for the empty audio sources.\");\r\n
         \           "
-    - startInstruction: 276
-      endInstruction: 295
-      startSourceChar: 579
-      endSourceChar: 609
-      line: 17
+    - startInstruction: 432
+      endInstruction: 451
+      startSourceChar: 849
+      endSourceChar: 879
+      line: 26
       lineChar: 12
       spanCodeSection: "return;\r\n        }\r\n\r\n        "
-    - startInstruction: 296
-      endInstruction: 295
-      startSourceChar: 609
-      endSourceChar: 609
-      line: 20
+    - startInstruction: 452
+      endInstruction: 451
+      startSourceChar: 879
+      endSourceChar: 879
+      line: 29
       lineChar: 8
       spanCodeSection: 
-    - startInstruction: 296
-      endInstruction: 295
-      startSourceChar: 609
-      endSourceChar: 609
-      line: 20
+    - startInstruction: 452
+      endInstruction: 451
+      startSourceChar: 879
+      endSourceChar: 879
+      line: 29
       lineChar: 8
       spanCodeSection: 
-    - startInstruction: 296
-      endInstruction: 295
-      startSourceChar: 609
-      endSourceChar: 626
-      line: 20
+    - startInstruction: 452
+      endInstruction: 451
+      startSourceChar: 879
+      endSourceChar: 896
+      line: 29
       lineChar: 8
       spanCodeSection: 'var stoppedIndex '
-    - startInstruction: 296
-      endInstruction: 295
-      startSourceChar: 626
-      endSourceChar: 628
-      line: 20
+    - startInstruction: 452
+      endInstruction: 451
+      startSourceChar: 896
+      endSourceChar: 898
+      line: 29
       lineChar: 25
       spanCodeSection: '= '
-    - startInstruction: 296
-      endInstruction: 295
-      startSourceChar: 628
-      endSourceChar: 628
-      line: 20
+    - startInstruction: 452
+      endInstruction: 451
+      startSourceChar: 898
+      endSourceChar: 898
+      line: 29
       lineChar: 27
       spanCodeSection: 
-    - startInstruction: 296
-      endInstruction: 295
-      startSourceChar: 628
-      endSourceChar: 628
-      line: 20
+    - startInstruction: 452
+      endInstruction: 451
+      startSourceChar: 898
+      endSourceChar: 898
+      line: 29
       lineChar: 27
       spanCodeSection: 
-    - startInstruction: 296
-      endInstruction: 295
-      startSourceChar: 628
-      endSourceChar: 628
-      line: 20
+    - startInstruction: 452
+      endInstruction: 451
+      startSourceChar: 898
+      endSourceChar: 898
+      line: 29
       lineChar: 27
       spanCodeSection: 
-    - startInstruction: 296
-      endInstruction: 295
-      startSourceChar: 628
-      endSourceChar: 633
-      line: 20
+    - startInstruction: 452
+      endInstruction: 451
+      startSourceChar: 898
+      endSourceChar: 903
+      line: 29
       lineChar: 27
       spanCodeSection: this.
-    - startInstruction: 296
-      endInstruction: 295
-      startSourceChar: 633
-      endSourceChar: 638
-      line: 20
+    - startInstruction: 452
+      endInstruction: 451
+      startSourceChar: 903
+      endSourceChar: 908
+      line: 29
       lineChar: 32
       spanCodeSection: core.
-    - startInstruction: 296
-      endInstruction: 395
-      startSourceChar: 638
-      endSourceChar: 661
-      line: 20
+    - startInstruction: 452
+      endInstruction: 551
+      startSourceChar: 908
+      endSourceChar: 931
+      line: 29
       lineChar: 37
       spanCodeSection: "StopLatest();\r\n        "
-    - startInstruction: 396
-      endInstruction: 395
-      startSourceChar: 661
-      endSourceChar: 665
-      line: 21
+    - startInstruction: 552
+      endInstruction: 551
+      startSourceChar: 931
+      endSourceChar: 935
+      line: 30
       lineChar: 8
       spanCodeSection: if (
-    - startInstruction: 396
-      endInstruction: 395
-      startSourceChar: 665
-      endSourceChar: 666
-      line: 21
+    - startInstruction: 552
+      endInstruction: 551
+      startSourceChar: 935
+      endSourceChar: 936
+      line: 30
       lineChar: 12
       spanCodeSection: '!'
-    - startInstruction: 396
-      endInstruction: 395
-      startSourceChar: 666
-      endSourceChar: 666
-      line: 21
+    - startInstruction: 552
+      endInstruction: 551
+      startSourceChar: 936
+      endSourceChar: 936
+      line: 30
       lineChar: 13
       spanCodeSection: 
-    - startInstruction: 396
-      endInstruction: 395
-      startSourceChar: 666
-      endSourceChar: 666
-      line: 21
+    - startInstruction: 552
+      endInstruction: 551
+      startSourceChar: 936
+      endSourceChar: 936
+      line: 30
       lineChar: 13
       spanCodeSection: 
-    - startInstruction: 396
-      endInstruction: 395
-      startSourceChar: 666
-      endSourceChar: 666
-      line: 21
+    - startInstruction: 552
+      endInstruction: 551
+      startSourceChar: 936
+      endSourceChar: 936
+      line: 30
       lineChar: 13
       spanCodeSection: 
-    - startInstruction: 396
-      endInstruction: 395
-      startSourceChar: 666
-      endSourceChar: 671
-      line: 21
+    - startInstruction: 552
+      endInstruction: 551
+      startSourceChar: 936
+      endSourceChar: 941
+      line: 30
       lineChar: 13
       spanCodeSection: this.
-    - startInstruction: 396
-      endInstruction: 395
-      startSourceChar: 671
-      endSourceChar: 676
-      line: 21
+    - startInstruction: 552
+      endInstruction: 551
+      startSourceChar: 941
+      endSourceChar: 946
+      line: 30
       lineChar: 18
       spanCodeSection: core.
-    - startInstruction: 396
-      endInstruction: 395
-      startSourceChar: 676
-      endSourceChar: 707
-      line: 21
+    - startInstruction: 552
+      endInstruction: 551
+      startSourceChar: 946
+      endSourceChar: 977
+      line: 30
       lineChar: 23
       spanCodeSection: IsNotOutOfBoundsOnAudioSources(
-    - startInstruction: 396
-      endInstruction: 547
-      startSourceChar: 707
-      endSourceChar: 722
-      line: 21
+    - startInstruction: 552
+      endInstruction: 703
+      startSourceChar: 977
+      endSourceChar: 992
+      line: 30
       lineChar: 54
       spanCodeSection: 'stoppedIndex)) '
-    - startInstruction: 548
-      endInstruction: 547
-      startSourceChar: 722
-      endSourceChar: 737
-      line: 21
+    - startInstruction: 704
+      endInstruction: 703
+      startSourceChar: 992
+      endSourceChar: 1007
+      line: 30
       lineChar: 69
       spanCodeSection: "{\r\n            "
-    - startInstruction: 548
-      endInstruction: 547
-      startSourceChar: 737
-      endSourceChar: 737
-      line: 22
+    - startInstruction: 704
+      endInstruction: 703
+      startSourceChar: 1007
+      endSourceChar: 1007
+      line: 31
       lineChar: 12
       spanCodeSection: 
-    - startInstruction: 548
-      endInstruction: 547
-      startSourceChar: 737
-      endSourceChar: 737
-      line: 22
+    - startInstruction: 704
+      endInstruction: 703
+      startSourceChar: 1007
+      endSourceChar: 1007
+      line: 31
       lineChar: 12
       spanCodeSection: 
-    - startInstruction: 548
-      endInstruction: 547
-      startSourceChar: 737
-      endSourceChar: 737
-      line: 22
+    - startInstruction: 704
+      endInstruction: 703
+      startSourceChar: 1007
+      endSourceChar: 1007
+      line: 31
       lineChar: 12
       spanCodeSection: 
-    - startInstruction: 548
-      endInstruction: 547
-      startSourceChar: 737
-      endSourceChar: 743
-      line: 22
+    - startInstruction: 704
+      endInstruction: 703
+      startSourceChar: 1007
+      endSourceChar: 1013
+      line: 31
       lineChar: 12
       spanCodeSection: Debug.
-    - startInstruction: 548
-      endInstruction: 547
-      startSourceChar: 743
-      endSourceChar: 747
-      line: 22
+    - startInstruction: 704
+      endInstruction: 703
+      startSourceChar: 1013
+      endSourceChar: 1017
+      line: 31
       lineChar: 18
       spanCodeSection: Log(
-    - startInstruction: 548
-      endInstruction: 547
-      startSourceChar: 747
-      endSourceChar: 749
-      line: 22
+    - startInstruction: 704
+      endInstruction: 703
+      startSourceChar: 1017
+      endSourceChar: 1019
+      line: 31
       lineChar: 22
       spanCodeSection: $"
-    - startInstruction: 548
-      endInstruction: 567
-      startSourceChar: 749
-      endSourceChar: 801
-      line: 22
+    - startInstruction: 704
+      endInstruction: 723
+      startSourceChar: 1019
+      endSourceChar: 1071
+      line: 31
       lineChar: 24
       spanCodeSection: 'EasyAudioPlayerPlayPrevious: Illegal stopped index '''
-    - startInstruction: 568
-      endInstruction: 567
-      startSourceChar: 801
-      endSourceChar: 802
-      line: 22
+    - startInstruction: 724
+      endInstruction: 723
+      startSourceChar: 1071
+      endSourceChar: 1072
+      line: 31
       lineChar: 76
       spanCodeSection: '{'
-    - startInstruction: 568
-      endInstruction: 643
-      startSourceChar: 802
-      endSourceChar: 815
-      line: 22
+    - startInstruction: 724
+      endInstruction: 799
+      startSourceChar: 1072
+      endSourceChar: 1085
+      line: 31
       lineChar: 77
       spanCodeSection: stoppedIndex}
-    - startInstruction: 644
-      endInstruction: 711
-      startSourceChar: 815
-      endSourceChar: 839
-      line: 22
+    - startInstruction: 800
+      endInstruction: 867
+      startSourceChar: 1085
+      endSourceChar: 1109
+      line: 31
       lineChar: 90
       spanCodeSection: ". Exit.\");\r\n            "
-    - startInstruction: 712
-      endInstruction: 731
-      startSourceChar: 839
-      endSourceChar: 869
-      line: 23
+    - startInstruction: 868
+      endInstruction: 887
+      startSourceChar: 1109
+      endSourceChar: 1139
+      line: 32
       lineChar: 12
       spanCodeSection: "return;\r\n        }\r\n\r\n        "
-    - startInstruction: 732
-      endInstruction: 731
-      startSourceChar: 869
-      endSourceChar: 869
-      line: 26
+    - startInstruction: 888
+      endInstruction: 887
+      startSourceChar: 1139
+      endSourceChar: 1139
+      line: 35
       lineChar: 8
       spanCodeSection: 
-    - startInstruction: 732
-      endInstruction: 731
-      startSourceChar: 869
-      endSourceChar: 869
-      line: 26
+    - startInstruction: 888
+      endInstruction: 887
+      startSourceChar: 1139
+      endSourceChar: 1139
+      line: 35
       lineChar: 8
       spanCodeSection: 
-    - startInstruction: 732
-      endInstruction: 731
-      startSourceChar: 869
-      endSourceChar: 887
-      line: 26
+    - startInstruction: 888
+      endInstruction: 887
+      startSourceChar: 1139
+      endSourceChar: 1157
+      line: 35
       lineChar: 8
       spanCodeSection: 'var previousIndex '
-    - startInstruction: 732
-      endInstruction: 731
-      startSourceChar: 887
-      endSourceChar: 889
-      line: 26
+    - startInstruction: 888
+      endInstruction: 887
+      startSourceChar: 1157
+      endSourceChar: 1159
+      line: 35
       lineChar: 26
       spanCodeSection: '= '
-    - startInstruction: 732
-      endInstruction: 731
-      startSourceChar: 889
-      endSourceChar: 889
-      line: 26
+    - startInstruction: 888
+      endInstruction: 887
+      startSourceChar: 1159
+      endSourceChar: 1159
+      line: 35
       lineChar: 28
       spanCodeSection: 
-    - startInstruction: 732
-      endInstruction: 731
-      startSourceChar: 889
-      endSourceChar: 889
-      line: 26
+    - startInstruction: 888
+      endInstruction: 887
+      startSourceChar: 1159
+      endSourceChar: 1159
+      line: 35
       lineChar: 28
       spanCodeSection: 
-    - startInstruction: 732
-      endInstruction: 731
-      startSourceChar: 889
-      endSourceChar: 894
-      line: 26
+    - startInstruction: 888
+      endInstruction: 887
+      startSourceChar: 1159
+      endSourceChar: 1164
+      line: 35
       lineChar: 28
       spanCodeSection: this.
-    - startInstruction: 732
-      endInstruction: 731
-      startSourceChar: 894
-      endSourceChar: 911
-      line: 26
+    - startInstruction: 888
+      endInstruction: 887
+      startSourceChar: 1164
+      endSourceChar: 1181
+      line: 35
       lineChar: 33
       spanCodeSection: getPreviousIndex(
-    - startInstruction: 732
-      endInstruction: 731
-      startSourceChar: 911
-      endSourceChar: 925
-      line: 26
+    - startInstruction: 888
+      endInstruction: 887
+      startSourceChar: 1181
+      endSourceChar: 1195
+      line: 35
       lineChar: 50
       spanCodeSection: 'stoppedIndex, '
-    - startInstruction: 732
-      endInstruction: 731
-      startSourceChar: 925
-      endSourceChar: 925
-      line: 26
+    - startInstruction: 888
+      endInstruction: 887
+      startSourceChar: 1195
+      endSourceChar: 1195
+      line: 35
       lineChar: 64
       spanCodeSection: 
-    - startInstruction: 732
-      endInstruction: 731
-      startSourceChar: 925
-      endSourceChar: 938
-      line: 26
+    - startInstruction: 888
+      endInstruction: 887
+      startSourceChar: 1195
+      endSourceChar: 1208
+      line: 35
       lineChar: 64
       spanCodeSection: audioSources.
-    - startInstruction: 732
-      endInstruction: 811
-      startSourceChar: 938
-      endSourceChar: 956
-      line: 26
+    - startInstruction: 888
+      endInstruction: 967
+      startSourceChar: 1208
+      endSourceChar: 1226
+      line: 35
       lineChar: 77
       spanCodeSection: "Length);\r\n        "
-    - startInstruction: 812
-      endInstruction: 811
-      startSourceChar: 956
-      endSourceChar: 960
-      line: 27
+    - startInstruction: 968
+      endInstruction: 967
+      startSourceChar: 1226
+      endSourceChar: 1230
+      line: 36
       lineChar: 8
       spanCodeSection: if (
-    - startInstruction: 812
-      endInstruction: 811
-      startSourceChar: 960
-      endSourceChar: 960
-      line: 27
+    - startInstruction: 968
+      endInstruction: 967
+      startSourceChar: 1230
+      endSourceChar: 1230
+      line: 36
       lineChar: 12
       spanCodeSection: 
-    - startInstruction: 812
-      endInstruction: 811
-      startSourceChar: 960
-      endSourceChar: 977
-      line: 27
+    - startInstruction: 968
+      endInstruction: 967
+      startSourceChar: 1230
+      endSourceChar: 1247
+      line: 36
       lineChar: 12
       spanCodeSection: 'previousIndex == '
-    - startInstruction: 812
-      endInstruction: 811
-      startSourceChar: 977
-      endSourceChar: 978
-      line: 27
+    - startInstruction: 968
+      endInstruction: 967
+      startSourceChar: 1247
+      endSourceChar: 1248
+      line: 36
       lineChar: 29
       spanCodeSection: '-'
-    - startInstruction: 812
-      endInstruction: 883
-      startSourceChar: 978
-      endSourceChar: 981
-      line: 27
+    - startInstruction: 968
+      endInstruction: 1039
+      startSourceChar: 1248
+      endSourceChar: 1251
+      line: 36
       lineChar: 30
       spanCodeSection: '1) '
-    - startInstruction: 884
-      endInstruction: 883
-      startSourceChar: 981
-      endSourceChar: 996
-      line: 27
+    - startInstruction: 1040
+      endInstruction: 1039
+      startSourceChar: 1251
+      endSourceChar: 1266
+      line: 36
       lineChar: 33
       spanCodeSection: "{\r\n            "
-    - startInstruction: 884
-      endInstruction: 883
-      startSourceChar: 996
-      endSourceChar: 996
-      line: 28
+    - startInstruction: 1040
+      endInstruction: 1039
+      startSourceChar: 1266
+      endSourceChar: 1266
+      line: 37
       lineChar: 12
       spanCodeSection: 
-    - startInstruction: 884
-      endInstruction: 883
-      startSourceChar: 996
-      endSourceChar: 996
-      line: 28
+    - startInstruction: 1040
+      endInstruction: 1039
+      startSourceChar: 1266
+      endSourceChar: 1266
+      line: 37
       lineChar: 12
       spanCodeSection: 
-    - startInstruction: 884
-      endInstruction: 883
-      startSourceChar: 996
-      endSourceChar: 996
-      line: 28
+    - startInstruction: 1040
+      endInstruction: 1039
+      startSourceChar: 1266
+      endSourceChar: 1266
+      line: 37
       lineChar: 12
       spanCodeSection: 
-    - startInstruction: 884
-      endInstruction: 883
-      startSourceChar: 996
-      endSourceChar: 1002
-      line: 28
+    - startInstruction: 1040
+      endInstruction: 1039
+      startSourceChar: 1266
+      endSourceChar: 1272
+      line: 37
       lineChar: 12
       spanCodeSection: Debug.
-    - startInstruction: 884
-      endInstruction: 883
-      startSourceChar: 1002
-      endSourceChar: 1006
-      line: 28
+    - startInstruction: 1040
+      endInstruction: 1039
+      startSourceChar: 1272
+      endSourceChar: 1276
+      line: 37
       lineChar: 18
       spanCodeSection: Log(
-    - startInstruction: 884
-      endInstruction: 883
-      startSourceChar: 1006
-      endSourceChar: 1008
-      line: 28
+    - startInstruction: 1040
+      endInstruction: 1039
+      startSourceChar: 1276
+      endSourceChar: 1278
+      line: 37
       lineChar: 22
       spanCodeSection: $"
-    - startInstruction: 884
-      endInstruction: 903
-      startSourceChar: 1008
-      endSourceChar: 1060
-      line: 28
+    - startInstruction: 1040
+      endInstruction: 1059
+      startSourceChar: 1278
+      endSourceChar: 1330
+      line: 37
       lineChar: 24
       spanCodeSection: 'EasyAudioPlayerPlayPrevious: The previous index of '''
-    - startInstruction: 904
-      endInstruction: 903
-      startSourceChar: 1060
-      endSourceChar: 1061
-      line: 28
+    - startInstruction: 1060
+      endInstruction: 1059
+      startSourceChar: 1330
+      endSourceChar: 1331
+      line: 37
       lineChar: 76
       spanCodeSection: '{'
-    - startInstruction: 904
-      endInstruction: 979
-      startSourceChar: 1061
-      endSourceChar: 1074
-      line: 28
+    - startInstruction: 1060
+      endInstruction: 1135
+      startSourceChar: 1331
+      endSourceChar: 1344
+      line: 37
       lineChar: 77
       spanCodeSection: stoppedIndex}
-    - startInstruction: 980
-      endInstruction: 1047
-      startSourceChar: 1074
-      endSourceChar: 1127
-      line: 28
+    - startInstruction: 1136
+      endInstruction: 1203
+      startSourceChar: 1344
+      endSourceChar: 1388
+      line: 37
       lineChar: 90
-      spanCodeSection: "' couldn't be gotten. Exit.\");\r\n        }\r\n\r\n        "
-    - startInstruction: 1048
-      endInstruction: 1047
-      startSourceChar: 1127
-      endSourceChar: 1127
-      line: 31
+      spanCodeSection: "' couldn't be gotten. Exit.\");\r\n            "
+    - startInstruction: 1204
+      endInstruction: 1223
+      startSourceChar: 1388
+      endSourceChar: 1418
+      line: 38
+      lineChar: 12
+      spanCodeSection: "return;\r\n        }\r\n\r\n        "
+    - startInstruction: 1224
+      endInstruction: 1223
+      startSourceChar: 1418
+      endSourceChar: 1418
+      line: 41
       lineChar: 8
       spanCodeSection: 
-    - startInstruction: 1048
-      endInstruction: 1047
-      startSourceChar: 1127
-      endSourceChar: 1127
-      line: 31
+    - startInstruction: 1224
+      endInstruction: 1223
+      startSourceChar: 1418
+      endSourceChar: 1418
+      line: 41
       lineChar: 8
       spanCodeSection: 
-    - startInstruction: 1048
-      endInstruction: 1047
-      startSourceChar: 1127
-      endSourceChar: 1127
-      line: 31
+    - startInstruction: 1224
+      endInstruction: 1223
+      startSourceChar: 1418
+      endSourceChar: 1418
+      line: 41
       lineChar: 8
       spanCodeSection: 
-    - startInstruction: 1048
-      endInstruction: 1047
-      startSourceChar: 1127
-      endSourceChar: 1127
-      line: 31
+    - startInstruction: 1224
+      endInstruction: 1223
+      startSourceChar: 1418
+      endSourceChar: 1418
+      line: 41
       lineChar: 8
       spanCodeSection: 
-    - startInstruction: 1048
-      endInstruction: 1047
-      startSourceChar: 1127
-      endSourceChar: 1132
-      line: 31
+    - startInstruction: 1224
+      endInstruction: 1223
+      startSourceChar: 1418
+      endSourceChar: 1423
+      line: 41
       lineChar: 8
       spanCodeSection: this.
-    - startInstruction: 1048
-      endInstruction: 1047
-      startSourceChar: 1132
-      endSourceChar: 1137
-      line: 31
+    - startInstruction: 1224
+      endInstruction: 1223
+      startSourceChar: 1423
+      endSourceChar: 1428
+      line: 41
       lineChar: 13
       spanCodeSection: core.
-    - startInstruction: 1048
-      endInstruction: 1047
-      startSourceChar: 1137
-      endSourceChar: 1142
-      line: 31
+    - startInstruction: 1224
+      endInstruction: 1223
+      startSourceChar: 1428
+      endSourceChar: 1433
+      line: 41
       lineChar: 18
       spanCodeSection: Play(
-    - startInstruction: 1048
-      endInstruction: 1123
-      startSourceChar: 1142
-      endSourceChar: 1172
-      line: 31
+    - startInstruction: 1224
+      endInstruction: 1299
+      startSourceChar: 1433
+      endSourceChar: 1463
+      line: 41
       lineChar: 23
       spanCodeSection: "previousIndex);\r\n    }\r\n\r\n    "
-    - startInstruction: 1124
-      endInstruction: 1123
-      startSourceChar: 1172
-      endSourceChar: 1201
-      line: 34
+    - startInstruction: 1300
+      endInstruction: 1299
+      startSourceChar: 1463
+      endSourceChar: 1492
+      line: 44
       lineChar: 4
       spanCodeSection: private int getPreviousIndex(
-    - startInstruction: 1124
-      endInstruction: 1123
-      startSourceChar: 1201
-      endSourceChar: 1216
-      line: 34
+    - startInstruction: 1300
+      endInstruction: 1299
+      startSourceChar: 1492
+      endSourceChar: 1507
+      line: 44
       lineChar: 33
       spanCodeSection: 'int baseIndex, '
-    - startInstruction: 1124
-      endInstruction: 1131
-      startSourceChar: 1216
-      endSourceChar: 1228
-      line: 34
+    - startInstruction: 1300
+      endInstruction: 1307
+      startSourceChar: 1507
+      endSourceChar: 1519
+      line: 44
       lineChar: 48
       spanCodeSection: 'int length) '
-    - startInstruction: 1132
-      endInstruction: 1131
-      startSourceChar: 1228
-      endSourceChar: 1239
-      line: 34
+    - startInstruction: 1308
+      endInstruction: 1307
+      startSourceChar: 1519
+      endSourceChar: 1530
+      line: 44
       lineChar: 60
       spanCodeSection: "{\r\n        "
-    - startInstruction: 1132
-      endInstruction: 1131
-      startSourceChar: 1239
-      endSourceChar: 1243
-      line: 35
+    - startInstruction: 1308
+      endInstruction: 1307
+      startSourceChar: 1530
+      endSourceChar: 1534
+      line: 45
       lineChar: 8
       spanCodeSection: if (
-    - startInstruction: 1132
-      endInstruction: 1131
-      startSourceChar: 1243
-      endSourceChar: 1243
-      line: 35
+    - startInstruction: 1308
+      endInstruction: 1307
+      startSourceChar: 1534
+      endSourceChar: 1534
+      line: 45
       lineChar: 12
       spanCodeSection: 
-    - startInstruction: 1132
-      endInstruction: 1131
-      startSourceChar: 1243
-      endSourceChar: 1243
-      line: 35
+    - startInstruction: 1308
+      endInstruction: 1307
+      startSourceChar: 1534
+      endSourceChar: 1534
+      line: 45
       lineChar: 12
       spanCodeSection: 
-    - startInstruction: 1132
-      endInstruction: 1131
-      startSourceChar: 1243
-      endSourceChar: 1256
-      line: 35
+    - startInstruction: 1308
+      endInstruction: 1307
+      startSourceChar: 1534
+      endSourceChar: 1547
+      line: 45
       lineChar: 12
       spanCodeSection: 'baseIndex <= '
-    - startInstruction: 1132
-      endInstruction: 1131
-      startSourceChar: 1256
-      endSourceChar: 1257
-      line: 35
+    - startInstruction: 1308
+      endInstruction: 1307
+      startSourceChar: 1547
+      endSourceChar: 1548
+      line: 45
       lineChar: 25
       spanCodeSection: '-'
-    - startInstruction: 1132
-      endInstruction: 1247
-      startSourceChar: 1257
-      endSourceChar: 1262
-      line: 35
+    - startInstruction: 1308
+      endInstruction: 1423
+      startSourceChar: 1548
+      endSourceChar: 1553
+      line: 45
       lineChar: 26
       spanCodeSection: '2 || '
-    - startInstruction: 1248
-      endInstruction: 1247
-      startSourceChar: 1262
-      endSourceChar: 1262
-      line: 35
+    - startInstruction: 1424
+      endInstruction: 1423
+      startSourceChar: 1553
+      endSourceChar: 1553
+      line: 45
       lineChar: 31
       spanCodeSection: 
-    - startInstruction: 1248
-      endInstruction: 1247
-      startSourceChar: 1262
-      endSourceChar: 1272
-      line: 35
+    - startInstruction: 1424
+      endInstruction: 1423
+      startSourceChar: 1553
+      endSourceChar: 1563
+      line: 45
       lineChar: 31
       spanCodeSection: 'length <= '
-    - startInstruction: 1248
-      endInstruction: 1347
-      startSourceChar: 1272
-      endSourceChar: 1283
-      line: 35
+    - startInstruction: 1424
+      endInstruction: 1523
+      startSourceChar: 1563
+      endSourceChar: 1574
+      line: 45
       lineChar: 41
       spanCodeSection: 'baseIndex) '
-    - startInstruction: 1348
-      endInstruction: 1347
-      startSourceChar: 1283
-      endSourceChar: 1298
-      line: 35
+    - startInstruction: 1524
+      endInstruction: 1523
+      startSourceChar: 1574
+      endSourceChar: 1589
+      line: 45
       lineChar: 52
       spanCodeSection: "{\r\n            "
-    - startInstruction: 1348
-      endInstruction: 1347
-      startSourceChar: 1298
-      endSourceChar: 1305
-      line: 36
+    - startInstruction: 1524
+      endInstruction: 1523
+      startSourceChar: 1589
+      endSourceChar: 1596
+      line: 46
       lineChar: 12
       spanCodeSection: 'return '
-    - startInstruction: 1348
-      endInstruction: 1347
-      startSourceChar: 1305
-      endSourceChar: 1306
-      line: 36
+    - startInstruction: 1524
+      endInstruction: 1523
+      startSourceChar: 1596
+      endSourceChar: 1597
+      line: 46
       lineChar: 19
       spanCodeSection: '-'
-    - startInstruction: 1348
-      endInstruction: 1391
-      startSourceChar: 1306
-      endSourceChar: 1331
-      line: 36
+    - startInstruction: 1524
+      endInstruction: 1567
+      startSourceChar: 1597
+      endSourceChar: 1622
+      line: 46
       lineChar: 20
       spanCodeSection: "1;\r\n        }\r\n\r\n        "
-    - startInstruction: 1392
-      endInstruction: 1391
-      startSourceChar: 1331
-      endSourceChar: 1338
-      line: 39
+    - startInstruction: 1568
+      endInstruction: 1567
+      startSourceChar: 1622
+      endSourceChar: 1629
+      line: 49
       lineChar: 8
       spanCodeSection: 'return '
-    - startInstruction: 1392
-      endInstruction: 1391
-      startSourceChar: 1338
-      endSourceChar: 1338
-      line: 39
+    - startInstruction: 1568
+      endInstruction: 1567
+      startSourceChar: 1629
+      endSourceChar: 1629
+      line: 49
       lineChar: 15
       spanCodeSection: 
-    - startInstruction: 1392
-      endInstruction: 1391
-      startSourceChar: 1338
-      endSourceChar: 1339
-      line: 39
+    - startInstruction: 1568
+      endInstruction: 1567
+      startSourceChar: 1629
+      endSourceChar: 1630
+      line: 49
       lineChar: 15
       spanCodeSection: (
-    - startInstruction: 1392
-      endInstruction: 1391
-      startSourceChar: 1339
-      endSourceChar: 1339
-      line: 39
+    - startInstruction: 1568
+      endInstruction: 1567
+      startSourceChar: 1630
+      endSourceChar: 1630
+      line: 49
       lineChar: 16
       spanCodeSection: 
-    - startInstruction: 1392
-      endInstruction: 1391
-      startSourceChar: 1339
-      endSourceChar: 1352
-      line: 39
+    - startInstruction: 1568
+      endInstruction: 1567
+      startSourceChar: 1630
+      endSourceChar: 1643
+      line: 49
       lineChar: 16
       spanCodeSection: 'baseIndex == '
-    - startInstruction: 1392
-      endInstruction: 1439
-      startSourceChar: 1352
-      endSourceChar: 1357
-      line: 39
+    - startInstruction: 1568
+      endInstruction: 1615
+      startSourceChar: 1643
+      endSourceChar: 1648
+      line: 49
       lineChar: 29
       spanCodeSection: '0) ? '
-    - startInstruction: 1440
-      endInstruction: 1439
-      startSourceChar: 1357
-      endSourceChar: 1358
-      line: 39
+    - startInstruction: 1616
+      endInstruction: 1615
+      startSourceChar: 1648
+      endSourceChar: 1649
+      line: 49
       lineChar: 34
       spanCodeSection: (
-    - startInstruction: 1440
-      endInstruction: 1439
-      startSourceChar: 1358
-      endSourceChar: 1358
-      line: 39
+    - startInstruction: 1616
+      endInstruction: 1615
+      startSourceChar: 1649
+      endSourceChar: 1649
+      line: 49
       lineChar: 35
       spanCodeSection: 
-    - startInstruction: 1440
-      endInstruction: 1439
-      startSourceChar: 1358
-      endSourceChar: 1367
-      line: 39
+    - startInstruction: 1616
+      endInstruction: 1615
+      startSourceChar: 1649
+      endSourceChar: 1658
+      line: 49
       lineChar: 35
       spanCodeSection: 'length - '
-    - startInstruction: 1440
-      endInstruction: 1479
-      startSourceChar: 1367
-      endSourceChar: 1372
-      line: 39
+    - startInstruction: 1616
+      endInstruction: 1655
+      startSourceChar: 1658
+      endSourceChar: 1663
+      line: 49
       lineChar: 44
       spanCodeSection: '1) : '
-    - startInstruction: 1480
-      endInstruction: 1479
-      startSourceChar: 1372
-      endSourceChar: 1373
-      line: 39
+    - startInstruction: 1656
+      endInstruction: 1655
+      startSourceChar: 1663
+      endSourceChar: 1664
+      line: 49
       lineChar: 49
       spanCodeSection: (
-    - startInstruction: 1480
-      endInstruction: 1479
-      startSourceChar: 1373
-      endSourceChar: 1373
-      line: 39
+    - startInstruction: 1656
+      endInstruction: 1655
+      startSourceChar: 1664
+      endSourceChar: 1664
+      line: 49
       lineChar: 50
       spanCodeSection: 
-    - startInstruction: 1480
-      endInstruction: 1479
-      startSourceChar: 1373
-      endSourceChar: 1385
-      line: 39
+    - startInstruction: 1656
+      endInstruction: 1655
+      startSourceChar: 1664
+      endSourceChar: 1676
+      line: 49
       lineChar: 50
       spanCodeSection: 'baseIndex - '
-    - startInstruction: 1480
-      endInstruction: 1480
-      startSourceChar: 1385
-      endSourceChar: 1385
-      line: 39
+    - startInstruction: 1656
+      endInstruction: 1656
+      startSourceChar: 1676
+      endSourceChar: 1676
+      line: 49
       lineChar: 62
       spanCodeSection: 
   hasInteractEvent: 1

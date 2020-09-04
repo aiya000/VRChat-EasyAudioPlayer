@@ -252,621 +252,622 @@ MonoBehaviour:
     - startInstruction: 0
       endInstruction: -1
       startSourceChar: 149
-      endSourceChar: 411
+      endSourceChar: 450
       line: 6
       lineChar: 11
-      spanCodeSection: "EasyAudioPlayerAudioSourceStore core;\r\n\r\n    /// Do nothing
-        if core is null or core size is 0.\r\n    /// Play the first if no one is
-        playing now or the last is playing now.\r\n    /// Or play the next of the
-        one that is playing now or the one has been paused.\r\n    "
+      spanCodeSection: "EasyAudioPlayerAudioSourceStore core;\r\n\r\n    /// <summary>\r\n
+        \   /// Do nothing if core is null or core size is 0.\r\n    /// Play the
+        first if no one is playing now or the last is playing now.\r\n    /// Or play
+        the next of the one that is playing now or the one has been paused.\r\n    ///
+        </summary>\r\n    "
     - startInstruction: 0
       endInstruction: 7
-      startSourceChar: 411
-      endSourceChar: 443
-      line: 11
+      startSourceChar: 450
+      endSourceChar: 482
+      line: 13
       lineChar: 4
       spanCodeSection: 'public override void Interact() '
     - startInstruction: 8
       endInstruction: 7
-      startSourceChar: 443
-      endSourceChar: 454
-      line: 11
+      startSourceChar: 482
+      endSourceChar: 493
+      line: 13
       lineChar: 36
       spanCodeSection: "{\r\n        "
     - startInstruction: 8
       endInstruction: 7
-      startSourceChar: 454
-      endSourceChar: 458
-      line: 12
+      startSourceChar: 493
+      endSourceChar: 497
+      line: 14
       lineChar: 8
       spanCodeSection: if (
     - startInstruction: 8
       endInstruction: 7
-      startSourceChar: 458
-      endSourceChar: 458
-      line: 12
+      startSourceChar: 497
+      endSourceChar: 497
+      line: 14
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 8
       endInstruction: 7
-      startSourceChar: 458
-      endSourceChar: 458
-      line: 12
+      startSourceChar: 497
+      endSourceChar: 497
+      line: 14
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 8
       endInstruction: 7
-      startSourceChar: 458
-      endSourceChar: 463
-      line: 12
+      startSourceChar: 497
+      endSourceChar: 502
+      line: 14
       lineChar: 12
       spanCodeSection: this.
     - startInstruction: 8
       endInstruction: 7
-      startSourceChar: 463
-      endSourceChar: 471
-      line: 12
+      startSourceChar: 502
+      endSourceChar: 510
+      line: 14
       lineChar: 17
       spanCodeSection: 'core == '
     - startInstruction: 8
       endInstruction: 55
-      startSourceChar: 471
-      endSourceChar: 477
-      line: 12
+      startSourceChar: 510
+      endSourceChar: 516
+      line: 14
       lineChar: 25
       spanCodeSection: 'null) '
     - startInstruction: 56
       endInstruction: 55
-      startSourceChar: 477
-      endSourceChar: 492
-      line: 12
+      startSourceChar: 516
+      endSourceChar: 531
+      line: 14
       lineChar: 31
       spanCodeSection: "{\r\n            "
     - startInstruction: 56
       endInstruction: 55
-      startSourceChar: 492
-      endSourceChar: 492
-      line: 13
+      startSourceChar: 531
+      endSourceChar: 531
+      line: 15
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 56
       endInstruction: 55
-      startSourceChar: 492
-      endSourceChar: 492
-      line: 13
+      startSourceChar: 531
+      endSourceChar: 531
+      line: 15
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 56
       endInstruction: 55
-      startSourceChar: 492
-      endSourceChar: 492
-      line: 13
+      startSourceChar: 531
+      endSourceChar: 531
+      line: 15
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 56
       endInstruction: 55
-      startSourceChar: 492
-      endSourceChar: 498
-      line: 13
+      startSourceChar: 531
+      endSourceChar: 537
+      line: 15
       lineChar: 12
       spanCodeSection: Debug.
     - startInstruction: 56
       endInstruction: 55
-      startSourceChar: 498
-      endSourceChar: 502
-      line: 13
+      startSourceChar: 537
+      endSourceChar: 541
+      line: 15
       lineChar: 18
       spanCodeSection: Log(
     - startInstruction: 56
       endInstruction: 71
-      startSourceChar: 502
-      endSourceChar: 566
-      line: 13
+      startSourceChar: 541
+      endSourceChar: 605
+      line: 15
       lineChar: 22
       spanCodeSection: "\"EasyAudioPlayerPlayNext: The core has not set.\");\r\n            "
     - startInstruction: 72
       endInstruction: 91
-      startSourceChar: 566
-      endSourceChar: 596
-      line: 14
+      startSourceChar: 605
+      endSourceChar: 635
+      line: 16
       lineChar: 12
       spanCodeSection: "return;\r\n        }\r\n\r\n        "
     - startInstruction: 92
       endInstruction: 91
-      startSourceChar: 596
-      endSourceChar: 596
-      line: 17
+      startSourceChar: 635
+      endSourceChar: 635
+      line: 19
       lineChar: 8
       spanCodeSection: 
     - startInstruction: 92
       endInstruction: 91
-      startSourceChar: 596
-      endSourceChar: 596
-      line: 17
+      startSourceChar: 635
+      endSourceChar: 635
+      line: 19
       lineChar: 8
       spanCodeSection: 
     - startInstruction: 92
       endInstruction: 91
-      startSourceChar: 596
-      endSourceChar: 613
-      line: 17
+      startSourceChar: 635
+      endSourceChar: 652
+      line: 19
       lineChar: 8
       spanCodeSection: 'var audioSources '
     - startInstruction: 92
       endInstruction: 91
-      startSourceChar: 613
-      endSourceChar: 615
-      line: 17
+      startSourceChar: 652
+      endSourceChar: 654
+      line: 19
       lineChar: 25
       spanCodeSection: '= '
     - startInstruction: 92
       endInstruction: 91
-      startSourceChar: 615
-      endSourceChar: 615
-      line: 17
+      startSourceChar: 654
+      endSourceChar: 654
+      line: 19
       lineChar: 27
       spanCodeSection: 
     - startInstruction: 92
       endInstruction: 91
-      startSourceChar: 615
-      endSourceChar: 615
-      line: 17
+      startSourceChar: 654
+      endSourceChar: 654
+      line: 19
       lineChar: 27
       spanCodeSection: 
     - startInstruction: 92
       endInstruction: 91
-      startSourceChar: 615
-      endSourceChar: 615
-      line: 17
+      startSourceChar: 654
+      endSourceChar: 654
+      line: 19
       lineChar: 27
       spanCodeSection: 
     - startInstruction: 92
       endInstruction: 91
-      startSourceChar: 615
-      endSourceChar: 620
-      line: 17
+      startSourceChar: 654
+      endSourceChar: 659
+      line: 19
       lineChar: 27
       spanCodeSection: this.
     - startInstruction: 92
       endInstruction: 91
-      startSourceChar: 620
-      endSourceChar: 625
-      line: 17
+      startSourceChar: 659
+      endSourceChar: 664
+      line: 19
       lineChar: 32
       spanCodeSection: core.
     - startInstruction: 92
       endInstruction: 187
-      startSourceChar: 625
-      endSourceChar: 653
-      line: 17
+      startSourceChar: 664
+      endSourceChar: 692
+      line: 19
       lineChar: 37
       spanCodeSection: "GetAudioSources();\r\n        "
     - startInstruction: 188
       endInstruction: 187
-      startSourceChar: 653
-      endSourceChar: 657
-      line: 18
+      startSourceChar: 692
+      endSourceChar: 696
+      line: 20
       lineChar: 8
       spanCodeSection: if (
     - startInstruction: 188
       endInstruction: 187
-      startSourceChar: 657
-      endSourceChar: 657
-      line: 18
+      startSourceChar: 696
+      endSourceChar: 696
+      line: 20
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 188
       endInstruction: 187
-      startSourceChar: 657
-      endSourceChar: 657
-      line: 18
+      startSourceChar: 696
+      endSourceChar: 696
+      line: 20
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 188
       endInstruction: 187
-      startSourceChar: 657
-      endSourceChar: 670
-      line: 18
+      startSourceChar: 696
+      endSourceChar: 709
+      line: 20
       lineChar: 12
       spanCodeSection: audioSources.
     - startInstruction: 188
       endInstruction: 211
-      startSourceChar: 670
-      endSourceChar: 680
-      line: 18
+      startSourceChar: 709
+      endSourceChar: 719
+      line: 20
       lineChar: 25
       spanCodeSection: 'Length == '
     - startInstruction: 212
       endInstruction: 259
-      startSourceChar: 680
-      endSourceChar: 683
-      line: 18
+      startSourceChar: 719
+      endSourceChar: 722
+      line: 20
       lineChar: 35
       spanCodeSection: '0) '
     - startInstruction: 260
       endInstruction: 259
-      startSourceChar: 683
-      endSourceChar: 698
-      line: 18
+      startSourceChar: 722
+      endSourceChar: 737
+      line: 20
       lineChar: 38
       spanCodeSection: "{\r\n            "
     - startInstruction: 260
       endInstruction: 259
-      startSourceChar: 698
-      endSourceChar: 698
-      line: 19
+      startSourceChar: 737
+      endSourceChar: 737
+      line: 21
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 260
       endInstruction: 259
-      startSourceChar: 698
-      endSourceChar: 698
-      line: 19
+      startSourceChar: 737
+      endSourceChar: 737
+      line: 21
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 260
       endInstruction: 259
-      startSourceChar: 698
-      endSourceChar: 698
-      line: 19
+      startSourceChar: 737
+      endSourceChar: 737
+      line: 21
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 260
       endInstruction: 259
-      startSourceChar: 698
-      endSourceChar: 704
-      line: 19
+      startSourceChar: 737
+      endSourceChar: 743
+      line: 21
       lineChar: 12
       spanCodeSection: Debug.
     - startInstruction: 260
       endInstruction: 259
-      startSourceChar: 704
-      endSourceChar: 708
-      line: 19
+      startSourceChar: 743
+      endSourceChar: 747
+      line: 21
       lineChar: 18
       spanCodeSection: Log(
     - startInstruction: 260
       endInstruction: 275
-      startSourceChar: 708
-      endSourceChar: 784
-      line: 19
+      startSourceChar: 747
+      endSourceChar: 823
+      line: 21
       lineChar: 22
       spanCodeSection: "\"EasyAudioPlayerPlayNext: exit for the empty audio sources.\");\r\n
         \           "
     - startInstruction: 276
       endInstruction: 295
-      startSourceChar: 784
-      endSourceChar: 814
-      line: 20
+      startSourceChar: 823
+      endSourceChar: 853
+      line: 22
       lineChar: 12
       spanCodeSection: "return;\r\n        }\r\n\r\n        "
     - startInstruction: 296
       endInstruction: 295
-      startSourceChar: 814
-      endSourceChar: 814
-      line: 23
+      startSourceChar: 853
+      endSourceChar: 853
+      line: 25
       lineChar: 8
       spanCodeSection: 
     - startInstruction: 296
       endInstruction: 295
-      startSourceChar: 814
-      endSourceChar: 814
-      line: 23
+      startSourceChar: 853
+      endSourceChar: 853
+      line: 25
       lineChar: 8
       spanCodeSection: 
     - startInstruction: 296
       endInstruction: 295
-      startSourceChar: 814
-      endSourceChar: 831
-      line: 23
+      startSourceChar: 853
+      endSourceChar: 870
+      line: 25
       lineChar: 8
       spanCodeSection: 'var stoppedIndex '
     - startInstruction: 296
       endInstruction: 295
-      startSourceChar: 831
-      endSourceChar: 833
-      line: 23
+      startSourceChar: 870
+      endSourceChar: 872
+      line: 25
       lineChar: 25
       spanCodeSection: '= '
     - startInstruction: 296
       endInstruction: 295
-      startSourceChar: 833
-      endSourceChar: 833
-      line: 23
+      startSourceChar: 872
+      endSourceChar: 872
+      line: 25
       lineChar: 27
       spanCodeSection: 
     - startInstruction: 296
       endInstruction: 295
-      startSourceChar: 833
-      endSourceChar: 833
-      line: 23
+      startSourceChar: 872
+      endSourceChar: 872
+      line: 25
       lineChar: 27
       spanCodeSection: 
     - startInstruction: 296
       endInstruction: 295
-      startSourceChar: 833
-      endSourceChar: 833
-      line: 23
+      startSourceChar: 872
+      endSourceChar: 872
+      line: 25
       lineChar: 27
       spanCodeSection: 
     - startInstruction: 296
       endInstruction: 295
-      startSourceChar: 833
-      endSourceChar: 838
-      line: 23
+      startSourceChar: 872
+      endSourceChar: 877
+      line: 25
       lineChar: 27
       spanCodeSection: this.
     - startInstruction: 296
       endInstruction: 295
-      startSourceChar: 838
-      endSourceChar: 843
-      line: 23
+      startSourceChar: 877
+      endSourceChar: 882
+      line: 25
       lineChar: 32
       spanCodeSection: core.
     - startInstruction: 296
       endInstruction: 395
-      startSourceChar: 843
-      endSourceChar: 866
-      line: 23
+      startSourceChar: 882
+      endSourceChar: 905
+      line: 25
       lineChar: 37
       spanCodeSection: "StopLatest();\r\n        "
     - startInstruction: 396
       endInstruction: 395
-      startSourceChar: 866
-      endSourceChar: 870
-      line: 24
+      startSourceChar: 905
+      endSourceChar: 909
+      line: 26
       lineChar: 8
       spanCodeSection: if (
     - startInstruction: 396
       endInstruction: 395
-      startSourceChar: 870
-      endSourceChar: 871
-      line: 24
+      startSourceChar: 909
+      endSourceChar: 910
+      line: 26
       lineChar: 12
       spanCodeSection: '!'
     - startInstruction: 396
       endInstruction: 395
-      startSourceChar: 871
-      endSourceChar: 871
-      line: 24
+      startSourceChar: 910
+      endSourceChar: 910
+      line: 26
       lineChar: 13
       spanCodeSection: 
     - startInstruction: 396
       endInstruction: 395
-      startSourceChar: 871
-      endSourceChar: 871
-      line: 24
+      startSourceChar: 910
+      endSourceChar: 910
+      line: 26
       lineChar: 13
       spanCodeSection: 
     - startInstruction: 396
       endInstruction: 395
-      startSourceChar: 871
-      endSourceChar: 871
-      line: 24
+      startSourceChar: 910
+      endSourceChar: 910
+      line: 26
       lineChar: 13
       spanCodeSection: 
     - startInstruction: 396
       endInstruction: 395
-      startSourceChar: 871
-      endSourceChar: 876
-      line: 24
+      startSourceChar: 910
+      endSourceChar: 915
+      line: 26
       lineChar: 13
       spanCodeSection: this.
     - startInstruction: 396
       endInstruction: 395
-      startSourceChar: 876
-      endSourceChar: 881
-      line: 24
+      startSourceChar: 915
+      endSourceChar: 920
+      line: 26
       lineChar: 18
       spanCodeSection: core.
     - startInstruction: 396
       endInstruction: 395
-      startSourceChar: 881
-      endSourceChar: 912
-      line: 24
+      startSourceChar: 920
+      endSourceChar: 951
+      line: 26
       lineChar: 23
       spanCodeSection: IsNotOutOfBoundsOnAudioSources(
     - startInstruction: 396
       endInstruction: 547
-      startSourceChar: 912
-      endSourceChar: 927
-      line: 24
+      startSourceChar: 951
+      endSourceChar: 966
+      line: 26
       lineChar: 54
       spanCodeSection: 'stoppedIndex)) '
     - startInstruction: 548
       endInstruction: 547
-      startSourceChar: 927
-      endSourceChar: 942
-      line: 24
+      startSourceChar: 966
+      endSourceChar: 981
+      line: 26
       lineChar: 69
       spanCodeSection: "{\r\n            "
     - startInstruction: 548
       endInstruction: 547
-      startSourceChar: 942
-      endSourceChar: 942
-      line: 25
+      startSourceChar: 981
+      endSourceChar: 981
+      line: 27
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 548
       endInstruction: 547
-      startSourceChar: 942
-      endSourceChar: 942
-      line: 25
+      startSourceChar: 981
+      endSourceChar: 981
+      line: 27
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 548
       endInstruction: 547
-      startSourceChar: 942
-      endSourceChar: 942
-      line: 25
+      startSourceChar: 981
+      endSourceChar: 981
+      line: 27
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 548
       endInstruction: 547
-      startSourceChar: 942
-      endSourceChar: 948
-      line: 25
+      startSourceChar: 981
+      endSourceChar: 987
+      line: 27
       lineChar: 12
       spanCodeSection: Debug.
     - startInstruction: 548
       endInstruction: 547
-      startSourceChar: 948
-      endSourceChar: 952
-      line: 25
+      startSourceChar: 987
+      endSourceChar: 991
+      line: 27
       lineChar: 18
       spanCodeSection: Log(
     - startInstruction: 548
       endInstruction: 563
-      startSourceChar: 952
-      endSourceChar: 1015
-      line: 25
+      startSourceChar: 991
+      endSourceChar: 1054
+      line: 27
       lineChar: 22
       spanCodeSection: "\"EasyAudioPlayerPlayNext: Illegal State. Exit.\");\r\n            "
     - startInstruction: 564
       endInstruction: 583
-      startSourceChar: 1015
-      endSourceChar: 1045
-      line: 26
+      startSourceChar: 1054
+      endSourceChar: 1084
+      line: 28
       lineChar: 12
       spanCodeSection: "return;\r\n        }\r\n\r\n        "
     - startInstruction: 584
       endInstruction: 583
-      startSourceChar: 1045
-      endSourceChar: 1045
-      line: 29
+      startSourceChar: 1084
+      endSourceChar: 1084
+      line: 31
       lineChar: 8
       spanCodeSection: 
     - startInstruction: 584
       endInstruction: 583
-      startSourceChar: 1045
-      endSourceChar: 1045
-      line: 29
+      startSourceChar: 1084
+      endSourceChar: 1084
+      line: 31
       lineChar: 8
       spanCodeSection: 
     - startInstruction: 584
       endInstruction: 583
-      startSourceChar: 1045
-      endSourceChar: 1059
-      line: 29
+      startSourceChar: 1084
+      endSourceChar: 1098
+      line: 31
       lineChar: 8
       spanCodeSection: 'var nextIndex '
     - startInstruction: 584
       endInstruction: 583
-      startSourceChar: 1059
-      endSourceChar: 1061
-      line: 29
+      startSourceChar: 1098
+      endSourceChar: 1100
+      line: 31
       lineChar: 22
       spanCodeSection: '= '
     - startInstruction: 584
       endInstruction: 583
-      startSourceChar: 1061
-      endSourceChar: 1061
-      line: 29
+      startSourceChar: 1100
+      endSourceChar: 1100
+      line: 31
       lineChar: 24
       spanCodeSection: 
     - startInstruction: 584
       endInstruction: 583
-      startSourceChar: 1061
-      endSourceChar: 1062
-      line: 29
+      startSourceChar: 1100
+      endSourceChar: 1101
+      line: 31
       lineChar: 24
       spanCodeSection: (
     - startInstruction: 584
       endInstruction: 583
-      startSourceChar: 1062
-      endSourceChar: 1062
-      line: 29
+      startSourceChar: 1101
+      endSourceChar: 1101
+      line: 31
       lineChar: 25
       spanCodeSection: 
     - startInstruction: 584
       endInstruction: 583
-      startSourceChar: 1062
-      endSourceChar: 1077
-      line: 29
+      startSourceChar: 1101
+      endSourceChar: 1116
+      line: 31
       lineChar: 25
       spanCodeSection: 'stoppedIndex + '
     - startInstruction: 584
       endInstruction: 615
-      startSourceChar: 1077
-      endSourceChar: 1082
-      line: 29
+      startSourceChar: 1116
+      endSourceChar: 1121
+      line: 31
       lineChar: 40
       spanCodeSection: '1) % '
     - startInstruction: 616
       endInstruction: 615
-      startSourceChar: 1082
-      endSourceChar: 1082
-      line: 29
+      startSourceChar: 1121
+      endSourceChar: 1121
+      line: 31
       lineChar: 45
       spanCodeSection: 
     - startInstruction: 616
       endInstruction: 615
-      startSourceChar: 1082
-      endSourceChar: 1095
-      line: 29
+      startSourceChar: 1121
+      endSourceChar: 1134
+      line: 31
       lineChar: 45
       spanCodeSection: audioSources.
     - startInstruction: 616
       endInstruction: 691
-      startSourceChar: 1095
-      endSourceChar: 1112
-      line: 29
+      startSourceChar: 1134
+      endSourceChar: 1151
+      line: 31
       lineChar: 58
       spanCodeSection: "Length;\r\n        "
     - startInstruction: 692
       endInstruction: 691
-      startSourceChar: 1112
-      endSourceChar: 1112
-      line: 30
+      startSourceChar: 1151
+      endSourceChar: 1151
+      line: 32
       lineChar: 8
       spanCodeSection: 
     - startInstruction: 692
       endInstruction: 691
-      startSourceChar: 1112
-      endSourceChar: 1112
-      line: 30
+      startSourceChar: 1151
+      endSourceChar: 1151
+      line: 32
       lineChar: 8
       spanCodeSection: 
     - startInstruction: 692
       endInstruction: 691
-      startSourceChar: 1112
-      endSourceChar: 1112
-      line: 30
+      startSourceChar: 1151
+      endSourceChar: 1151
+      line: 32
       lineChar: 8
       spanCodeSection: 
     - startInstruction: 692
       endInstruction: 691
-      startSourceChar: 1112
-      endSourceChar: 1112
-      line: 30
+      startSourceChar: 1151
+      endSourceChar: 1151
+      line: 32
       lineChar: 8
       spanCodeSection: 
     - startInstruction: 692
       endInstruction: 691
-      startSourceChar: 1112
-      endSourceChar: 1117
-      line: 30
+      startSourceChar: 1151
+      endSourceChar: 1156
+      line: 32
       lineChar: 8
       spanCodeSection: this.
     - startInstruction: 692
       endInstruction: 691
-      startSourceChar: 1117
-      endSourceChar: 1122
-      line: 30
+      startSourceChar: 1156
+      endSourceChar: 1161
+      line: 32
       lineChar: 13
       spanCodeSection: core.
     - startInstruction: 692
       endInstruction: 691
-      startSourceChar: 1122
-      endSourceChar: 1127
-      line: 30
+      startSourceChar: 1161
+      endSourceChar: 1166
+      line: 32
       lineChar: 18
       spanCodeSection: Play(
     - startInstruction: 692
       endInstruction: 692
-      startSourceChar: 1127
-      endSourceChar: 1127
-      line: 30
+      startSourceChar: 1166
+      endSourceChar: 1166
+      line: 32
       lineChar: 23
       spanCodeSection: 
   hasInteractEvent: 1

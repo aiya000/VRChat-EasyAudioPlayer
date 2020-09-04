@@ -1,6 +1,7 @@
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
+using VRC.Udon.Common.Interfaces;
 using VRC.Udon;
 
 public class EasyAudioPlayerPlayOrPause : UdonSharpBehaviour {
@@ -17,6 +18,14 @@ public class EasyAudioPlayerPlayOrPause : UdonSharpBehaviour {
             return;
         }
 
+        if (this.core.isWorkingOnlyOnLocal) {
+            this.PlayOrPause();
+        } else {
+            this.SendCustomNetworkEvent(NetworkEventTarget.All, "PlayOrPause");
+        }
+    }
+
+    public void PlayOrPause() {
         if (this.core.UnPauseLatest()) {
             return;
         }

@@ -1,6 +1,7 @@
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
+using VRC.Udon.Common.Interfaces;
 using VRC.Udon;
 
 public class EasyAudioPlayerPlayPrevious : UdonSharpBehaviour {
@@ -12,6 +13,14 @@ public class EasyAudioPlayerPlayPrevious : UdonSharpBehaviour {
             return;
         }
 
+        if (this.core.isWorkingOnlyOnLocal) {
+            this.PlayPrevious();
+        } else {
+            this.SendCustomNetworkEvent(NetworkEventTarget.All, "PlayPrevious");
+        }
+    }
+
+    public void PlayPrevious() {
         var audioSources = this.core.GetAudioSources();
         if (audioSources.Length == 0) {
             Debug.Log("EasyAudioPlayerPlayPrevious: exit for the empty audio sources.");
@@ -27,6 +36,7 @@ public class EasyAudioPlayerPlayPrevious : UdonSharpBehaviour {
         var previousIndex = this.getPreviousIndex(stoppedIndex, audioSources.Length);
         if (previousIndex == -1) {
             Debug.Log($"EasyAudioPlayerPlayPrevious: The previous index of '{stoppedIndex}' couldn't be gotten. Exit.");
+            return;
         }
 
         this.core.Play(previousIndex);
