@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2677040666824732320}
   - component: {fileID: 2677040666824732323}
   m_Layer: 0
-  m_Name: EasyAudioPlayer (Original. Please modify this if you'll contribute EasyAudioPlayer.)
+  m_Name: EasyAudioPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
