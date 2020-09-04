@@ -22,16 +22,16 @@ public class SoundUiAudioSourceStore : UdonSharpBehaviour {
 
     public void Start() {
         if (this.audioSourceList == null) {
-            Debug.Log("SoundUiAudioSourceList: The audio source list has not set.");
+            Debug.Log("SoundUiAudioSourceStore: The audio source list has not set.");
             return;
         }
 
         var components = this.audioSourceList.GetComponentsInChildren(typeof(AudioSource));
         if (components == null) {
-            Debug.Log("SoundUiAudioSourceList: Gotten components is null.");
+            Debug.Log("SoundUiAudioSourceStore: Gotten components is null.");
             return;
         }
-        Debug.Log($"SoundUiAudioSourceList: Gotten components size is {components.Length}");
+        Debug.Log($"SoundUiAudioSourceStore: Gotten components size is {components.Length}");
 
         this.audioSources = new AudioSource[components.Length];
         for (var i = 0; i < components.Length; i++) {
