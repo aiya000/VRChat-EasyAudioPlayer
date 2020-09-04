@@ -22,16 +22,16 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
 
     public void Start() {
         if (this.audioSourceList == null) {
-            Debug.Log("EasyAudioPlayerAudioSourceStore: The audio source list has not set.");
+            Debug.Log("EasyAudioPlayerAudioSourceStore: Start(): The audio source list has not set.");
             return;
         }
 
         var components = this.audioSourceList.GetComponentsInChildren(typeof(AudioSource));
         if (components == null) {
-            Debug.Log("EasyAudioPlayerAudioSourceStore: Gotten components is null.");
+            Debug.Log("EasyAudioPlayerAudioSourceStore: Start(): Gotten components is null.");
             return;
         }
-        Debug.Log($"EasyAudioPlayerAudioSourceStore: Gotten components size is {components.Length}");
+        Debug.Log($"EasyAudioPlayerAudioSourceStore: Start(): Gotten components size is {components.Length}");
 
         this.audioSources = new AudioSource[components.Length];
         for (var i = 0; i < components.Length; i++) {
@@ -60,10 +60,10 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
     /// </summary>
     public AudioSource[] GetAudioSources() {
         if (this.audioSources == null) {
-            Debug.Log("EasyAudioPlayerAudioSourceStore: Gotten audio sources is null. Return the empty array instead.");
+            Debug.Log("EasyAudioPlayerAudioSourceStore: GetAudioSources(): Gotten audio sources is null. Return the empty array instead.");
             return new AudioSource[0];
         }
-        Debug.Log($"EasyAudioPlayerAudioSourceStore: Gotten audio sources size is {this.audioSources.Length}");
+        Debug.Log($"EasyAudioPlayerAudioSourceStore: GetAudioSources(): Gotten audio sources size is {this.audioSources.Length}");
 
         return this.audioSources;
     }
