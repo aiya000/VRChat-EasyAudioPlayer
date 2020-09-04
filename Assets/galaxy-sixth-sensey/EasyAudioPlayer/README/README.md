@@ -24,8 +24,9 @@ MITライセンス
 1. 各AudioSourceを、曲名にリネーム  
    ![](5.PNG)
    - この名前が、本プレイヤーの曲名表示オブジェクトに表示されます
-1. リネームした各AudioSourceを全て選択して、Inspectorの'Play On Awake'のチェックを**外す**
+1. リネームした各AudioSourceを全て選択して、Inspectorの'Play On Awake'のチェックを**外す**  
    ![](6.PNG)
+   - ここで'Loop'のチェックを入れておくと各曲がループし、曲を終えたときに次の曲に移さなくなります
 1. EasyAudioPlayer.unitypackageをインポート  
    ![](7.PNG)
 1. `galaxy-sixth-sensey\EasyAudioPlayer\EasyAudioPlayer.prefab`をHierarchyに配置
@@ -55,6 +56,7 @@ MITライセンス
 1. AudioSourceを設定する
 1. AudioSourceの名前に曲名を設定する
 1. AudioSourceに'Play On Awake'のチェックを**入れる**
+1. お好みで、AudioSourceに'Loop'のチェックを**入れる**
 1. EasyAudioPlayerを'Unpack prefab'する
 1. Hierarchyの`EasyAudioPlayer > PlayingAudioName > Canvas > Text`をクリック
 1. Inspectorの`Text`に、設定したAudioSourceの曲名を入力する
