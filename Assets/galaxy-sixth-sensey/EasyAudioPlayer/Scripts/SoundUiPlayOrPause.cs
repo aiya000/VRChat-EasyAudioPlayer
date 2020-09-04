@@ -4,35 +4,27 @@ using VRC.SDKBase;
 using VRC.Udon;
 
 public class SoundUiPlayOrPause : UdonSharpBehaviour {
-    public SoundUiAudioSourceStore soundUiAudioSourceStore;
+    public SoundUiAudioSourceStore core;
 
-    /// Stop an audio source that is playing now.
-    /// Play an audio source that has been paused.
-    /// Or play the first audio source if no one is playing now.
+    /// <summary>
+    /// Plays (Unpauses) an audio source that has been paused.
+    /// Pauses an audio source that is playing now.
+    /// Or plays the first audio source if no one is playing now.
+    /// </summary>
     public override void Interact() {
-        if (this.soundUiAudioSourceStore == null) {
-            Debug.Log("SoundUiPlayOrPause: The SoundUiAudioSourceStore has not set.");
+        if (this.core == null) {
+            Debug.Log("SoundUiPlayOrPause: The core has not set.");
             return;
         }
 
-        var audioSources = this.soundUiAudioSourceStore.GetAudioSources();
-        if (audioSources.Length == 0) {
-            Debug.Log("SoundUiPlayOrPause: exit for the empty audio sources.");
+        if (this.core.UnPauseLatest()) {
             return;
         }
 
-        if (this.soundUiAudioSourceStore.UnPauseLatest()) {
+        if (this.core.PausePlaying()) {
             return;
         }
 
-        for (var i = 0; i < audioSources.Length; i++) {
-            var audioSource = audioSources[i];
-            if (audioSource.isPlaying) {
-                this.soundUiAudioSourceStore.Pause(i);
-                return;
-            }
-        }
-
-        this.soundUiAudioSourceStore.Play(0);
+        this.core.Play(0);
     }
 }
