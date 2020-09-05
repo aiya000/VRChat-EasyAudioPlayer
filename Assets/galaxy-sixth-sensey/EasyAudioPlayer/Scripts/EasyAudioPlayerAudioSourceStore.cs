@@ -1,6 +1,7 @@
+using EasyAudioPlayer;
 using UdonSharp;
-using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
 
@@ -9,6 +10,12 @@ using VRC.Udon;
 /// - an audio source list that is set by a user
 /// - The EasyAudioPlayer's state
 /// - Operations for the audio sources (EasyAudioPlayer scripts should use this instead of AudioSource methods.)
+///
+/// To synchronize on the network of users, operations are splited to setter methods and Apply().
+/// The setter methods should be called only by the owner.
+/// Also Apply() should be called everyone after a setter is called.
+///
+/// <see cref="Apply"/>
 /// </summary>
 public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
     public GameObject audioSourceList;
@@ -24,20 +31,20 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
     private AudioSource[] audioSources;
 
     [UdonSynced(UdonSyncMode.None)]
-    private int paused = -1;
+    private int nextAction = EasyAudioPlayerAction.Nothing;
 
     [UdonSynced(UdonSyncMode.None)]
-    private int playing = -1;  // Now playing AudioSource's index
+    private PlayingState playing = new PlayingStateStopping();
 
     public void Start() {
         if (this.audioSourceList == null) {
-            Debug.Log("EasyAudioPlayerAudioSourceStore: Start(): The audio source list has not set.");
+            Debug.Log("EasyAudioPlayerAudioSourceStore: Start(): Error! The audio source list has not set.");
             return;
         }
 
         var components = this.audioSourceList.GetComponentsInChildren(typeof(AudioSource));
         if (components == null) {
-            Debug.Log("EasyAudioPlayerAudioSourceStore: Start(): Gotten components is null.");
+            Debug.Log("EasyAudioPlayerAudioSourceStore: Start(): Error! Gotten components is null.");
             return;
         }
         Debug.Log($"EasyAudioPlayerAudioSourceStore: Start(): Gotten components size is {components.Length}");
@@ -49,168 +56,66 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
             // Set this.playing to the first one which is playing
             if (this.playing == -1 && this.audioSources[i].isPlaying) {
                 Debug.Log($"EasyAudioPlayerAudioSourceStore: Start(): Set this.playing to {i}");
-                this.setPlaying(i);
+                this.setToBePlaying(i);
             }
-        }
-
-        // Stop all excluding the one which is the playing
-        this.StopAll();
-
-        if (this.playing != -1) {
-            this.Play(this.playing);
         }
     }
 
     public void Update() {
-        if (this.playing == -1) {
-            return;
-        } else if (!Networking.IsOwner(Networking.LocalPlayer, this.gameObject)) {
-            return;
-        }
+        // TODO
+    }
 
-        if (this.audioSources == null) {
-            Debug.Log("EasyAudioPlayerAudioSourceStore: Update(): The audio sources has not set.");
-            return;
-        } else if (!this.IsNotOutOfBoundsOnAudioSources(this.playing)) {
-            Debug.Log($"EasyAudioPlayerAudioSourceStore: Update(): '{this.playing}' is out of bounds. Skip.");
-            return;
-        }
-
-        if (this.playing == this.audioSources.Length - 1) {
-            this.playingAudioName.text = NOT_PLAYING_NOW;
-            return;
-        }
-
-        if (!this.audioSources[this.playing].isPlaying) {
-            this.Play(this.playing + 1);
+    public void PrepareToPlayOrPauseOrUnpause() {
+        if (this.paused) {
+            this.prepareToUnpause();
         }
     }
 
     /// <summary>
-    /// Returns audio sources that is audioSourceList's children.
-    /// Or return the empty array if audioSourceList has not set.
-    ///
-    /// This doesn't return null.
+    /// To synchronize the state with network users.
     /// </summary>
-    public AudioSource[] GetAudioSources() {
+    public void Apply() {
         if (this.audioSources == null) {
-            Debug.Log("EasyAudioPlayerAudioSourceStore: GetAudioSources(): Gotten audio sources is null. Return the empty array instead.");
-            return new AudioSource[0];
+            Debug.Log("EasyAudioPlayerAudioSourceStore: Refresh(): Gotten audio sources is null. Skip.");
+            return;
         }
-        Debug.Log($"EasyAudioPlayerAudioSourceStore: GetAudioSources(): Gotten audio sources size is {this.audioSources.Length}");
 
-        return this.audioSources;
+        if (this.paused) {
+            this.pause();
+            return;
+        }
+
+        if (this.playing == -1) {
+            this.stop();
+            return;
+        }
+
+        if (!this.isNotOutOfBoundsOnAudioSources(this.playing)) {
+            Debug.Log($"EasyAudioPlayerAudioSourceStore: Refresh(): {this.playing} is out of bounds. Skip.");
+            return;
+        }
+        var current = this.audioSources[this.playing];
+        this.playingAudioName.text = current.name;
     }
 
-    public bool IsNotOutOfBoundsOnAudioSources(int index) {
+    private bool isNotOutOfBoundsOnAudioSources(int index) {
         return 0 <= index && index < this.audioSources.Length;
     }
 
-    /// <summary>
-    /// Pauses the i-th audio source,
-    /// and saves the index i.
-    /// Also show the audio source name on the text.
-    ///
-    /// <see cref="UnPauseLatest"/>
-    /// </summary>
-    public void Pause(int i) {
-        var audioSource = this.audioSources[i];
-        audioSource.Pause();
-        this.playingAudioName.text = audioSource.name;
-
-        this.setPaused(i);
-        Debug.Log($"EasyAudioPlayerAudioSourceStore: Pause(): {i}-th is paused.");
-    }
-
-    /// <summary>
-    /// Pauses a currently playing audio source.
-    /// Return false if no one is playing now.
-    /// </summary>
-    public bool PausePlaying() {
-        if (!IsNotOutOfBoundsOnAudioSources(this.playing)) {
-            Debug.Log($"EasyAudioPlayerAudioSourceStore: PausePlaying(): {this.playing} is out of bounds. Skip.");
-            return false;
-        }
-
-        var result = this.audioSources[this.playing].isPlaying;
-        this.Pause(this.playing);
-        Debug.Log($"EasyAudioPlayerAudioSourceStore: PausePlaying(): {this.playing} is paused.");
-        return result;
-    }
-
-    /// <summary>
-    /// Unpauses the latestly paused audio source, and returns true.
-    /// Or return false if no one is paused or the one already has been unpaused.
-    ///
-    /// Also show the audio source name on the text.
-    ///
-    /// <see cref="Pause"/>
-    /// </summary>
-    public bool UnPauseLatest() {
-        if (this.paused == -1) {
-            Debug.Log("EasyAudioPlayerAudioSourceStore: UnPauseLatest(): no one was playing. Skip.");
-            return false;
-        }
-
-        var audioSource = this.audioSources[this.paused];
-        audioSource.UnPause();
-        this.playingAudioName.text = audioSource.name;
-
-        Debug.Log($"EasyAudioPlayerAudioSourceStore: UnPauseLatest(): {this.paused} is unpaused.");
-        this.setPaused(-1);
-        return true;
-    }
-
-    /// <summary>
-    /// Play the i-th audio source if it is existent.
-    /// Also show the audio source name on the text.
-    /// </summary>
-    public void Play(int i) {
-        if (i < 0 || this.audioSources.Length <= i) {
-            Debug.Log($"EasyAudioPlayerAudioSourceStore: Play(): A got index is out of bounds: {i}");
-            return;
-        }
-
-        var audioSource = this.audioSources[i];
-        audioSource.Play();
-        this.setPlaying(i);
-        Debug.Log($"EasyAudioPlayerAudioSourceStore: Play(): {i} started to play.");
-
-        this.playingAudioName.text = audioSource.name;
-    }
-
-    public int StopLatest() {
-        if (this.playing < 0 || this.audioSources.Length <= this.playing) {
-            Debug.Log($"EasyAudioPlayerAudioSourceStore: Stop(): A got index is out of bounds: {this.playing}. Skip.");
-            return -1;
-        }
-
-        this.audioSources[this.playing].Stop();
-        this.playingAudioName.text = NOT_PLAYING_NOW;
-
-        var playing = this.playing;
-        this.setPlaying(-1);
-        return playing;
-    }
-
-    public void StopAll() {
+    private void StopAll() {
         foreach (var audioSource in this.audioSources) {
             audioSource.Stop();
         }
-
-        this.playingAudioName.text = NOT_PLAYING_NOW;
-        this.setPaused(-1);
-        this.setPlaying(-1);
     }
 
-    private void setPaused(int val) {
+    private void setToBePaused(bool val) {
         if (!Networking.IsOwner(Networking.LocalPlayer, this.gameObject)) {
             Networking.SetOwner(Networking.LocalPlayer, this.gameObject);
         }
         this.paused = val;
     }
 
-    private void setPlaying(int val) {
+    private void setToBePlaying(int val) {
         if (!Networking.IsOwner(Networking.LocalPlayer, this.gameObject)) {
             Networking.SetOwner(Networking.LocalPlayer, this.gameObject);
         }
@@ -226,5 +131,26 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
         }
 
         return audioSource;
+    }
+
+    private void prepareToUnpause() {
+        if (!this.isNotOutOfBoundsOnAudioSources(this.playing)) {
+            Debug.Log($"SoundUiAudioSourceList: prepareToUnpause(): Error! this.playing is out of bounds: {this.playing}.");
+            return;
+        }
+        this.setToBePaused(false);
+    }
+
+    private void pause() {
+        if (this.isNotOutOfBoundsOnAudioSources(this.playing)) {
+            Debug.Log($"SoundUiAudioSourceList: pause(): Error! this.playing is out of bounds: {this.playing}");
+            return;
+        }
+        this.audioSources[this.playing].Pause();
+    }
+
+    private void stop() {
+        this.playingAudioName.text = NOT_PLAYING_NOW;
+        this.stopAll();
     }
 }

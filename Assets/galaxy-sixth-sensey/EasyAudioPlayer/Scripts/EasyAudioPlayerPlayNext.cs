@@ -18,27 +18,13 @@ public class EasyAudioPlayerPlayNext : UdonSharpBehaviour {
             return;
         }
 
-        if (this.core.isWorkingOnlyOnLocal) {
-            this.PlayNext();
-        } else {
-            this.SendCustomNetworkEvent(NetworkEventTarget.All, "PlayNext");
+        if (Networking.IsOwner(Networking.LocalPlayer, this.gameObject)) {
+            this.core.PrepareToPlayNext();
         }
+        this.SendCustomNetworkEvent(NetworkEventTarget.All, "Refresh");
     }
 
-    public void PlayNext() {
-        var audioSources = this.core.GetAudioSources();
-        if (audioSources.Length == 0) {
-            Debug.Log("EasyAudioPlayerPlayNext: exit for the empty audio sources.");
-            return;
-        }
-
-        var stoppedIndex = this.core.StopLatest();
-        if (!this.core.IsNotOutOfBoundsOnAudioSources(stoppedIndex)) {
-            Debug.Log("EasyAudioPlayerPlayNext: Illegal State. Exit.");
-            return;
-        }
-
-        var nextIndex = (stoppedIndex + 1) % audioSources.Length;
-        this.core.Play(nextIndex);
+    public void Refresh() {
+        this.core.Refresh();
     }
 }

@@ -4,6 +4,7 @@ using VRC.SDKBase;
 using VRC.Udon.Common.Interfaces;
 using VRC.Udon;
 
+// TODO: Rename to EasyAudioPlayerPlayOrPauseOrUnpause
 public class EasyAudioPlayerPlayOrPause : UdonSharpBehaviour {
     public EasyAudioPlayerAudioSourceStore core;
 
@@ -18,22 +19,13 @@ public class EasyAudioPlayerPlayOrPause : UdonSharpBehaviour {
             return;
         }
 
-        if (this.core.isWorkingOnlyOnLocal) {
-            this.PlayOrPause();
-        } else {
-            this.SendCustomNetworkEvent(NetworkEventTarget.All, "PlayOrPause");
+        if (Networking.IsOwner(Networking.LocalPlayer, this.gameObject)) {
+            this.PrepareToPlayOrPause();
         }
+        this.SendCustomNetworkEvent(NetworkEventTarget.All, "Refresh");
     }
 
-    public void PlayOrPause() {
-        if (this.core.UnPauseLatest()) {
-            return;
-        }
-
-        if (this.core.PausePlaying()) {
-            return;
-        }
-
-        this.core.Play(0);
+    public void Refresh() {
+        this.core.Refresh();
     }
 }
