@@ -64,6 +64,8 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
     public void Update() {
         if (this.playing == -1) {
             return;
+        } else if (!Networking.IsOwner(Networking.LocalPlayer, this.gameObject)) {
+            return;
         }
 
         if (this.audioSources == null) {
