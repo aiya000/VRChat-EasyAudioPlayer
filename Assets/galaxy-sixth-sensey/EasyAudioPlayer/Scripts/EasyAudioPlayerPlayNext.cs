@@ -1,6 +1,7 @@
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
+using VRC.Udon.Common.Interfaces;
 using VRC.Udon;
 
 public class EasyAudioPlayerPlayNext : UdonSharpBehaviour {
@@ -17,6 +18,14 @@ public class EasyAudioPlayerPlayNext : UdonSharpBehaviour {
             return;
         }
 
+        if (this.core.isWorkingOnlyOnLocal) {
+            this.PlayNext();
+        } else {
+            this.SendCustomNetworkEvent(NetworkEventTarget.All, "PlayNext");
+        }
+    }
+
+    public void PlayNext() {
         var audioSources = this.core.GetAudioSources();
         if (audioSources.Length == 0) {
             Debug.Log("EasyAudioPlayerPlayNext: exit for the empty audio sources.");
