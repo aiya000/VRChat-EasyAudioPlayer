@@ -16,27 +16,21 @@ MonoBehaviour:
     type: 2}
   udonAssembly: ".data_start\n\n    .export core\n\n    __refl_const_intnl_udonTypeID:
     %SystemInt64, null\n    __refl_const_intnl_udonTypeName: %SystemString, null\n
-    \   core: %VRCUdonUdonBehaviour, null\n    __0_this_intnl_EasyAudioPlayerPlayOrPause:
-    %VRCUdonUdonBehaviour, this\n    __0_const_intnl_SystemInt32: %SystemInt32, null\n
-    \   __0_const_intnl_VRCUdonCommonInterfacesNetworkEventTarget: %VRCUdonCommonInterfacesNetworkEventTarget,
+    \   core: %VRCUdonUdonBehaviour, null\n    __0_this_intnl_UnityEngineGameObject:
+    %UnityEngineGameObject, this\n    __0_this_intnl_EasyAudioPlayerPlayOrPause: %VRCUdonUdonBehaviour,
+    this\n    __0_const_intnl_VRCUdonCommonInterfacesNetworkEventTarget: %VRCUdonCommonInterfacesNetworkEventTarget,
     null\n    __0_const_intnl_SystemObject: %SystemObject, null\n    __0_const_intnl_SystemString:
     %SystemString, null\n    __1_const_intnl_SystemString: %SystemString, null\n    __2_const_intnl_SystemString:
-    %SystemString, null\n    __3_const_intnl_SystemString: %SystemString, null\n    __4_const_intnl_SystemString:
-    %SystemString, null\n    __5_const_intnl_SystemString: %SystemString, null\n    __6_const_intnl_SystemString:
-    %SystemString, null\n    __7_const_intnl_SystemString: %SystemString, null\n    __8_const_intnl_SystemString:
     %SystemString, null\n    __0_const_intnl_VRCUdonCommonInterfacesIUdonEventReceiver:
-    %VRCUdonUdonBehaviour, null\n    __0_const_intnl_exitJumpLoc_UInt32: %SystemUInt32,
-    null\n    __0_const_intnl_SystemUInt32: %SystemUInt32, null\n    __0_intnl_SystemBoolean:
-    %SystemBoolean, null\n    __1_intnl_SystemBoolean: %SystemBoolean, null\n    __2_intnl_SystemBoolean:
-    %SystemBoolean, null\n    __3_intnl_SystemBoolean: %SystemBoolean, null\n    __4_intnl_SystemBoolean:
-    %SystemBoolean, null\n    __0_intnl_SystemObject: %SystemObject, null\n    __1_intnl_SystemObject:
-    %SystemObject, null\n    __2_intnl_SystemObject: %SystemObject, null\n    __0_intnl_returnTarget_UInt32:
-    %SystemUInt32, null\n\n.data_end\n\n        \n         # using UdonSharp;\n        \n
-    \        # using UnityEngine;\n        \n         # using VRC.SDKBase;\n        \n
-    \        # using VRC.Udon.Common.Interfaces;\n        \n         # using VRC.Udon;\n
-    \       \n         # public class EasyAudioPlayerPlayOrPause : UdonSharpBehaviour
-    {\n.code_start\n        \n         # public EasyAudioPlayerAudioSourceStore core;\n
-    \       \n         # public override void Interact() {\n    .export _interact\n
+    %VRCUdonUdonBehaviour, null\n    __0_const_intnl_SystemUInt32: %SystemUInt32,
+    null\n    __0_intnl_SystemBoolean: %SystemBoolean, null\n    __1_intnl_SystemBoolean:
+    %SystemBoolean, null\n    __0_intnl_returnTarget_UInt32: %SystemUInt32, null\n
+    \   __0_intnl_VRCSDKBaseVRCPlayerApi: %VRCSDKBaseVRCPlayerApi, null\n\n.data_end\n\n
+    \       \n         # using UdonSharp;\n        \n         # using UnityEngine;\n
+    \       \n         # using VRC.SDKBase;\n        \n         # using VRC.Udon.Common.Interfaces;\n
+    \       \n         # using VRC.Udon;\n        \n         # public class EasyAudioPlayerPlayOrPause
+    : UdonSharpBehaviour {\n.code_start\n        \n         # public EasyAudioPlayerAudioSourceStore
+    core;\n        \n         # public override void Interact() {\n    .export _interact\n
     \       \n    _interact:\n        \n        PUSH, __0_const_intnl_SystemUInt32\n
     \       \n         # if (this.core == null) {\n        PUSH, core\n        PUSH,
     __0_const_intnl_VRCUdonCommonInterfacesIUdonEventReceiver\n        PUSH, __0_intnl_SystemBoolean\n
@@ -46,43 +40,21 @@ MonoBehaviour:
     \       PUSH, __0_const_intnl_SystemString\n        EXTERN, \"UnityEngineDebug.__Log__SystemObject__SystemVoid\"\n
     \       \n         # return;\n        PUSH, __0_intnl_returnTarget_UInt32 #Explicit
     return sequence\n        COPY\n        JUMP_INDIRECT, __0_intnl_returnTarget_UInt32\n
-    \       \n         # if (this.core.isWorkingOnlyOnLocal) {\n        PUSH, core\n
-    \       PUSH, __1_const_intnl_SystemString\n        PUSH, __0_intnl_SystemObject\n
-    \       EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__GetProgramVariable__SystemString__SystemObject\"\n
-    \       PUSH, __0_intnl_SystemObject\n        PUSH, __2_intnl_SystemBoolean\n
-    \       EXTERN, \"SystemConvert.__ToBoolean__SystemObject__SystemBoolean\"\n        PUSH,
-    __2_intnl_SystemBoolean\n        JUMP_IF_FALSE, 0x000000BC\n        \n         #
-    this.PlayOrPause();\n        PUSH, __0_const_intnl_exitJumpLoc_UInt32\n        JUMP,
-    0x000000F8\n        JUMP, 0x000000DC\n        \n         # } else {\n        \n
-    \        # this.SendCustomNetworkEvent(NetworkEventTarget.All, \"PlayOrPause\");\n
+    \       \n         # if (Networking.IsOwner(Networking.LocalPlayer, this.gameObject))
+    {\n        PUSH, __0_intnl_VRCSDKBaseVRCPlayerApi\n        EXTERN, \"VRCSDKBaseNetworking.__get_LocalPlayer__VRCSDKBaseVRCPlayerApi\"\n
+    \       PUSH, __0_intnl_VRCSDKBaseVRCPlayerApi\n        PUSH, __0_this_intnl_UnityEngineGameObject\n
+    \       PUSH, __1_intnl_SystemBoolean\n        EXTERN, \"VRCSDKBaseNetworking.__IsOwner__VRCSDKBaseVRCPlayerApi_UnityEngineGameObject__SystemBoolean\"\n
+    \       PUSH, __1_intnl_SystemBoolean\n        JUMP_IF_FALSE, 0x000000B4\n        \n
+    \        # this.core.PrepareToPlayFirstOrPauseOrUnpause();\n        PUSH, core\n
+    \       PUSH, __1_const_intnl_SystemString\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid\"\n
+    \       \n         # this.SendCustomNetworkEvent(NetworkEventTarget.All, \"Apply\");\n
     \       PUSH, __0_this_intnl_EasyAudioPlayerPlayOrPause\n        PUSH, __0_const_intnl_VRCUdonCommonInterfacesNetworkEventTarget\n
     \       PUSH, __2_const_intnl_SystemString\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomNetworkEvent__VRCUdonCommonInterfacesNetworkEventTarget_SystemString__SystemVoid\"\n
     \       PUSH, __0_intnl_returnTarget_UInt32 #Function epilogue\n        COPY\n
     \       JUMP_INDIRECT, __0_intnl_returnTarget_UInt32\n        \n        \n         #
-    public void PlayOrPause() {\n    .export PlayOrPause\n        \n    PlayOrPause:\n
-    \       \n        PUSH, __0_const_intnl_SystemUInt32\n        \n         # if
-    (this.core.UnPauseLatest()) {\n        PUSH, core\n        PUSH, __3_const_intnl_SystemString\n
-    \       EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid\"\n
-    \       PUSH, core\n        PUSH, __4_const_intnl_SystemString\n        PUSH,
-    __1_intnl_SystemObject\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__GetProgramVariable__SystemString__SystemObject\"\n
-    \       PUSH, __1_intnl_SystemObject\n        PUSH, __3_intnl_SystemBoolean\n
-    \       EXTERN, \"SystemConvert.__ToBoolean__SystemObject__SystemBoolean\"\n        PUSH,
-    __3_intnl_SystemBoolean\n        JUMP_IF_FALSE, 0x0000016C\n        \n         #
-    return;\n        PUSH, __0_intnl_returnTarget_UInt32 #Explicit return sequence\n
-    \       COPY\n        JUMP_INDIRECT, __0_intnl_returnTarget_UInt32\n        \n
-    \        # if (this.core.PausePlaying()) {\n        PUSH, core\n        PUSH,
-    __5_const_intnl_SystemString\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid\"\n
-    \       PUSH, core\n        PUSH, __6_const_intnl_SystemString\n        PUSH,
-    __2_intnl_SystemObject\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__GetProgramVariable__SystemString__SystemObject\"\n
-    \       PUSH, __2_intnl_SystemObject\n        PUSH, __4_intnl_SystemBoolean\n
-    \       EXTERN, \"SystemConvert.__ToBoolean__SystemObject__SystemBoolean\"\n        PUSH,
-    __4_intnl_SystemBoolean\n        JUMP_IF_FALSE, 0x000001E0\n        \n         #
-    return;\n        PUSH, __0_intnl_returnTarget_UInt32 #Explicit return sequence\n
-    \       COPY\n        JUMP_INDIRECT, __0_intnl_returnTarget_UInt32\n        \n
-    \        # this.core.Play(0);\n        PUSH, core\n        PUSH, __7_const_intnl_SystemString\n
-    \       PUSH, __0_const_intnl_SystemInt32\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SetProgramVariable__SystemString_SystemObject__SystemVoid\"\n
-    \       PUSH, core\n        PUSH, __8_const_intnl_SystemString\n        EXTERN,
-    \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid\"\n
+    public void Apply() {\n    .export Apply\n        \n    Apply:\n        \n        PUSH,
+    __0_const_intnl_SystemUInt32\n        \n         # this.core.Apply();\n        PUSH,
+    core\n        PUSH, __2_const_intnl_SystemString\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid\"\n
     \       PUSH, __0_intnl_returnTarget_UInt32 #Function epilogue\n        COPY\n
     \       JUMP_INDIRECT, __0_intnl_returnTarget_UInt32\n        \n.code_end\n"
   assemblyError: 
@@ -241,57 +213,57 @@ MonoBehaviour:
     - startInstruction: 0
       endInstruction: -1
       startSourceChar: 103
-      endSourceChar: 112
+      endSourceChar: 168
       line: 4
       lineChar: 10
-      spanCodeSection: "Udon;\r\n\r\n"
+      spanCodeSection: "Udon;\r\n\r\n// TODO: Rename to EasyAudioPlayerPlayOrPauseOrUnpause\r\n"
     - startInstruction: 0
       endInstruction: -1
-      startSourceChar: 112
-      endSourceChar: 152
-      line: 6
+      startSourceChar: 168
+      endSourceChar: 208
+      line: 7
       lineChar: 0
       spanCodeSection: 'public class EasyAudioPlayerPlayOrPause '
     - startInstruction: 0
       endInstruction: -1
-      startSourceChar: 152
-      endSourceChar: 154
-      line: 6
+      startSourceChar: 208
+      endSourceChar: 210
+      line: 7
       lineChar: 40
       spanCodeSection: ': '
     - startInstruction: 0
       endInstruction: -1
-      startSourceChar: 154
-      endSourceChar: 154
-      line: 6
+      startSourceChar: 210
+      endSourceChar: 210
+      line: 7
       lineChar: 42
       spanCodeSection: 
     - startInstruction: 0
       endInstruction: -1
-      startSourceChar: 154
-      endSourceChar: 180
-      line: 6
+      startSourceChar: 210
+      endSourceChar: 236
+      line: 7
       lineChar: 42
       spanCodeSection: "UdonSharpBehaviour {\r\n    "
     - startInstruction: 0
       endInstruction: -1
-      startSourceChar: 180
-      endSourceChar: 187
-      line: 7
+      startSourceChar: 236
+      endSourceChar: 243
+      line: 8
       lineChar: 4
       spanCodeSection: 'public '
     - startInstruction: 0
       endInstruction: -1
-      startSourceChar: 187
-      endSourceChar: 187
-      line: 7
+      startSourceChar: 243
+      endSourceChar: 243
+      line: 8
       lineChar: 11
       spanCodeSection: 
     - startInstruction: 0
       endInstruction: -1
-      startSourceChar: 187
-      endSourceChar: 455
-      line: 7
+      startSourceChar: 243
+      endSourceChar: 511
+      line: 8
       lineChar: 11
       spanCodeSection: "EasyAudioPlayerAudioSourceStore core;\r\n\r\n    /// <summary>\r\n
         \   /// Plays (Unpauses) an audio source that has been paused.\r\n    ///
@@ -299,473 +271,375 @@ MonoBehaviour:
         audio source if no one is playing now.\r\n    /// </summary>\r\n    "
     - startInstruction: 0
       endInstruction: 7
-      startSourceChar: 455
-      endSourceChar: 487
-      line: 14
+      startSourceChar: 511
+      endSourceChar: 543
+      line: 15
       lineChar: 4
       spanCodeSection: 'public override void Interact() '
     - startInstruction: 8
       endInstruction: 7
-      startSourceChar: 487
-      endSourceChar: 498
-      line: 14
+      startSourceChar: 543
+      endSourceChar: 554
+      line: 15
       lineChar: 36
       spanCodeSection: "{\r\n        "
     - startInstruction: 8
       endInstruction: 7
-      startSourceChar: 498
-      endSourceChar: 502
-      line: 15
+      startSourceChar: 554
+      endSourceChar: 558
+      line: 16
       lineChar: 8
       spanCodeSection: if (
     - startInstruction: 8
       endInstruction: 7
-      startSourceChar: 502
-      endSourceChar: 502
-      line: 15
+      startSourceChar: 558
+      endSourceChar: 558
+      line: 16
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 8
       endInstruction: 7
-      startSourceChar: 502
-      endSourceChar: 502
-      line: 15
+      startSourceChar: 558
+      endSourceChar: 558
+      line: 16
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 8
       endInstruction: 7
-      startSourceChar: 502
-      endSourceChar: 507
-      line: 15
+      startSourceChar: 558
+      endSourceChar: 563
+      line: 16
       lineChar: 12
       spanCodeSection: this.
     - startInstruction: 8
       endInstruction: 7
-      startSourceChar: 507
-      endSourceChar: 515
-      line: 15
+      startSourceChar: 563
+      endSourceChar: 571
+      line: 16
       lineChar: 17
       spanCodeSection: 'core == '
     - startInstruction: 8
       endInstruction: 55
-      startSourceChar: 515
-      endSourceChar: 521
-      line: 15
+      startSourceChar: 571
+      endSourceChar: 577
+      line: 16
       lineChar: 25
       spanCodeSection: 'null) '
     - startInstruction: 56
       endInstruction: 55
-      startSourceChar: 521
-      endSourceChar: 536
-      line: 15
+      startSourceChar: 577
+      endSourceChar: 592
+      line: 16
       lineChar: 31
       spanCodeSection: "{\r\n            "
     - startInstruction: 56
       endInstruction: 55
-      startSourceChar: 536
-      endSourceChar: 536
-      line: 16
+      startSourceChar: 592
+      endSourceChar: 592
+      line: 17
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 56
       endInstruction: 55
-      startSourceChar: 536
-      endSourceChar: 536
-      line: 16
+      startSourceChar: 592
+      endSourceChar: 592
+      line: 17
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 56
       endInstruction: 55
-      startSourceChar: 536
-      endSourceChar: 536
-      line: 16
+      startSourceChar: 592
+      endSourceChar: 592
+      line: 17
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 56
       endInstruction: 55
-      startSourceChar: 536
-      endSourceChar: 542
-      line: 16
+      startSourceChar: 592
+      endSourceChar: 598
+      line: 17
       lineChar: 12
       spanCodeSection: Debug.
     - startInstruction: 56
       endInstruction: 55
-      startSourceChar: 542
-      endSourceChar: 546
-      line: 16
+      startSourceChar: 598
+      endSourceChar: 602
+      line: 17
       lineChar: 18
       spanCodeSection: Log(
     - startInstruction: 56
       endInstruction: 71
-      startSourceChar: 546
-      endSourceChar: 613
-      line: 16
+      startSourceChar: 602
+      endSourceChar: 669
+      line: 17
       lineChar: 22
       spanCodeSection: "\"EasyAudioPlayerPlayOrPause: The core has not set.\");\r\n
         \           "
     - startInstruction: 72
       endInstruction: 91
-      startSourceChar: 613
-      endSourceChar: 643
-      line: 17
+      startSourceChar: 669
+      endSourceChar: 699
+      line: 18
       lineChar: 12
       spanCodeSection: "return;\r\n        }\r\n\r\n        "
     - startInstruction: 92
       endInstruction: 91
-      startSourceChar: 643
-      endSourceChar: 647
-      line: 20
+      startSourceChar: 699
+      endSourceChar: 703
+      line: 21
       lineChar: 8
       spanCodeSection: if (
     - startInstruction: 92
       endInstruction: 91
-      startSourceChar: 647
-      endSourceChar: 647
-      line: 20
+      startSourceChar: 703
+      endSourceChar: 703
+      line: 21
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 92
       endInstruction: 91
-      startSourceChar: 647
-      endSourceChar: 647
-      line: 20
+      startSourceChar: 703
+      endSourceChar: 703
+      line: 21
       lineChar: 12
       spanCodeSection: 
     - startInstruction: 92
       endInstruction: 91
-      startSourceChar: 647
-      endSourceChar: 652
-      line: 20
+      startSourceChar: 703
+      endSourceChar: 714
+      line: 21
+      lineChar: 12
+      spanCodeSection: Networking.
+    - startInstruction: 92
+      endInstruction: 91
+      startSourceChar: 714
+      endSourceChar: 722
+      line: 21
+      lineChar: 23
+      spanCodeSection: IsOwner(
+    - startInstruction: 92
+      endInstruction: 91
+      startSourceChar: 722
+      endSourceChar: 722
+      line: 21
+      lineChar: 31
+      spanCodeSection: 
+    - startInstruction: 92
+      endInstruction: 91
+      startSourceChar: 722
+      endSourceChar: 733
+      line: 21
+      lineChar: 31
+      spanCodeSection: Networking.
+    - startInstruction: 92
+      endInstruction: 107
+      startSourceChar: 733
+      endSourceChar: 746
+      line: 21
+      lineChar: 42
+      spanCodeSection: 'LocalPlayer, '
+    - startInstruction: 108
+      endInstruction: 107
+      startSourceChar: 746
+      endSourceChar: 746
+      line: 21
+      lineChar: 55
+      spanCodeSection: 
+    - startInstruction: 108
+      endInstruction: 107
+      startSourceChar: 746
+      endSourceChar: 751
+      line: 21
+      lineChar: 55
+      spanCodeSection: this.
+    - startInstruction: 108
+      endInstruction: 155
+      startSourceChar: 751
+      endSourceChar: 764
+      line: 21
+      lineChar: 60
+      spanCodeSection: 'gameObject)) '
+    - startInstruction: 156
+      endInstruction: 155
+      startSourceChar: 764
+      endSourceChar: 779
+      line: 21
+      lineChar: 73
+      spanCodeSection: "{\r\n            "
+    - startInstruction: 156
+      endInstruction: 155
+      startSourceChar: 779
+      endSourceChar: 779
+      line: 22
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 156
+      endInstruction: 155
+      startSourceChar: 779
+      endSourceChar: 779
+      line: 22
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 156
+      endInstruction: 155
+      startSourceChar: 779
+      endSourceChar: 779
+      line: 22
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 156
+      endInstruction: 155
+      startSourceChar: 779
+      endSourceChar: 779
+      line: 22
+      lineChar: 12
+      spanCodeSection: 
+    - startInstruction: 156
+      endInstruction: 155
+      startSourceChar: 779
+      endSourceChar: 784
+      line: 22
       lineChar: 12
       spanCodeSection: this.
-    - startInstruction: 92
-      endInstruction: 91
-      startSourceChar: 652
-      endSourceChar: 657
-      line: 20
+    - startInstruction: 156
+      endInstruction: 155
+      startSourceChar: 784
+      endSourceChar: 789
+      line: 22
       lineChar: 17
       spanCodeSection: core.
-    - startInstruction: 92
-      endInstruction: 163
-      startSourceChar: 657
-      endSourceChar: 679
-      line: 20
+    - startInstruction: 156
+      endInstruction: 179
+      startSourceChar: 789
+      endSourceChar: 847
+      line: 22
       lineChar: 22
-      spanCodeSection: 'isWorkingOnlyOnLocal) '
-    - startInstruction: 164
-      endInstruction: 163
-      startSourceChar: 679
-      endSourceChar: 694
-      line: 20
-      lineChar: 44
-      spanCodeSection: "{\r\n            "
-    - startInstruction: 164
-      endInstruction: 163
-      startSourceChar: 694
-      endSourceChar: 694
-      line: 21
-      lineChar: 12
+      spanCodeSection: "PrepareToPlayFirstOrPauseOrUnpause();\r\n        }\r\n        "
+    - startInstruction: 180
+      endInstruction: 179
+      startSourceChar: 847
+      endSourceChar: 847
+      line: 24
+      lineChar: 8
       spanCodeSection: 
-    - startInstruction: 164
-      endInstruction: 163
-      startSourceChar: 694
-      endSourceChar: 694
-      line: 21
-      lineChar: 12
+    - startInstruction: 180
+      endInstruction: 179
+      startSourceChar: 847
+      endSourceChar: 847
+      line: 24
+      lineChar: 8
       spanCodeSection: 
-    - startInstruction: 164
-      endInstruction: 163
-      startSourceChar: 694
-      endSourceChar: 694
-      line: 21
-      lineChar: 12
+    - startInstruction: 180
+      endInstruction: 179
+      startSourceChar: 847
+      endSourceChar: 847
+      line: 24
+      lineChar: 8
       spanCodeSection: 
-    - startInstruction: 164
-      endInstruction: 163
-      startSourceChar: 694
-      endSourceChar: 699
-      line: 21
-      lineChar: 12
+    - startInstruction: 180
+      endInstruction: 179
+      startSourceChar: 847
+      endSourceChar: 852
+      line: 24
+      lineChar: 8
       spanCodeSection: this.
-    - startInstruction: 164
-      endInstruction: 187
-      startSourceChar: 699
-      endSourceChar: 725
-      line: 21
-      lineChar: 17
-      spanCodeSection: "PlayOrPause();\r\n        } "
-    - startInstruction: 188
-      endInstruction: 187
-      startSourceChar: 725
-      endSourceChar: 730
-      line: 22
-      lineChar: 10
-      spanCodeSection: 'else '
-    - startInstruction: 188
-      endInstruction: 187
-      startSourceChar: 730
-      endSourceChar: 745
-      line: 22
-      lineChar: 15
-      spanCodeSection: "{\r\n            "
-    - startInstruction: 188
-      endInstruction: 187
-      startSourceChar: 745
-      endSourceChar: 745
-      line: 23
-      lineChar: 12
-      spanCodeSection: 
-    - startInstruction: 188
-      endInstruction: 187
-      startSourceChar: 745
-      endSourceChar: 745
-      line: 23
-      lineChar: 12
-      spanCodeSection: 
-    - startInstruction: 188
-      endInstruction: 187
-      startSourceChar: 745
-      endSourceChar: 745
-      line: 23
-      lineChar: 12
-      spanCodeSection: 
-    - startInstruction: 188
-      endInstruction: 187
-      startSourceChar: 745
-      endSourceChar: 750
-      line: 23
-      lineChar: 12
-      spanCodeSection: this.
-    - startInstruction: 188
-      endInstruction: 187
-      startSourceChar: 750
-      endSourceChar: 773
-      line: 23
-      lineChar: 17
+    - startInstruction: 180
+      endInstruction: 179
+      startSourceChar: 852
+      endSourceChar: 875
+      line: 24
+      lineChar: 13
       spanCodeSection: SendCustomNetworkEvent(
-    - startInstruction: 188
-      endInstruction: 187
-      startSourceChar: 773
-      endSourceChar: 773
-      line: 23
-      lineChar: 40
+    - startInstruction: 180
+      endInstruction: 179
+      startSourceChar: 875
+      endSourceChar: 875
+      line: 24
+      lineChar: 36
       spanCodeSection: 
-    - startInstruction: 188
-      endInstruction: 187
-      startSourceChar: 773
-      endSourceChar: 792
-      line: 23
-      lineChar: 40
+    - startInstruction: 180
+      endInstruction: 179
+      startSourceChar: 875
+      endSourceChar: 894
+      line: 24
+      lineChar: 36
       spanCodeSection: NetworkEventTarget.
-    - startInstruction: 188
-      endInstruction: 187
-      startSourceChar: 792
-      endSourceChar: 797
-      line: 23
-      lineChar: 59
+    - startInstruction: 180
+      endInstruction: 179
+      startSourceChar: 894
+      endSourceChar: 899
+      line: 24
+      lineChar: 55
       spanCodeSection: 'All, '
-    - startInstruction: 188
+    - startInstruction: 180
+      endInstruction: 231
+      startSourceChar: 899
+      endSourceChar: 923
+      line: 24
+      lineChar: 60
+      spanCodeSection: "\"Apply\");\r\n    }\r\n\r\n    "
+    - startInstruction: 232
       endInstruction: 239
-      startSourceChar: 797
-      endSourceChar: 838
-      line: 23
-      lineChar: 64
-      spanCodeSection: "\"PlayOrPause\");\r\n        }\r\n    }\r\n\r\n    "
-    - startInstruction: 240
-      endInstruction: 247
-      startSourceChar: 838
-      endSourceChar: 864
+      startSourceChar: 923
+      endSourceChar: 943
       line: 27
       lineChar: 4
-      spanCodeSection: 'public void PlayOrPause() '
-    - startInstruction: 248
-      endInstruction: 247
-      startSourceChar: 864
-      endSourceChar: 875
+      spanCodeSection: 'public void Apply() '
+    - startInstruction: 240
+      endInstruction: 239
+      startSourceChar: 943
+      endSourceChar: 954
       line: 27
-      lineChar: 30
+      lineChar: 24
       spanCodeSection: "{\r\n        "
-    - startInstruction: 248
-      endInstruction: 247
-      startSourceChar: 875
-      endSourceChar: 879
+    - startInstruction: 240
+      endInstruction: 239
+      startSourceChar: 954
+      endSourceChar: 954
       line: 28
       lineChar: 8
-      spanCodeSection: if (
-    - startInstruction: 248
-      endInstruction: 247
-      startSourceChar: 879
-      endSourceChar: 879
-      line: 28
-      lineChar: 12
       spanCodeSection: 
-    - startInstruction: 248
-      endInstruction: 247
-      startSourceChar: 879
-      endSourceChar: 879
+    - startInstruction: 240
+      endInstruction: 239
+      startSourceChar: 954
+      endSourceChar: 954
       line: 28
-      lineChar: 12
-      spanCodeSection: 
-    - startInstruction: 248
-      endInstruction: 247
-      startSourceChar: 879
-      endSourceChar: 879
-      line: 28
-      lineChar: 12
-      spanCodeSection: 
-    - startInstruction: 248
-      endInstruction: 247
-      startSourceChar: 879
-      endSourceChar: 884
-      line: 28
-      lineChar: 12
-      spanCodeSection: this.
-    - startInstruction: 248
-      endInstruction: 247
-      startSourceChar: 884
-      endSourceChar: 889
-      line: 28
-      lineChar: 17
-      spanCodeSection: core.
-    - startInstruction: 248
-      endInstruction: 343
-      startSourceChar: 889
-      endSourceChar: 906
-      line: 28
-      lineChar: 22
-      spanCodeSection: 'UnPauseLatest()) '
-    - startInstruction: 344
-      endInstruction: 343
-      startSourceChar: 906
-      endSourceChar: 921
-      line: 28
-      lineChar: 39
-      spanCodeSection: "{\r\n            "
-    - startInstruction: 344
-      endInstruction: 363
-      startSourceChar: 921
-      endSourceChar: 951
-      line: 29
-      lineChar: 12
-      spanCodeSection: "return;\r\n        }\r\n\r\n        "
-    - startInstruction: 364
-      endInstruction: 363
-      startSourceChar: 951
-      endSourceChar: 955
-      line: 32
-      lineChar: 8
-      spanCodeSection: if (
-    - startInstruction: 364
-      endInstruction: 363
-      startSourceChar: 955
-      endSourceChar: 955
-      line: 32
-      lineChar: 12
-      spanCodeSection: 
-    - startInstruction: 364
-      endInstruction: 363
-      startSourceChar: 955
-      endSourceChar: 955
-      line: 32
-      lineChar: 12
-      spanCodeSection: 
-    - startInstruction: 364
-      endInstruction: 363
-      startSourceChar: 955
-      endSourceChar: 955
-      line: 32
-      lineChar: 12
-      spanCodeSection: 
-    - startInstruction: 364
-      endInstruction: 363
-      startSourceChar: 955
-      endSourceChar: 960
-      line: 32
-      lineChar: 12
-      spanCodeSection: this.
-    - startInstruction: 364
-      endInstruction: 363
-      startSourceChar: 960
-      endSourceChar: 965
-      line: 32
-      lineChar: 17
-      spanCodeSection: core.
-    - startInstruction: 364
-      endInstruction: 459
-      startSourceChar: 965
-      endSourceChar: 981
-      line: 32
-      lineChar: 22
-      spanCodeSection: 'PausePlaying()) '
-    - startInstruction: 460
-      endInstruction: 459
-      startSourceChar: 981
-      endSourceChar: 996
-      line: 32
-      lineChar: 38
-      spanCodeSection: "{\r\n            "
-    - startInstruction: 460
-      endInstruction: 479
-      startSourceChar: 996
-      endSourceChar: 1026
-      line: 33
-      lineChar: 12
-      spanCodeSection: "return;\r\n        }\r\n\r\n        "
-    - startInstruction: 480
-      endInstruction: 479
-      startSourceChar: 1026
-      endSourceChar: 1026
-      line: 36
       lineChar: 8
       spanCodeSection: 
-    - startInstruction: 480
-      endInstruction: 479
-      startSourceChar: 1026
-      endSourceChar: 1026
-      line: 36
+    - startInstruction: 240
+      endInstruction: 239
+      startSourceChar: 954
+      endSourceChar: 954
+      line: 28
       lineChar: 8
       spanCodeSection: 
-    - startInstruction: 480
-      endInstruction: 479
-      startSourceChar: 1026
-      endSourceChar: 1026
-      line: 36
+    - startInstruction: 240
+      endInstruction: 239
+      startSourceChar: 954
+      endSourceChar: 954
+      line: 28
       lineChar: 8
       spanCodeSection: 
-    - startInstruction: 480
-      endInstruction: 479
-      startSourceChar: 1026
-      endSourceChar: 1026
-      line: 36
-      lineChar: 8
-      spanCodeSection: 
-    - startInstruction: 480
-      endInstruction: 479
-      startSourceChar: 1026
-      endSourceChar: 1031
-      line: 36
+    - startInstruction: 240
+      endInstruction: 239
+      startSourceChar: 954
+      endSourceChar: 959
+      line: 28
       lineChar: 8
       spanCodeSection: this.
-    - startInstruction: 480
-      endInstruction: 479
-      startSourceChar: 1031
-      endSourceChar: 1036
-      line: 36
+    - startInstruction: 240
+      endInstruction: 239
+      startSourceChar: 959
+      endSourceChar: 964
+      line: 28
       lineChar: 13
       spanCodeSection: core.
-    - startInstruction: 480
-      endInstruction: 479
-      startSourceChar: 1036
-      endSourceChar: 1041
-      line: 36
+    - startInstruction: 240
+      endInstruction: 240
+      startSourceChar: 964
+      endSourceChar: 964
+      line: 28
       lineChar: 18
-      spanCodeSection: Play(
-    - startInstruction: 480
-      endInstruction: 480
-      startSourceChar: 1041
-      endSourceChar: 1041
-      line: 36
-      lineChar: 23
       spanCodeSection: 
   hasInteractEvent: 1
   serializationData:

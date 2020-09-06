@@ -17,14 +17,5 @@ public class EasyAudioPlayerPlayNext : UdonSharpBehaviour {
             Debug.Log("EasyAudioPlayerPlayNext: The core has not set.");
             return;
         }
-
-        if (Networking.IsOwner(Networking.LocalPlayer, this.gameObject)) {
-            this.core.PrepareToPlayNext();
-        }
-        this.SendCustomNetworkEvent(NetworkEventTarget.All, "Refresh");
-    }
-
-    public void Refresh() {
-        this.core.Refresh();
     }
 }

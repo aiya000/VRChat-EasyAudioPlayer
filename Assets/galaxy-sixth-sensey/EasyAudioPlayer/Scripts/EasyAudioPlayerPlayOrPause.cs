@@ -20,12 +20,12 @@ public class EasyAudioPlayerPlayOrPause : UdonSharpBehaviour {
         }
 
         if (Networking.IsOwner(Networking.LocalPlayer, this.gameObject)) {
-            this.PrepareToPlayOrPause();
+            this.core.PrepareToPlayFirstOrPauseOrUnpause();
         }
-        this.SendCustomNetworkEvent(NetworkEventTarget.All, "Refresh");
+        this.SendCustomNetworkEvent(NetworkEventTarget.All, "Apply");
     }
 
-    public void Refresh() {
-        this.core.Refresh();
+    public void Apply() {
+        this.core.Apply();
     }
 }

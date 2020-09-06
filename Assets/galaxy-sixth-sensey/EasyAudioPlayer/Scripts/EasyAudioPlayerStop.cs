@@ -12,15 +12,5 @@ public class EasyAudioPlayerStop : UdonSharpBehaviour {
             Debug.Log("EasyAudioPlayerStop: The core has not set.");
             return;
         }
-
-        if (this.core.isWorkingOnlyOnLocal) {
-            this.Stop();
-        } else {
-            this.SendCustomNetworkEvent(NetworkEventTarget.All, "Stop");
-        }
-    }
-
-    public void Stop() {
-        this.core.StopAll();
     }
 }
