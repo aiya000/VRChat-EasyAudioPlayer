@@ -93,6 +93,36 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
         this.prepareToPlayFirst();
     }
 
+    public void PrepareToStop() {
+        this.setPlaying(-1);
+        this.setPaused(true);
+        this.setUnPaused(true);
+    }
+
+    public void PrepareToPlayNext() {
+        if (this.playing == this.audioSources.Length - 1) {
+            this.log("PrepareToPlayNext(): this.playing arrived at the ending of the audio sources.");
+            this.prepareToUnpause();  // don't play again.
+            return;
+        }
+
+        this.setPaused(false);
+        this.setUnPaused(false);
+        this.setPlaying(this.playing + 1);
+    }
+
+    public void PrepareToPlayPrevious() {
+        if (this.playing == 0) {
+            this.log("PrepareToPlayPrevious(): this.playing arrived at the beginning of the audio sources.");
+            this.prepareToUnpause();  // don't play again.
+            return;
+        }
+
+        this.setPaused(false);
+        this.setUnPaused(false);
+        this.setPlaying(this.playing - 1);
+    }
+
     /// <summary>
     /// To synchronize the state with network users.
     ///
@@ -111,26 +141,22 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
         }
 
         if (this.paused && this.unPaused) {
-            this.log("Apply(): stop() will start.");
-            this.logStateInfo();
             this.stop();
-            this.log("Apply(): stop() is end.");
             return;
         }
 
         if (this.paused) {
-            this.log("Apply(): pause() will start.");
-            this.logStateInfo();
             this.pause();
-            this.log("Apply(): pause() is end.");
             return;
         }
 
         if (this.unPaused) {
-            this.log("Apply(): unPause() will start.");
-            this.logStateInfo();
             this.unPause();
-            this.log("Apply(): unPause() is end.");
+            return;
+        }
+
+        if (this.playing == -1 || this.playing == this.audioSources.Length) {
+            this.log($"Apply(): this.playing arrived {this.playing}. Skip.");
             return;
         }
 
@@ -139,10 +165,7 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
             return;
         }
 
-        this.log("Apply(): play() will start.");
-        this.logStateInfo();
         this.play();
-        this.log("Apply(): play() is end.");
     }
 
     private bool isNotOutOfBoundsOnAudioSources(int index) {
@@ -228,11 +251,18 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
     }
 
     private void stop() {
+        this.log("stop(): Start.");
+        this.logStateInfo();
+
         this.stopAll();
         this.playingAudioName.text = NOT_PLAYING_NOW;
+        this.log("stop(): End.");
     }
 
     private void pause() {
+        this.log("pause(): Start.");
+        this.logStateInfo();
+
         if (!this.isNotOutOfBoundsOnAudioSources(this.playing)) {
             this.log($"pause(): Error! this.playing is out of bounds: {this.playing} of {this.audioSources.Length}");
             return;
@@ -241,9 +271,14 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
 
         current.Pause();
         this.playingAudioName.text = current.name;
+
+        this.log("pause(): End.");
     }
 
     private void unPause() {
+        this.log("unPause(): Start.");
+        this.logStateInfo();
+
         if (!this.isNotOutOfBoundsOnAudioSources(this.playing)) {
             this.log($"unPause(): Error! this.playing is out of bounds: {this.playing} of {this.audioSources.Length}");
             return;
@@ -252,17 +287,25 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
 
         current.UnPause();
         this.playingAudioName.text = current.name;
+
+        this.log("unPause(): End.");
     }
 
     private void play() {
+        this.log("play(): Start.");
+        this.logStateInfo();
+
         if (!this.isNotOutOfBoundsOnAudioSources(this.playing)) {
             this.log($"play(): Error! this.playing is out of bounds: {this.playing} of {this.audioSources.Length}");
             return;
         }
         var next = this.audioSources[this.playing];
 
+        this.stopAll();
         next.Play();
         this.playingAudioName.text = next.name;
+
+        this.log("play(): End.");
     }
 
     private void playFirst() {
