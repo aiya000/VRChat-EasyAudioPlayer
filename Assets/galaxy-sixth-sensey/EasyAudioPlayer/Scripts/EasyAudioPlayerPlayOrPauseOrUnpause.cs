@@ -23,8 +23,8 @@ public class EasyAudioPlayerPlayOrPauseOrUnpause : UdonSharpBehaviour {
             Networking.SetOwner(Networking.LocalPlayer, this.gameObject);
         }
         this.core.PrepareToPlayFirstOrPauseOrUnpause();
-
         this.core.WaitToSync();
+
         this.SendCustomNetworkEvent(NetworkEventTarget.All, "Apply");
     }
 

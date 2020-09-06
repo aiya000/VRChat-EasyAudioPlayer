@@ -22,8 +22,8 @@ public class EasyAudioPlayerPlayNext : UdonSharpBehaviour {
             Networking.SetOwner(Networking.LocalPlayer, this.gameObject);
         }
         this.core.PrepareToPlayNext();
-
         this.core.WaitToSync();
+
         this.SendCustomNetworkEvent(NetworkEventTarget.All, "Apply");
     }
 

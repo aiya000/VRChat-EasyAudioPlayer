@@ -602,59 +602,59 @@ MonoBehaviour:
     - startInstruction: 220
       endInstruction: 243
       startSourceChar: 595
-      endSourceChar: 631
+      endSourceChar: 629
       line: 18
       lineChar: 18
-      spanCodeSection: "PrepareToPlayPrevious();\r\n\r\n        "
+      spanCodeSection: "PrepareToPlayPrevious();\r\n        "
     - startInstruction: 244
       endInstruction: 243
-      startSourceChar: 631
-      endSourceChar: 631
-      line: 20
+      startSourceChar: 629
+      endSourceChar: 629
+      line: 19
       lineChar: 8
       spanCodeSection: 
     - startInstruction: 244
       endInstruction: 243
-      startSourceChar: 631
-      endSourceChar: 631
-      line: 20
+      startSourceChar: 629
+      endSourceChar: 629
+      line: 19
       lineChar: 8
       spanCodeSection: 
     - startInstruction: 244
       endInstruction: 243
-      startSourceChar: 631
-      endSourceChar: 631
-      line: 20
+      startSourceChar: 629
+      endSourceChar: 629
+      line: 19
       lineChar: 8
       spanCodeSection: 
     - startInstruction: 244
       endInstruction: 243
-      startSourceChar: 631
-      endSourceChar: 631
-      line: 20
+      startSourceChar: 629
+      endSourceChar: 629
+      line: 19
       lineChar: 8
       spanCodeSection: 
     - startInstruction: 244
       endInstruction: 243
-      startSourceChar: 631
-      endSourceChar: 636
-      line: 20
+      startSourceChar: 629
+      endSourceChar: 634
+      line: 19
       lineChar: 8
       spanCodeSection: this.
     - startInstruction: 244
       endInstruction: 243
-      startSourceChar: 636
-      endSourceChar: 641
-      line: 20
+      startSourceChar: 634
+      endSourceChar: 639
+      line: 19
       lineChar: 13
       spanCodeSection: core.
     - startInstruction: 244
       endInstruction: 267
-      startSourceChar: 641
+      startSourceChar: 639
       endSourceChar: 664
-      line: 20
+      line: 19
       lineChar: 18
-      spanCodeSection: "WaitToSync();\r\n        "
+      spanCodeSection: "WaitToSync();\r\n\r\n        "
     - startInstruction: 268
       endInstruction: 267
       startSourceChar: 664

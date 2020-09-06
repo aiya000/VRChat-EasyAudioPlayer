@@ -124,7 +124,7 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
     public void PrepareToPlayPrevious() {
         this.log("PrepareToPlayPrevious()");
 
-        if (this.playing == 0) {
+        if (this.playing <= 0) {
             this.log("PrepareToPlayPrevious(): this.playing arrived at the beginning of the audio sources.");
             this.PrepareToStop();
             return;

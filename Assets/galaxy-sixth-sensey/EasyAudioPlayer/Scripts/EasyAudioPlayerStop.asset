@@ -600,59 +600,59 @@ MonoBehaviour:
     - startInstruction: 220
       endInstruction: 243
       startSourceChar: 579
-      endSourceChar: 607
+      endSourceChar: 605
       line: 18
       lineChar: 18
-      spanCodeSection: "PrepareToStop();\r\n\r\n        "
+      spanCodeSection: "PrepareToStop();\r\n        "
     - startInstruction: 244
       endInstruction: 243
-      startSourceChar: 607
-      endSourceChar: 607
-      line: 20
+      startSourceChar: 605
+      endSourceChar: 605
+      line: 19
       lineChar: 8
       spanCodeSection: 
     - startInstruction: 244
       endInstruction: 243
-      startSourceChar: 607
-      endSourceChar: 607
-      line: 20
+      startSourceChar: 605
+      endSourceChar: 605
+      line: 19
       lineChar: 8
       spanCodeSection: 
     - startInstruction: 244
       endInstruction: 243
-      startSourceChar: 607
-      endSourceChar: 607
-      line: 20
+      startSourceChar: 605
+      endSourceChar: 605
+      line: 19
       lineChar: 8
       spanCodeSection: 
     - startInstruction: 244
       endInstruction: 243
-      startSourceChar: 607
-      endSourceChar: 607
-      line: 20
+      startSourceChar: 605
+      endSourceChar: 605
+      line: 19
       lineChar: 8
       spanCodeSection: 
     - startInstruction: 244
       endInstruction: 243
-      startSourceChar: 607
-      endSourceChar: 612
-      line: 20
+      startSourceChar: 605
+      endSourceChar: 610
+      line: 19
       lineChar: 8
       spanCodeSection: this.
     - startInstruction: 244
       endInstruction: 243
-      startSourceChar: 612
-      endSourceChar: 617
-      line: 20
+      startSourceChar: 610
+      endSourceChar: 615
+      line: 19
       lineChar: 13
       spanCodeSection: core.
     - startInstruction: 244
       endInstruction: 267
-      startSourceChar: 617
+      startSourceChar: 615
       endSourceChar: 640
-      line: 20
+      line: 19
       lineChar: 18
-      spanCodeSection: "WaitToSync();\r\n        "
+      spanCodeSection: "WaitToSync();\r\n\r\n        "
     - startInstruction: 268
       endInstruction: 267
       startSourceChar: 640

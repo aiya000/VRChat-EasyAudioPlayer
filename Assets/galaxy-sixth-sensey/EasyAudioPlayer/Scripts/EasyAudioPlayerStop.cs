@@ -17,8 +17,8 @@ public class EasyAudioPlayerStop : UdonSharpBehaviour {
             Networking.SetOwner(Networking.LocalPlayer, this.gameObject);
         }
         this.core.PrepareToStop();
-
         this.core.WaitToSync();
+
         this.SendCustomNetworkEvent(NetworkEventTarget.All, "Apply");
     }
 
