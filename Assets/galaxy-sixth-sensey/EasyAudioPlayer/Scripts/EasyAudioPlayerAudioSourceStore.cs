@@ -100,7 +100,7 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
     /// - stop all audio sources (if `paused and unPaused`)
     /// - pause the current playing audio source (if `paused`)
     /// - unpause the latestly paused audio source (if `unPaused`)
-    /// - play the first of audio sources (else if)
+    /// - play the specified (== this.playing) audio source (else if)
     ///
     /// NOTE: `paused and unPaused` may not make feeling, but it maybe right.
     /// </summary>
@@ -134,18 +134,15 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
             return;
         }
 
-        if (this.playing != -1) {
-            Debug.Log("EasyAudioPlayerAudioSourceStore: Apply(): play() will start.");
-            this.debugLogStateInfo();
-            this.play();
-            Debug.Log("EasyAudioPlayerAudioSourceStore: Apply(): play() is end.");
+        if (!this.isNotOutOfBoundsOnAudioSources(this.playing)) {
+            Debug.Log($"EasyAudioPlayerAudioSourceStore: Apply(): Error! this.playing is out of bounds: {this.playing} of {this.audioSources.Length}");
             return;
         }
 
-        Debug.Log("EasyAudioPlayerAudioSourceStore: Apply(): playFirst() will start.");
+        Debug.Log("EasyAudioPlayerAudioSourceStore: Apply(): play() will start.");
         this.debugLogStateInfo();
-        this.playFirst();
-        Debug.Log("EasyAudioPlayerAudioSourceStore: Apply(): playFirst() is end.");
+        this.play();
+        Debug.Log("EasyAudioPlayerAudioSourceStore: Apply(): play() is end.");
     }
 
     private bool isNotOutOfBoundsOnAudioSources(int index) {

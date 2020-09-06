@@ -1,3 +1,4 @@
+using System.Collections;
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
@@ -22,6 +23,8 @@ public class EasyAudioPlayerPlayOrPause : UdonSharpBehaviour {
         if (Networking.IsOwner(Networking.LocalPlayer, this.gameObject)) {
             this.core.PrepareToPlayFirstOrPauseOrUnpause();
         }
+
+        for (var i = 0; i < 100000; i++) {}  // Wait to sync variables
         this.SendCustomNetworkEvent(NetworkEventTarget.All, "Apply");
     }
 
