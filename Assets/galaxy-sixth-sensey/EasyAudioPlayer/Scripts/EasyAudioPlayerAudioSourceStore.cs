@@ -46,16 +46,16 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
 
     public void Start() {
         if (this.audioSourceList == null) {
-            Debug.Log("EasyAudioPlayerAudioSourceStore: Start(): Error! The audio source list has not set.");
+            this.log("Start(): Error! The audio source list has not set.");
             return;
         }
 
         var components = this.audioSourceList.GetComponentsInChildren(typeof(AudioSource));
         if (components == null) {
-            Debug.Log("EasyAudioPlayerAudioSourceStore: Start(): Error! Gotten components is null.");
+            this.log("Start(): Error! Gotten components is null.");
             return;
         }
-        Debug.Log($"EasyAudioPlayerAudioSourceStore: Start(): Gotten components size is {components.Length}");
+        this.log($"Start(): Gotten components size is {components.Length}");
 
         this.audioSources = new AudioSource[components.Length];
         for (var i = 0; i < components.Length; i++) {
@@ -63,7 +63,7 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
 
             // Set this.playing to the first one which is playing
             if (this.playing == -1 && this.audioSources[i].isPlaying) {
-                Debug.Log($"EasyAudioPlayerAudioSourceStore: Start(): Set this.playing to {i}");
+                this.log($"Start(): Set this.playing to {i}");
                 this.setPlaying(i);
             }
         }
@@ -106,43 +106,43 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
     /// </summary>
     public void Apply() {
         if (this.audioSources == null) {
-            Debug.Log("EasyAudioPlayerAudioSourceStore: Apply(): Gotten audio sources is null. Skip.");
+            this.log("Apply(): Gotten audio sources is null. Skip.");
             return;
         }
 
         if (this.paused && this.unPaused) {
-            Debug.Log("EasyAudioPlayerAudioSourceStore: Apply(): stop() will start.");
-            this.debugLogStateInfo();
+            this.log("Apply(): stop() will start.");
+            this.logStateInfo();
             this.stop();
-            Debug.Log("EasyAudioPlayerAudioSourceStore: Apply(): stop() is end.");
+            this.log("Apply(): stop() is end.");
             return;
         }
 
         if (this.paused) {
-            Debug.Log("EasyAudioPlayerAudioSourceStore: Apply(): pause() will start.");
-            this.debugLogStateInfo();
+            this.log("Apply(): pause() will start.");
+            this.logStateInfo();
             this.pause();
-            Debug.Log("EasyAudioPlayerAudioSourceStore: Apply(): pause() is end.");
+            this.log("Apply(): pause() is end.");
             return;
         }
 
         if (this.unPaused) {
-            Debug.Log("EasyAudioPlayerAudioSourceStore: Apply(): unPause() will start.");
-            this.debugLogStateInfo();
+            this.log("Apply(): unPause() will start.");
+            this.logStateInfo();
             this.unPause();
-            Debug.Log("EasyAudioPlayerAudioSourceStore: Apply(): unPause() is end.");
+            this.log("Apply(): unPause() is end.");
             return;
         }
 
         if (!this.isNotOutOfBoundsOnAudioSources(this.playing)) {
-            Debug.Log($"EasyAudioPlayerAudioSourceStore: Apply(): Error! this.playing is out of bounds: {this.playing} of {this.audioSources.Length}");
+            this.log($"Apply(): Error! this.playing is out of bounds: {this.playing} of {this.audioSources.Length}");
             return;
         }
 
-        Debug.Log("EasyAudioPlayerAudioSourceStore: Apply(): play() will start.");
-        this.debugLogStateInfo();
+        this.log("Apply(): play() will start.");
+        this.logStateInfo();
         this.play();
-        Debug.Log("EasyAudioPlayerAudioSourceStore: Apply(): play() is end.");
+        this.log("Apply(): play() is end.");
     }
 
     private bool isNotOutOfBoundsOnAudioSources(int index) {
@@ -159,7 +159,7 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
         if (!Networking.IsOwner(Networking.LocalPlayer, this.gameObject)) {
             Networking.SetOwner(Networking.LocalPlayer, this.gameObject);
         }
-        Debug.Log($"EasyAudioPlayerAudioSourceStore: setPaused(): from {this.paused} to {val}");
+        this.log($"setPaused(): from {this.paused} to {val}");
         this.paused = val;
     }
 
@@ -167,7 +167,7 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
         if (!Networking.IsOwner(Networking.LocalPlayer, this.gameObject)) {
             Networking.SetOwner(Networking.LocalPlayer, this.gameObject);
         }
-        Debug.Log($"EasyAudioPlayerAudioSourceStore: setUnPaused(): from {this.unPaused} to {val}");
+        this.log($"setUnPaused(): from {this.unPaused} to {val}");
         this.unPaused = val;
     }
 
@@ -175,7 +175,7 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
         if (!Networking.IsOwner(Networking.LocalPlayer, this.gameObject)) {
             Networking.SetOwner(Networking.LocalPlayer, this.gameObject);
         }
-        Debug.Log($"EasyAudioPlayerAudioSourceStore: setPlaying(): from {this.playing} to {val}");
+        this.log($"setPlaying(): from {this.playing} to {val}");
         this.playing = val;
     }
 
@@ -188,9 +188,15 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
         }}";
     }
 
-    private void debugLogStateInfo() {
+    private void logStateInfo() {
         if (this.DEBUG) {
-            Debug.Log($"EasyAudioPlayerAudioSourceStore: {this.getStateInfo()}");
+            this.log(this.getStateInfo());
+        }
+    }
+
+    private void log(string message) {
+        if (this.DEBUG) {
+            Debug.Log($"EasyAudioPlayerAudioSourceStore: {message}");
         }
     }
 
@@ -198,7 +204,7 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
         var audioSource = (AudioSource)x.GetComponent(typeof(AudioSource));
 
         if (audioSource == null) {
-            Debug.Log("EasyAudioPlayerAudioSourceStore: Warning. a null audio source is found.");
+            this.log("getAudioSource(): Warning. a null audio source is found.");
             return null;
         }
 
@@ -228,7 +234,7 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
 
     private void pause() {
         if (!this.isNotOutOfBoundsOnAudioSources(this.playing)) {
-            Debug.Log($"EasyAudioPlayerAudioSourceStore: pause(): Error! this.playing is out of bounds: {this.playing} of {this.audioSources.Length}");
+            this.log($"pause(): Error! this.playing is out of bounds: {this.playing} of {this.audioSources.Length}");
             return;
         }
         var current = this.audioSources[this.playing];
@@ -239,7 +245,7 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
 
     private void unPause() {
         if (!this.isNotOutOfBoundsOnAudioSources(this.playing)) {
-            Debug.Log($"EasyAudioPlayerAudioSourceStore: unPause(): Error! this.playing is out of bounds: {this.playing} of {this.audioSources.Length}");
+            this.log($"unPause(): Error! this.playing is out of bounds: {this.playing} of {this.audioSources.Length}");
             return;
         }
         var current = this.audioSources[this.playing];
@@ -250,7 +256,7 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
 
     private void play() {
         if (!this.isNotOutOfBoundsOnAudioSources(this.playing)) {
-            Debug.Log($"EasyAudioPlayerAudioSourceStore: play(): Error! this.playing is out of bounds: {this.playing} of {this.audioSources.Length}");
+            this.log($"play(): Error! this.playing is out of bounds: {this.playing} of {this.audioSources.Length}");
             return;
         }
         var next = this.audioSources[this.playing];
@@ -261,7 +267,7 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
 
     private void playFirst() {
         if (this.audioSources.Length == 0) {
-            Debug.Log($"EasyAudioPlayerAudioSourceStore: playFirst(): this.audioSources is empty. Skip.");
+            this.log($"playFirst(): this.audioSources is empty. Skip.");
             return;
         }
         var first = this.audioSources[0];
