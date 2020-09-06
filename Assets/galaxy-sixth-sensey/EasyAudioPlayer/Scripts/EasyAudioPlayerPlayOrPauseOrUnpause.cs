@@ -5,8 +5,7 @@ using VRC.SDKBase;
 using VRC.Udon.Common.Interfaces;
 using VRC.Udon;
 
-// TODO: Rename to EasyAudioPlayerPlayOrPauseOrUnpause
-public class EasyAudioPlayerPlayOrPause : UdonSharpBehaviour {
+public class EasyAudioPlayerPlayOrPauseOrUnpause : UdonSharpBehaviour {
     public EasyAudioPlayerAudioSourceStore core;
 
     /// <summary>
