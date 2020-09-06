@@ -13,11 +13,12 @@ public class EasyAudioPlayerPlayPrevious : UdonSharpBehaviour {
             return;
         }
 
-        if (Networking.IsOwner(Networking.LocalPlayer, this.gameObject)) {
-            this.core.PrepareToPlayPrevious();
+        if (!Networking.IsOwner(Networking.LocalPlayer, this.gameObject)) {
+            Networking.SetOwner(Networking.LocalPlayer, this.gameObject);
         }
+        this.core.PrepareToPlayPrevious();
 
-        for (var i = 0; i < 100000; i++) {}  // Wait to sync variables
+        this.core.WaitToSync();
         this.SendCustomNetworkEvent(NetworkEventTarget.All, "Apply");
     }
 

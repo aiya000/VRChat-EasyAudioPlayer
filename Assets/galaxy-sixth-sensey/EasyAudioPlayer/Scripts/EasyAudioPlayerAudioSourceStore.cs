@@ -77,9 +77,15 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
     /// Transforms the state.
     /// </summary>
     public void PrepareToPlayFirstOrPauseOrUnpause() {
+        // if now stopping
+        if (this.paused && this.unPaused) {
+            this.prepareToPlayFirst();
+            return;
+        }
+
         // if already paused
         if (this.paused) {
-            this.prepareToUnpause();
+            this.prepareToUnPause();
             return;
         }
 
@@ -94,15 +100,19 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
     }
 
     public void PrepareToStop() {
+        this.log("PrepareToStop()");
+
         this.setPlaying(-1);
         this.setPaused(true);
         this.setUnPaused(true);
     }
 
     public void PrepareToPlayNext() {
+        this.log("PrepareToPlayNext()");
+
         if (this.playing == this.audioSources.Length - 1) {
             this.log("PrepareToPlayNext(): this.playing arrived at the ending of the audio sources.");
-            this.prepareToUnpause();  // don't play again.
+            this.PrepareToStop();
             return;
         }
 
@@ -112,15 +122,26 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
     }
 
     public void PrepareToPlayPrevious() {
+        this.log("PrepareToPlayPrevious()");
+
         if (this.playing == 0) {
             this.log("PrepareToPlayPrevious(): this.playing arrived at the beginning of the audio sources.");
-            this.prepareToUnpause();  // don't play again.
+            this.PrepareToStop();
             return;
         }
 
         this.setPaused(false);
         this.setUnPaused(false);
         this.setPlaying(this.playing - 1);
+    }
+
+    // TODO: What is a more better way?
+    /// <summary>
+    /// Waits little secs to synchronize UdonSynced variables.
+    /// </summary>
+    public void WaitToSync() {
+        const int VERY_VERY_RANDOM_VALUE = 100000;
+        for (var i = 0; i < VERY_VERY_RANDOM_VALUE; i++) {}
     }
 
     /// <summary>
@@ -152,11 +173,6 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
 
         if (this.unPaused) {
             this.unPause();
-            return;
-        }
-
-        if (this.playing == -1 || this.playing == this.audioSources.Length) {
-            this.log($"Apply(): this.playing arrived {this.playing}. Skip.");
             return;
         }
 
@@ -234,17 +250,23 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
         return audioSource;
     }
 
-    private void prepareToUnpause() {
+    private void prepareToUnPause() {
+        this.log("prepareToUnPause()");
+
         this.setUnPaused(true);
         this.setPaused(false);
     }
 
     private void prepareToPause() {
+        this.log("prepareToPause()");
+
         this.setUnPaused(false);
         this.setPaused(true);
     }
 
     private void prepareToPlayFirst() {
+        this.log("prepareToPlayFirst()");
+
         this.setPlaying(0);
         this.setPaused(false);
         this.setUnPaused(false);
