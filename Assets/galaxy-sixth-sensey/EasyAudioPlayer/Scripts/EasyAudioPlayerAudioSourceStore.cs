@@ -17,6 +17,9 @@ using VRC.Udon;
 /// <see cref="Apply"/>
 /// </summary>
 public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
+    // Do update manually.
+    private readonly bool DEBUG = true;
+
     public GameObject audioSourceList;
     public Text playingAudioName;
 
@@ -25,26 +28,20 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
     /// </summary>
     public bool isWorkingOnlyOnLocal = false;
 
+    /// <summary>
+    /// Please see <see cref="Apply"/>.
+    /// </summary>
+    public BoolSync paused;
+    public BoolSync unPaused;
+    public IntSync playing;
+
     private readonly string NOT_PLAYING_NOW = "<Not playing now>";
 
     private AudioSource[] audioSources;
 
-    // Please see Apply().
-    [UdonSynced(UdonSyncMode.None)]
-    private bool paused = false;
-
-    // Please see Apply().
-    [UdonSynced(UdonSyncMode.None)]
-    private bool unPaused = false;
-
-    // Please see Apply().
-    [UdonSynced(UdonSyncMode.None)]
-    private int playing = -1;
-
-    // Do update manually.
-    private readonly bool DEBUG = true;
-
     public void Start() {
+        this.initializeFields();
+
         if (this.audioSourceList == null) {
             this.log("Start(): Error! The audio source list has not set.");
             return;
@@ -62,9 +59,9 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
             this.audioSources[i] = this.getAudioSource(components[i].gameObject);
 
             // Set this.playing to the first one which is playing
-            if (this.playing == -1 && this.audioSources[i].isPlaying) {
+            if (this.playing.Get() == -1 && this.audioSources[i].isPlaying) {
                 this.log($"Start(): Set this.playing to {i}");
-                this.setPlaying(i);
+                this.playing.Set(i);
             }
         }
     }
@@ -78,19 +75,19 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
     /// </summary>
     public void PrepareToPlayFirstOrPauseOrUnpause() {
         // if now stopping
-        if (this.paused && this.unPaused) {
+        if (this.paused.Get() && this.unPaused.Get()) {
             this.prepareToPlayFirst();
             return;
         }
 
         // if already paused
-        if (this.paused) {
+        if (this.paused.Get()) {
             this.prepareToUnPause();
             return;
         }
 
         // if some one is playing
-        if (this.playing != -1) {
+        if (this.playing.Get() != -1) {
             this.prepareToPause();
             return;
         }
@@ -102,37 +99,37 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
     public void PrepareToStop() {
         this.log("PrepareToStop()");
 
-        this.setPlaying(-1);
-        this.setPaused(true);
-        this.setUnPaused(true);
+        this.playing.Set(-1);
+        this.paused.Set(true);
+        this.unPaused.Set(true);
     }
 
     public void PrepareToPlayNext() {
         this.log("PrepareToPlayNext()");
 
-        if (this.playing == this.audioSources.Length - 1) {
+        if (this.playing.Get() == this.audioSources.Length - 1) {
             this.log("PrepareToPlayNext(): this.playing arrived at the ending of the audio sources.");
             this.PrepareToStop();
             return;
         }
 
-        this.setPaused(false);
-        this.setUnPaused(false);
-        this.setPlaying(this.playing + 1);
+        this.paused.Set(false);
+        this.unPaused.Set(false);
+        this.playing.Set(this.playing.Get() + 1);
     }
 
     public void PrepareToPlayPrevious() {
         this.log("PrepareToPlayPrevious()");
 
-        if (this.playing <= 0) {
+        if (this.playing.Get() <= 0) {
             this.log("PrepareToPlayPrevious(): this.playing arrived at the beginning of the audio sources.");
             this.PrepareToStop();
             return;
         }
 
-        this.setPaused(false);
-        this.setUnPaused(false);
-        this.setPlaying(this.playing - 1);
+        this.paused.Set(false);
+        this.unPaused.Set(false);
+        this.playing.Set(this.playing.Get() - 1);
     }
 
     // TODO: What is a more better way?
@@ -161,27 +158,38 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
             return;
         }
 
-        if (this.paused && this.unPaused) {
+        if (this.paused.Get() && this.unPaused.Get()) {
             this.stop();
             return;
         }
 
-        if (this.paused) {
+        if (this.paused.Get()) {
             this.pause();
             return;
         }
 
-        if (this.unPaused) {
+        if (this.unPaused.Get()) {
             this.unPause();
             return;
         }
 
-        if (!this.isNotOutOfBoundsOnAudioSources(this.playing)) {
-            this.log($"Apply(): Error! this.playing is out of bounds: {this.playing} of {this.audioSources.Length}");
+        if (!this.isNotOutOfBoundsOnAudioSources(this.playing.Get())) {
+            this.log($"Apply(): Error! this.playing is out of bounds: {this.playing.Get()} of {this.audioSources.Length}");
             return;
         }
 
         this.play();
+    }
+
+    private void initializeFields() {
+        this.paused.Set(false);
+        this.paused.SetDebugMode(DEBUG);
+
+        this.unPaused.Set(false);
+        this.unPaused.SetDebugMode(DEBUG);
+
+        this.playing.Set(-1);
+        this.playing.SetDebugMode(DEBUG);
     }
 
     private bool isNotOutOfBoundsOnAudioSources(int index) {
@@ -194,47 +202,23 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
         }
     }
 
-    private void setPaused(bool val) {
-        if (!Networking.IsOwner(Networking.LocalPlayer, this.gameObject)) {
-            Networking.SetOwner(Networking.LocalPlayer, this.gameObject);
-        }
-        this.log($"setPaused(): from {this.paused} to {val}");
-        this.paused = val;
-    }
-
-    private void setUnPaused(bool val) {
-        if (!Networking.IsOwner(Networking.LocalPlayer, this.gameObject)) {
-            Networking.SetOwner(Networking.LocalPlayer, this.gameObject);
-        }
-        this.log($"setUnPaused(): from {this.unPaused} to {val}");
-        this.unPaused = val;
-    }
-
-    private void setPlaying(int val) {
-        if (!Networking.IsOwner(Networking.LocalPlayer, this.gameObject)) {
-            Networking.SetOwner(Networking.LocalPlayer, this.gameObject);
-        }
-        this.log($"setPlaying(): from {this.playing} to {val}");
-        this.playing = val;
-    }
-
     private string getStateInfo() {
         return $@"{{
             audioSourceLength: {this.audioSources.Length},
-            paused: {this.paused},
-            unPaused: {this.unPaused},
-            playing: {this.playing}
+            paused: {this.paused.Get()},
+            unPaused: {this.unPaused.Get()},
+            playing: {this.playing.Get()}
         }}";
     }
 
     private void logStateInfo() {
-        if (this.DEBUG) {
+        if (DEBUG) {
             this.log(this.getStateInfo());
         }
     }
 
     private void log(string message) {
-        if (this.DEBUG) {
+        if (DEBUG) {
             Debug.Log($"EasyAudioPlayerAudioSourceStore: {message}");
         }
     }
@@ -253,23 +237,23 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
     private void prepareToUnPause() {
         this.log("prepareToUnPause()");
 
-        this.setUnPaused(true);
-        this.setPaused(false);
+        this.unPaused.Set(true);
+        this.paused.Set(false);
     }
 
     private void prepareToPause() {
         this.log("prepareToPause()");
 
-        this.setUnPaused(false);
-        this.setPaused(true);
+        this.unPaused.Set(false);
+        this.paused.Set(true);
     }
 
     private void prepareToPlayFirst() {
         this.log("prepareToPlayFirst()");
 
-        this.setPlaying(0);
-        this.setPaused(false);
-        this.setUnPaused(false);
+        this.playing.Set(0);
+        this.paused.Set(false);
+        this.unPaused.Set(false);
     }
 
     private void stop() {
@@ -285,11 +269,11 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
         this.log("pause(): Start.");
         this.logStateInfo();
 
-        if (!this.isNotOutOfBoundsOnAudioSources(this.playing)) {
-            this.log($"pause(): Error! this.playing is out of bounds: {this.playing} of {this.audioSources.Length}");
+        if (!this.isNotOutOfBoundsOnAudioSources(this.playing.Get())) {
+            this.log($"pause(): Error! this.playing is out of bounds: {this.playing.Get()} of {this.audioSources.Length}");
             return;
         }
-        var current = this.audioSources[this.playing];
+        var current = this.audioSources[this.playing.Get()];
 
         current.Pause();
         this.playingAudioName.text = current.name;
@@ -301,11 +285,11 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
         this.log("unPause(): Start.");
         this.logStateInfo();
 
-        if (!this.isNotOutOfBoundsOnAudioSources(this.playing)) {
-            this.log($"unPause(): Error! this.playing is out of bounds: {this.playing} of {this.audioSources.Length}");
+        if (!this.isNotOutOfBoundsOnAudioSources(this.playing.Get())) {
+            this.log($"unPause(): Error! this.playing is out of bounds: {this.playing.Get()} of {this.audioSources.Length}");
             return;
         }
-        var current = this.audioSources[this.playing];
+        var current = this.audioSources[this.playing.Get()];
 
         current.UnPause();
         this.playingAudioName.text = current.name;
@@ -317,11 +301,11 @@ public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
         this.log("play(): Start.");
         this.logStateInfo();
 
-        if (!this.isNotOutOfBoundsOnAudioSources(this.playing)) {
-            this.log($"play(): Error! this.playing is out of bounds: {this.playing} of {this.audioSources.Length}");
+        if (!this.isNotOutOfBoundsOnAudioSources(this.playing.Get())) {
+            this.log($"play(): Error! this.playing is out of bounds: {this.playing.Get()} of {this.audioSources.Length}");
             return;
         }
-        var next = this.audioSources[this.playing];
+        var next = this.audioSources[this.playing.Get()];
 
         this.stopAll();
         next.Play();
