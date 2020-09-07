@@ -18,7 +18,7 @@ using VRC.Udon;
 /// </summary>
 public class EasyAudioPlayerAudioSourceStore : UdonSharpBehaviour {
     // Do update manually.
-    private readonly bool DEBUG = true;
+    private readonly bool DEBUG = false;
 
     public GameObject audioSourceList;
     public Text playingAudioName;
