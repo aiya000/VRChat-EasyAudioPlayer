@@ -41,6 +41,8 @@ MITライセンス
 
 完了！
 
+- 古いバージョンからのアップデートの場合・もしくは本手順で動作がうまくいかなかった場合、ドキュメント最下部にある「注意」をご覧ください
+
 - - - - -
 
 設定済み完成例
@@ -63,3 +65,34 @@ MITライセンス
 1. Inspectorの`Text`に、設定したAudioSourceの曲名を入力する
 
 ありがとう！
+
+- - - - -
+
+### 注意
+
+#### 子コンポーネントの'Core'がNoneになっている場合
+
+古いバージョンのEasyAudioPlayerのprefabを更新した際などに、EasyAudioPlayerの下記の子コンポーネントの、'Udon Behavior'にある`Core`がNoneになってしまう場合があるようです。
+
+- 子コンポーネント
+    - PlayPrevious
+    - PlayNext
+    - Stop
+    - PlayOrPause
+
+![](unset-core.PNG)
+
+その場合は`Core`にEasyAudioPlayerをD&Dしてください。
+
+![](resolve-unset-core.PNG)
+
+#### 親コンポーネント（EasyAudioPlayer）の各'Public Variables'がNoneになっている場合
+
+「子コンポーネントの'Core'がNoneになっている場合」と同様に、親コンポーネント（EasyAudioPlayer）の各'Public Variables'がNoneになっている場合があるようです。
+
+![](unset-core-vars.PNG)
+
+その場合は、画像のように`EasyAudioPlayer > UdonSharp`下のそれぞれを、それぞれにD&Dしてください。
+
+![](resolve-unset-core-vars.PNG)
+
