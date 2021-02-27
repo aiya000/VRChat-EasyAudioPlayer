@@ -1049,7 +1049,7 @@ GameObject:
   - component: {fileID: 952273634}
   - component: {fileID: 952273635}
   m_Layer: 0
-  m_Name: Audio Source
+  m_Name: se_maoudamashii_magical25
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1176,7 +1176,7 @@ GameObject:
   - component: {fileID: 961092140}
   - component: {fileID: 961092141}
   m_Layer: 0
-  m_Name: Audio Source (2)
+  m_Name: se_maoudamashii_magical30
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1467,7 +1467,7 @@ GameObject:
   - component: {fileID: 1194705989}
   - component: {fileID: 1194705990}
   m_Layer: 0
-  m_Name: Audio Source (1)
+  m_Name: se_maoudamashii_magical27
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
