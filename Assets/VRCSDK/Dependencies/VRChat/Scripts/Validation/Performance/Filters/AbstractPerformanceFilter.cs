@@ -1,8 +1,8 @@
 using System.Collections;
 using UnityEngine;
-using VRCSDK2.Validation.Performance.Stats;
+using VRC.SDKBase.Validation.Performance.Stats;
 
-namespace VRCSDK2.Validation.Performance.Filters
+namespace VRC.SDKBase.Validation.Performance.Filters
 {
     public abstract class AbstractPerformanceFilter : ScriptableObject
     {

@@ -50,7 +50,7 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
 
         public static bool SearchOnNoodleDrop
         {
-            get { return PlayerPrefs.GetInt(SearchOnNoodleDropString, 0) == 1; }
+            get { return PlayerPrefs.GetInt(SearchOnNoodleDropString, 1) == 1; }
             set { PlayerPrefs.SetInt(SearchOnNoodleDropString, value ? 1 : 0); }
         }
 

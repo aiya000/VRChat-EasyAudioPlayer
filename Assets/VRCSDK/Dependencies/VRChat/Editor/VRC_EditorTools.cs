@@ -7,7 +7,7 @@ using UnityEditorInternal;
 using System.Reflection;
 using System;
 
-namespace VRCSDK2
+namespace VRC.SDKBase
 {
     public static class VRC_EditorTools
     {

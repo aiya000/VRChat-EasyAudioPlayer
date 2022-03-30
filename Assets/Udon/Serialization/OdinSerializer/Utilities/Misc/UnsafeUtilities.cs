@@ -20,6 +20,8 @@ namespace VRC.Udon.Serialization.OdinSerializer.Utilities.Unsafe
     using System;
     using System.Runtime.InteropServices;
 
+#pragma warning disable 0649 // Field is never assigned to and will have its default value // VRC
+    
     /// <summary>
     /// Contains utilities for performing common unsafe operations.
     /// </summary>

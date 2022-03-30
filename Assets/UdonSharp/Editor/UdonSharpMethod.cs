@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
-
-namespace UdonSharp
+﻿
+namespace UdonSharp.Compiler
 {
     [System.Flags]
     public enum MethodDeclFlags
@@ -10,10 +7,7 @@ namespace UdonSharp
         None = 0,
         Public = 1,
         Private = 2,
-        AllowRecursion = 4, // Not implemented yet
-        // Not implemented yet, will be an attribute which enforces that the method has 0 arguments, returns void, and has no other methods that share the same name. 
-        // In exchange the name won't be mangled so it can be reliably called from Udon graphs and other non-UdonSharp based programs
-        GraphEventExport = 8,
+        RecursiveMethod = 4,
     }
 
     public class ParameterDefinition

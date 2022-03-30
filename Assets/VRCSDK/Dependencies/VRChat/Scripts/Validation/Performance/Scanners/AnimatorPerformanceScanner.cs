@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using VRCSDK2.Validation.Performance.Stats;
+using VRC.SDKBase.Validation.Performance.Stats;
 
-namespace VRCSDK2.Validation.Performance.Scanners
+namespace VRC.SDKBase.Validation.Performance.Scanners
 {
     #if VRC_CLIENT
     [CreateAssetMenu(
@@ -29,7 +29,7 @@ namespace VRCSDK2.Validation.Performance.Scanners
             animatorCount += animatorBuffer.Count;
 
             // Animations
-            List<Animation> animationBuffer = new List<Animation>();
+            List<UnityEngine.Animation> animationBuffer = new List<UnityEngine.Animation>();
             yield return ScanAvatarForComponentsOfType(avatarObject, animationBuffer);
             if(shouldIgnoreComponent != null)
             {

@@ -1,4 +1,4 @@
-﻿#if VRC_SDK_VRCSDK2
+#if VRC_SDK_VRCSDK2
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
@@ -7,7 +7,7 @@ using System;
 namespace VRCSDK2
 {
     [CustomEditor(typeof(VRCSDK2.VRC_PlayerAudioOverride))]
-    public class VRC_PlayerAudioOverrideEditor : Editor
+    public class VRC_PlayerAudioOverrideEditor : UnityEditor.Editor
     {
         private bool voShow = true;
         private bool voAdv = false;

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f11136daadff0b44ac2278a314682ab, type: 3}
   m_Name: SendEventOnInteract
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: 5550255a7d6e36e45a96feedc6454008,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: 32180201d7c0db2479886a981734e78e,
     type: 2}
   udonAssembly: ".data_start\r\n\r\n    .export target\r\n    .export eventName\r\n
     \   \r\n    instance_0: %VRCUdonUdonBehaviour, this\r\n    eventName_0: %SystemString,
@@ -99,7 +99,7 @@ MonoBehaviour:
       - unityObjectValue: {fileID: 0}
         stringValue: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|False
       - unityObjectValue: {fileID: 0}
-        stringValue: 
+        stringValue: System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|none
     - fullName: Event_Interact
       uid: ee611c19-6e9f-4006-a819-d16994e1f506
       position: {x: -320, y: -130}
@@ -107,24 +107,20 @@ MonoBehaviour:
       flowUIDs:
       - ce8d78a0-2f92-44e6-a87d-fa989465c978
       nodeValues: []
+    updateOrder: 0
   graphElementData:
   - type: 2
-    uid: 93b70c85-1541-4c1b-8d13-31cf0ad812f4
+    uid: 
     jsonData: '{"uid":"93b70c85-1541-4c1b-8d13-31cf0ad812f4","layout":{"serializedVersion":"2","x":-351.07965087890627,"y":-193.5,"width":766.0,"height":341.0},"containedElements":["ee611c19-6e9f-4006-a819-d16994e1f506","ce8d78a0-2f92-44e6-a87d-fa989465c978","c0389565-9622-4b61-9391-395ec701d61b","c85bd08b-bd8c-4d10-bbaf-8fe37b8e67ed"],"title":"Send
       an event to the target when the Mouse is clicked on this object","layer":0,"elementTypeColor":{"r":0.0,"g":0.0,"b":0.0,"a":0.0}}'
-  - type: 3
-    uid: 39866bfb-e46b-4684-921b-e0063250aabf
-    jsonData: '{"uid":"39866bfb-e46b-4684-921b-e0063250aabf","layout":{"serializedVersion":"2","x":-793.1991577148438,"y":-4.36962890625,"width":410.6087341308594,"height":95.65222930908203},"title":"eventName
-      and target are public variables so you can easily change it in the Inspector
-      and reuse this graph for other events","layer":0,"elementTypeColor":{"r":0.0,"g":0.0,"b":0.0,"a":0.0}}'
   - type: 5
-    uid: cddf633d-d48d-4bda-954f-1d0dd8f691c2
-    jsonData: '{"visible":true,"layout":{"serializedVersion":"2","x":13.0,"y":29.0,"width":239.0,"height":124.0}}'
+    uid: 2841d1ed-315d-4f52-af3d-3052d6d33236
+    jsonData: '{"visible":true,"layout":{"serializedVersion":"2","x":10.0,"y":130.0,"width":200.0,"height":150.0}}'
   - type: 4
-    uid: 46d8d053-df09-42aa-b83b-0d8d8bbabc43
-    jsonData: '{"visible":false,"layout":{"serializedVersion":"2","x":10.0,"y":20.0,"width":0.0,"height":0.0}}'
+    uid: 4b97c479-d8be-4671-b5c8-cae6434c1adf
+    jsonData: '{"visible":true,"layout":{"serializedVersion":"2","x":10.0,"y":20.0,"width":0.0,"height":0.0}}'
   viewTransform:
-    position: {x: 698.0099, y: 479.63956}
-    scale: 0.8455822
+    position: {x: 781.222, y: 334.74844}
+    scale: 1
   version: 1.0.0
   showAssembly: 0

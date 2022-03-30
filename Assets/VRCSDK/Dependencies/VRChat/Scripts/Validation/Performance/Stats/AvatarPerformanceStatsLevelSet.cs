@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace VRCSDK2.Validation.Performance.Stats
+namespace VRC.SDKBase.Validation.Performance.Stats
 {
     public class AvatarPerformanceStatsLevelSet : ScriptableObject
     {

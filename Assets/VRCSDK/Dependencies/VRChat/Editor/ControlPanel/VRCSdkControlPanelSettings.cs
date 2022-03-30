@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using VRC.Core;
+using VRC.SDKBase.Editor;
 
 public partial class VRCSdkControlPanel : EditorWindow
 {
@@ -44,17 +45,11 @@ public partial class VRCSdkControlPanel : EditorWindow
 
         EditorGUILayout.BeginVertical(boxGuiStyle);
         EditorGUILayout.LabelField("Developer", EditorStyles.boldLabel);
-#if VRC_SDK_VRCSDK2
-        VRCSettings.Get().DisplayAdvancedSettings = EditorGUILayout.ToggleLeft("Show Extra Options on build page and account page", VRCSettings.Get().DisplayAdvancedSettings);
-        bool prevDisplayHelpBoxes = VRCSettings.Get().DisplayHelpBoxes;
-        VRCSettings.Get().DisplayHelpBoxes = EditorGUILayout.ToggleLeft("Show Help Boxes on SDK components", VRCSettings.Get().DisplayHelpBoxes);
-        if (VRCSettings.Get().DisplayHelpBoxes != prevDisplayHelpBoxes)
-#elif VRC_SDK_VRCSDK3
-        VRC.SDK3.Editor.VRCSettings.Get().DisplayAdvancedSettings = EditorGUILayout.ToggleLeft("Show Extra Options on build page and account page", VRC.SDK3.Editor.VRCSettings.Get().DisplayAdvancedSettings);
-        bool prevDisplayHelpBoxes = VRC.SDK3.Editor.VRCSettings.Get().DisplayHelpBoxes;
-        VRC.SDK3.Editor.VRCSettings.Get().DisplayHelpBoxes = EditorGUILayout.ToggleLeft("Show Help Boxes on SDK components", VRC.SDK3.Editor.VRCSettings.Get().DisplayHelpBoxes);
-        if (VRC.SDK3.Editor.VRCSettings.Get().DisplayHelpBoxes != prevDisplayHelpBoxes)
-#endif
+
+        VRCSettings.DisplayAdvancedSettings = EditorGUILayout.ToggleLeft("Show Extra Options on build page and account page", VRCSettings.DisplayAdvancedSettings);
+        bool prevDisplayHelpBoxes = VRCSettings.DisplayHelpBoxes;
+        VRCSettings.DisplayHelpBoxes = EditorGUILayout.ToggleLeft("Show Help Boxes on SDK components", VRCSettings.DisplayHelpBoxes);
+        if (VRCSettings.DisplayHelpBoxes != prevDisplayHelpBoxes)
         {
             Editor[] editors = (Editor[])Resources.FindObjectsOfTypeAll<Editor>();
             for (int i = 0; i < editors.Length; i++)

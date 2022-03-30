@@ -1,13 +1,12 @@
-﻿#if VRC_SDK_VRCSDK3
-#if UNITY_EDITOR
+﻿#if VRC_SDK_VRCSDK3 && UNITY_EDITOR
 
 using UnityEditor;
 using UnityEngine;
 
-namespace VRCSDK2
+namespace VRC.SDK3
 {
     [CustomEditor(typeof(VRC.SDK3.Components.VRCPickup))]
-    public class VRC_PickupEditor3 : Editor
+    public class VRC_PickupEditor3 : UnityEditor.Editor
     {
         private void InspectorField(string propertyName, string humanName)
         {
@@ -69,5 +68,4 @@ namespace VRCSDK2
 
     }
 }
-#endif
 #endif

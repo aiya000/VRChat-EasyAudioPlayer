@@ -1,39 +1,56 @@
+#if UNITY_2019_3_OR_NEWER
+using UnityEditor.Experimental.GraphView;
+using UnityGraph = UnityEditor.Experimental.GraphView;
+using UnityEngine.UIElements;
+using MenuAction = UnityEngine.UIElements.DropdownMenuAction;
+#else
+using UnityEditor.Experimental.UIElements.GraphView;
+using UnityGraph = UnityEditor.Experimental.UIElements.GraphView;
+using UnityEngine.Experimental.UIElements;
+using MenuAction = UnityEngine.Experimental.UIElements.DropdownMenu.MenuAction;
+#endif
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using UnityEditor;
-using UnityEditor.Experimental.UIElements.GraphView;
+using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityGraph = UnityEditor.Experimental.UIElements.GraphView;
 using VRC.Udon.Graph;
 using VRC.Udon.Serialization;
-using UnityEngine.Experimental.UIElements;
-using UnityEditor.SceneManagement;
+
 
 namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
 {
     public static class UdonGraphCommands
     {
-        public const string Reserialize = "Reserialize";
         public const string Reload = "Reload";
-        public const string SaveNewData = "SaveNewData";
+        public const string Compile = "Compile";
     }
 
     public class UdonGraph : UnityGraph.GraphView
     {
-
         private GridBackground _background;
         private UdonMinimap _map;
         private UdonVariablesBlackboard _blackboard;
 
         // copied over from Legacy.UdonGraph,
         public UdonGraphProgramAsset graphProgramAsset;
-        public UdonBehaviour _udonBehaviour;
-        public UdonGraphData graphData;
+        public UdonBehaviour udonBehaviour;
+
+        public UdonGraphData graphData
+        {
+            get => graphProgramAsset.graphData;
+            set
+            {
+                graphProgramAsset.graphData = value;
+                EditorUtility.SetDirty(graphProgramAsset);
+            }
+        }
 
         // Tracking variables
-        private List<string> _variablePopupOptions = new List<string>();
         private List<UdonNodeData> _variableNodes = new List<UdonNodeData>();
+        private ImmutableList<string> _variableNames;
 
         private Vector2 lastMousePosition;
         private VisualElement mouseTipContainer;
@@ -43,14 +60,30 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
         private UdonSearchManager _searchManager;
 
         private bool _reloading = false;
+        
+        private bool _dragging = false;
 
         public bool IsReloading => _reloading;
 
         // Enable stuff from NodeGraphProcessor
         private UdonGraphWindow _window;
 
-        public List<string> GetVariableNames { get => _variablePopupOptions; private set { } }
-        public List<UdonNodeData> GetVariableNodes { get => _variableNodes; private set { } }
+        public ImmutableList<string> GetVariableNames
+        {
+            get => _variableNames;
+            private set { }
+        }
+
+        public List<UdonNodeData> GetVariableNodes
+        {
+            get => _variableNodes;
+            private set { }
+        }
+
+        public bool IsReservedName(string name)
+        {
+            return name.StartsWith("__");
+        }
 
         public UdonGraph(UdonGraphWindow window)
         {
@@ -63,9 +96,9 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
             SetupZoom(0.2f, 3);
             SetupDragAndDrop();
 
-            this.AddManipulator(new UnityGraph.ContentDragger());
-            this.AddManipulator(new UnityGraph.SelectionDragger());
-            this.AddManipulator(new UnityGraph.RectangleSelector());
+            this.AddManipulator(new ContentDragger());
+            this.AddManipulator(new SelectionDragger());
+            this.AddManipulator(new RectangleSelector());
 
             mouseTipContainer = new VisualElement()
             {
@@ -80,7 +113,7 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
             SetMouseTip("");
             mouseTipContainer.Add(mouseTip);
 
-            // This event is used to send a "Reserialize" command from updated port fields
+            // This event is used to send commands from updated port fields
             RegisterCallback<ExecuteCommandEvent>(OnExecuteCommand);
 
             // Save last known mouse position for better pasting. Is there a performance hit for this?
@@ -89,8 +122,6 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
 
             _searchManager = new UdonSearchManager(this, window);
 
-            elementsInsertedToStackNode = OnStackNodeInsert;
-            elementsRemovedFromStackNode = OnStackNodeRemove;
             graphViewChanged = OnViewChanged;
             serializeGraphElements = OnSerializeGraphElements;
             unserializeAndPaste = OnUnserializeAndPaste;
@@ -111,7 +142,8 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
             try
             {
                 copiedNodeDataArray = JsonUtility
-                    .FromJson<SerializableObjectContainer.ArrayWrapper<UdonNodeData>>(UdonGraphExtensions.UnZipString(pasteData))
+                    .FromJson<SerializableObjectContainer.ArrayWrapper<UdonNodeData>>(
+                        UdonGraphExtensions.UnZipString(pasteData))
                     .value;
             }
             catch
@@ -119,40 +151,77 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
                 //oof ouch that's not valid data
                 return false;
             }
+
             return true;
         }
 
         public void Initialize(UdonGraphProgramAsset asset, UdonBehaviour udonBehaviour)
         {
             if (graphProgramAsset != null)
+            {
                 SaveGraphToDisk();
-            
+            }
+
             graphProgramAsset = asset;
             if (udonBehaviour != null)
             {
-                _udonBehaviour = udonBehaviour;
+                this.udonBehaviour = udonBehaviour;
             }
             
             graphData = new UdonGraphData(graphProgramAsset.GetGraphData());
 
-            EditorApplication.update += DelayedReload;
+            DoDelayedReload();
             EditorApplication.update += DelayedRestoreViewFromData;
 
             // When pressing ctrl-s, we save the graph
-            UnityEditor.SceneManagement.EditorSceneManager.sceneSaved += _ => SaveGraphToDisk();
+            EditorSceneManager.sceneSaved += _ => SaveGraphToDisk();
         }
 
         private void DelayedRestoreViewFromData()
         {
             EditorApplication.update -= DelayedRestoreViewFromData;
-            UpdateViewTransform(graphProgramAsset.viewTransform.position, Vector3.one * graphProgramAsset.viewTransform.scale);
+            //Todo: restore from saved data instead of FrameAll
+#if UNITY_2019_3_OR_NEWER
+             FrameAll();
+#else
+            UpdateViewTransform(graphProgramAsset.viewTransform.position,
+                 Vector3.one * graphProgramAsset.viewTransform.scale);
+             contentViewContainer.MarkDirtyRepaint();
+#endif
+        }
+
+        public UdonNode AddNodeFromSearch(UdonNodeDefinition definition, Vector2 position)
+        {
+            UdonNode node = UdonNode.CreateNode(definition, this);
+            AddElement(node);
+
+            node.SetPosition(new Rect(position, Vector2.zero));
+            node.Select(this, false);
+
+            return node;
+        }
+
+        public void ConnectNodeTo(UdonNode node, UdonPort startingPort, UnityGraph.Direction direction, Type typeToSearch)
+        {
+            // Find port to connect to
+            var collection = direction == Direction.Input ? node.portsIn : node.portsOut;
+            UdonPort endPort = collection.FirstOrDefault(p => p.Value.portType == typeToSearch).Value;
+            // If found, add edge and serialize the connection in the programAsset
+            if(endPort != null)
+            {
+                // Important not to create and add this edge, we'll restore it below instead
+                startingPort.ConnectTo(endPort);
+                (startingPort.node as UdonNode).RestoreConnections();
+                (endPort.node as UdonNode).RestoreConnections();
+                Compile();
+            }
         }
 
         public void SaveGraphToDisk()
         {
             if (graphProgramAsset == null)
                 return;
-
+            
             EditorUtility.SetDirty(graphProgramAsset);
         }
 
@@ -172,6 +241,11 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
                 {
                     AddToSelection(element);
                 }
+            }
+            else if (evt.keyCode == KeyCode.G && evt.shiftKey)
+            {
+                Undo.RecordObject(graphProgramAsset, "Changed Name");
+                graphProgramAsset.graphData.name = Guid.NewGuid().ToString();
             }
         }
 
@@ -200,8 +274,8 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
             if (evt.target is UnityGraph.GraphView || evt.target is UdonNode)
             {
                 // Create a Group, enclosing any selected nodes
-                evt.menu.AppendAction("Create Group", (m) => {
-
+                evt.menu.AppendAction("Create Group", (m) =>
+                {
                     UdonGroup group = UdonGroup.Create("Group", GetRectFromMouse(), this);
                     Undo.RecordObject(graphProgramAsset, "Add Group");
                     AddElement(group);
@@ -218,11 +292,9 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
                             group.AddElement(item as UdonComment);
                         }
                     }
-
-                    ReSerializeData(true);
-                    Reload();
-
-                }, DropdownMenu.MenuAction.AlwaysEnabled);
+                    group.Initialize();
+                    SaveGraphElementData(group);
+                }, MenuAction.AlwaysEnabled);
                 var selectedItems = selection.Where(i=>i is UdonNode || i is UdonComment).ToList();
                 if (selectedItems.Count > 0)
                 {
@@ -235,28 +307,31 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
                             if(selectedItems.ElementAt(i) is UdonNode)
                             {
                                 UdonNode node = selectedItems.ElementAt(i) as UdonNode;
-                                if(node.group != null) node.group.RemoveElement(node);
+                                if (node.group != null)
+                                {
+                                    node.group.RemoveElement(node);
+                                }
                             }
                             else if (selectedItems.ElementAt(i) is UdonComment)
                             {
                                 UdonComment comment = selectedItems.ElementAt(i) as UdonComment;
-                                if(comment.group != null) comment.group.RemoveElement(comment);
+                                if (comment.group != null)
+                                {
+                                    comment.group.RemoveElement(comment);
+                                }
                             }
-
                         }
-
-                        ReSerializeData();
-                        Reload();
-                    }, DropdownMenu.MenuAction.AlwaysEnabled);
+                        
+                    }, MenuAction.AlwaysEnabled);
                 }
 
                 // Create a Comment
-                evt.menu.AppendAction("Create Comment", (m) => {
+                evt.menu.AppendAction("Create Comment", (m) =>
+                {
                     UdonComment comment = UdonComment.Create("Comment", GetRectFromMouse(), this);
                     Undo.RecordObject(graphProgramAsset, "Add Comment");
                     AddElement(comment);
-                    SaveNewData();
-                }, DropdownMenu.MenuAction.AlwaysEnabled);
+                }, MenuAction.AlwaysEnabled);
 
                 evt.menu.AppendSeparator();
             }
@@ -273,23 +348,27 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
         {
             lastMousePosition = evt.mousePosition;
             MoveMouseTip(lastMousePosition);
-
         }
 
         private void MoveMouseTip(Vector2 position)
         {
             if (mouseTipContainer.visible)
             {
-                var layout = mouseTipContainer.layout;
-                layout.position = position + mouseTipOffset;
-                mouseTipContainer.layout = layout;
+                var newLayout = mouseTipContainer.layout;
+                newLayout.position = position + mouseTipOffset;
+#if UNITY_2019_3_OR_NEWER
+                mouseTipContainer.transform.position = newLayout.position;
+#else
+                mouseTipContainer.layout = newLayout;
+#endif
             }
         }
 
-        public bool IsDuplicateEventNode(string fullName)
+        public bool IsDuplicateEventNode(string fullName, string uid = "")
         {
             if (fullName.StartsWith("Event_") &&
-                (fullName != "Event_Custom"))
+                (fullName != "Event_Custom")
+            )
             {
                 if (this.Query(fullName).ToList().Count > 0)
                 {
@@ -298,12 +377,23 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
                     return true;
                 }
             }
+            else if(fullName.StartsWith(Common.VariableChangedEvent.EVENT_PREFIX))
+            {
+                bool isDuplicate = graphData.EventNodes.Any(d =>
+                    d.nodeValues.Length > 0 && d.nodeValues[0].Deserialize().ToString() == uid);
+                if (isDuplicate)
+                {
+                    Debug.LogWarning(
+                        $"Can't create more than one Change Event for {GetVariableName(uid)}, try managing your flow with a Block node instead!");
+                }
+                return isDuplicate;
+            }
+
             return false;
         }
 
         private string OnSerializeGraphElements(IEnumerable<GraphElement> selection)
         {
-
             Bounds bounds = new Bounds();
             bool startedBounds = false;
             List<UdonNodeData> nodeData = new List<UdonNodeData>();
@@ -326,7 +416,7 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
                     }
 
                     // Handle Get/Set Variables
-                    if (node.data.fullName == "Get_Variable" || node.data.fullName == "Set_Variable")
+                    if (node.data.fullName == "Get_Variable" || node.data.fullName == "Set_Variable" || node.data.fullName == "Set_ReturnValue")
                     {
                         // make old-school get-variable node data from existing variable
                         var targetUid = node.data.nodeValues[0].Deserialize();
@@ -367,7 +457,8 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
             try
             {
                 copiedNodeDataArray = JsonUtility
-                    .FromJson<SerializableObjectContainer.ArrayWrapper<UdonNodeData>>(UdonGraphExtensions.UnZipString(pasteData))
+                    .FromJson<SerializableObjectContainer.ArrayWrapper<UdonNodeData>>(
+                        UdonGraphExtensions.UnZipString(pasteData))
                     .value;
             }
             catch
@@ -384,6 +475,21 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
                 {
                     if (!graphData.nodes.Exists(n => n.uid == copiedNodeDataArray[i].uid))
                     {
+                        // set graph to this one in case it was pasted from somewhere else
+                        copiedNodeDataArray[i].SetGraph(graphData);
+                        
+                        // check for conflicting variable names
+                        int nameIndex = (int)UdonParameterProperty.ValueIndices.name;
+                        string varName = (string)copiedNodeDataArray[i].nodeValues[nameIndex].Deserialize();
+                        if (GetVariableNames.Contains(varName))
+                        {
+                            // if we already have a variable with that name, find a new name and serialize it into the data
+                            varName = GetUnusedVariableNameLike(varName);
+                            copiedNodeDataArray[i].nodeValues[nameIndex] =
+                                SerializableObjectContainer.Serialize(varName);
+                        }
+
+                        _blackboard.AddFromData(copiedNodeDataArray[i]);
                         graphData.nodes.Add(copiedNodeDataArray[i]);
                     }
                 }
@@ -398,8 +504,7 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
             }
 
             // Remove duplicate events
-
-            RefreshVariables();
+            RefreshVariables(false);
 
             // copy modified list back to array
             copiedNodeDataArray = copiedNodeDataList.ToArray();
@@ -429,6 +534,9 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
             {
                 UdonNodeData nodeData = copiedNodeDataArray[i];
                 UdonNodeData newNodeData = newNodeDataArray[i];
+                
+                // Set the new node to point at this graph if it came from a different one
+                newNodeData.SetGraph(graphData);
 
                 for (int j = 0; j < newNodeData.nodeUIDs.Length; j++)
                 {
@@ -446,23 +554,25 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
                     }
                 }
 
-                UdonNode udonNode = UdonNode.CreateNode(newNodeDataArray[i], this);
+                UdonNode udonNode = UdonNode.CreateNode(newNodeData, this);
                 if (udonNode != null)
                 {
-                    graphData.nodes.Add(newNodeDataArray[i]);
+                    graphData.nodes.Add(newNodeData);
+                    AddElement(udonNode);
                     pastedNodes.Add(udonNode);
                 }
             }
-            _reloading = false;
-
-            Reload();
 
             // Select all newly-pasted nodes after reload
-            // TODO: figure out why this doesn't work!
             foreach (var item in pastedNodes)
             {
+                item.RestoreConnections();
+                item.BringToFront();
                 AddToSelection(item as GraphElement);
             }
+            
+            _reloading = false;
+            Compile();
         }
 
         // This is needed to properly clear the selection in some cases (like deleting a stack node) even though it doesn't appear to do anything
@@ -482,18 +592,17 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
         private GraphViewChange OnViewChanged(GraphViewChange changes)
         {
             bool dirty = false;
-
+            bool needsVariableRefresh = false;
             // Remove node from Data when removed from Graph
             if (!_reloading && changes.elementsToRemove != null && changes.elementsToRemove.Count > 0)
             {
-                var newElementsData = graphProgramAsset.graphElementData.ToList();
 
                 foreach (var element in changes.elementsToRemove)
                 {
                     if (element is UdonNode)
                     {
                         var nodeData = ((UdonNode)element).data;
-                        graphData.RemoveNode(nodeData);
+                        RemoveNodeAndData(nodeData);
                         continue;
                     }
 
@@ -505,26 +614,22 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
 
                     if (element is UdonParameterField)
                     {
+                        needsVariableRefresh = true;
+                        
                         var pField = element as UdonParameterField;
                         if (graphData.nodes.Contains(pField.Data))
                         {
-                            graphData.nodes.Remove(pField.Data);
-                            EditorApplication.update += DelayedReload;
+                            RemoveNodeAndData(pField.Data);
                         }
                     }
 
-                    // not an UdonNode or Edge, it's an element serialized in graphElementData
-                    var graphElement = newElementsData.Find(e => e.uid.CompareTo(element.persistenceKey) == 0);
-                    if (graphElement != null)
+                    if (element is IUdonGraphElementDataProvider)
                     {
                         Undo.RecordObject(graphProgramAsset, $"delete-{element.name}");
-                        newElementsData.Remove(graphElement);
+                        var provider = (IUdonGraphElementDataProvider) element;
+                        DeleteGraphElementData(provider, false);
+                        RemoveElement(element);
                     }
-                }
-
-                if (newElementsData.Count < graphProgramAsset.graphElementData.Length)
-                {
-                    graphProgramAsset.graphElementData = newElementsData.ToArray();
                 }
 
                 ClearSelection();
@@ -534,26 +639,41 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
             if (dirty)
             {
                 MarkSceneDirty();
-                EditorApplication.update += DelayedReserialize;
+                SaveGraphToDisk();
+            }
+
+            if (needsVariableRefresh)
+            {
+                RefreshVariables(true);
             }
 
             return changes;
         }
 
-        #region StackNode change listeners
-        private void OnStackNodeInsert(StackNode node, int index, IEnumerable<GraphElement> elements)
+        public void DoDelayedCompile()
         {
-            (node as UdonStackNode).OnElementsAdded(elements);
+            EditorApplication.update += DelayedCompile;
         }
 
-        private void OnStackNodeRemove(StackNode node, IEnumerable<GraphElement> elements)
+        private void DelayedCompile()
         {
-            (node as UdonStackNode).OnElementsRemoved(elements);
+            EditorApplication.update -= DelayedCompile;
+            graphProgramAsset.RefreshProgram();
         }
-        #endregion
-
+        
+        private bool _waitingToReload;
+        public void DoDelayedReload()
+        {
+            if (!_waitingToReload && !_reloading)
+            {
+                _waitingToReload = true;
+                EditorApplication.update += DelayedReload;
+            }
+        }
+        
         void DelayedReload()
         {
+            _waitingToReload = false;
             EditorApplication.update -= DelayedReload;
             Reload();
         }
@@ -578,10 +698,29 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
             Add(_blackboard);
         }
 
-        private void BlackboardEditVariableName(Blackboard b, VisualElement field, string newValue)
+        private void BlackboardEditVariableName(Blackboard b, VisualElement v, string newValue)
         {
-            ReSerializeData();
-            EditorApplication.update += DelayedReload;
+            UdonParameterField field = (UdonParameterField) v;
+            Undo.RecordObject(graphProgramAsset, "Rename Variable");
+            
+            // Sanitize value for variable name
+            string newVariableName = newValue.SanitizeVariableName();
+            newVariableName = GetUnusedVariableNameLike(newVariableName);
+            field.Data.nodeValues[(int)UdonParameterProperty.ValueIndices.name] = SerializableObjectContainer.Serialize(newVariableName);
+            field.text = newVariableName;
+            
+            // Find all nodes that are getters/setters for this variable
+            // Change their title text by hand
+            nodes.ForEach((node =>
+            {
+                UdonNode udonNode = (UdonNode) node;
+                if (udonNode != null && udonNode.IsVariableNode)
+                {
+                    udonNode.RefreshTitle();
+                }
+            }));
+            
+            RefreshVariables(true);
         }
 
         private void BlackboardAddVariable(Blackboard obj)
@@ -590,7 +729,7 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
             _searchManager.OpenVariableSearch(screenPosition);
         }
 
-        public void OpenPortSearch(Type type, Vector2 position, Port output, Direction direction)
+        public void OpenPortSearch(Type type, Vector2 position, UdonPort output, Direction direction)
         {
             _searchManager.OpenPortSearch(type, position, output, direction);
         }
@@ -601,39 +740,19 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
             Add(_map);
         }
 
-        private bool _reserializeNextUpdate = false;
         private void OnExecuteCommand(ExecuteCommandEvent evt)
         {
             switch (evt.commandName)
             {
                 case UdonGraphCommands.Reload:
-                    Reload();
+                    DoDelayedReload();
                     break;
-                case UdonGraphCommands.Reserialize:
-                    if (!_reloading && !_reserializeNextUpdate)
-                    {
-                        _reserializeNextUpdate = true;
-                        EditorApplication.update += DelayedReserialize;
-                    }
-                    break;
-                case UdonGraphCommands.SaveNewData:
-                    if (!_reloading)
-                    {
-                        SaveNewData();
-                    }
+                case UdonGraphCommands.Compile:
+                    Compile();
                     break;
                 default:
                     break;
             }
-
-        }
-
-        // collects all serialization requests from a single frame and batches them for next frame
-        private void DelayedReserialize()
-        {
-            _reserializeNextUpdate = false;
-            EditorApplication.update -= DelayedReserialize;
-            ReSerializeData(true);
         }
 
         public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
@@ -647,11 +766,27 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
             return result;
         }
 
+#if UNITY_2019_3_OR_NEWER
+        private StyleSheet neonStyle = (StyleSheet) Resources.Load("UdonGraphNeonStyle");
+#endif
+
         public void Reload()
         {
+            if (_reloading) return;
+            
             _reloading = true;
 
-            // Is there a better place to do this?
+#if UNITY_2019_3_OR_NEWER
+
+            if (Settings.UseNeonStyle && !styleSheets.Contains(neonStyle))
+            {
+                styleSheets.Add(neonStyle);
+            }
+            else if (!Settings.UseNeonStyle && !styleSheets.Contains(neonStyle))
+            {
+                styleSheets.Remove(neonStyle);
+            }
+#else
             string customStyle = "UdonGraphNeonStyle";
             if (Settings.UseNeonStyle && !HasStyleSheetPath(customStyle))
             {
@@ -661,8 +796,9 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
             {
                 RemoveStyleSheetPath(customStyle);
             }
-            
-            Undo.undoRedoPerformed -= OnUndoRedo; //Remove old handler if present to prevent duplicates, doesn't cause errors if not present
+#endif
+            Undo.undoRedoPerformed -=
+                OnUndoRedo; //Remove old handler if present to prevent duplicates, doesn't cause errors if not present
             Undo.undoRedoPerformed += OnUndoRedo;
 
             // Clear out Blackboard here
@@ -671,21 +807,18 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
             // clear existing elements, probably need to update to only clear nodes and edges
             DeleteElements(graphElements.ToList());
 
-            RefreshVariables();
-            
+            RefreshVariables(false);
+
+            List<UdonNodeData> nodesToDelete = new List<UdonNodeData>();
             // add all nodes to graph
-            for (int i = graphData.nodes.Count - 1; i >= 0; i--)
+            for (int i = 0; i < graphData.nodes.Count; i++)
             {
                 UdonNodeData nodeData = graphData.nodes[i];
 
                 // Check for Node type - create nodes, separate out Variables
                 if (nodeData.fullName.StartsWithCached("Variable_"))
                 {
-                    UdonNodeDefinition definition = UdonEditorManager.Instance.GetNodeDefinition(nodeData.fullName);
-                    if (definition != null)
-                    {
-                        _blackboard.Insert(0, new BlackboardRow(new UdonParameterField(this, nodeData), new UdonParameterProperty(this, definition, nodeData)));
-                    }
+                    _blackboard.AddFromData(nodeData);
                 }
                 else if (nodeData.fullName.StartsWithCached("Comment"))
                 {
@@ -693,47 +826,67 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
                     var commentString = nodeData.nodeValues[0].Deserialize();
                     if (commentString != null)
                     {
-                        var comment = UdonComment.Create((string)commentString, new Rect(nodeData.position, Vector2.zero), this);
+                        var comment = UdonComment.Create((string) commentString,
+                            new Rect(nodeData.position, Vector2.zero), this);
                         AddElement(comment);
+                        SaveGraphElementData(comment);
                     }
 
                     // Remove from data, no longer a node
-                    graphData.nodes.RemoveAt(i);
+                    nodesToDelete.Add(nodeData);
                 }
                 else
                 {
-                    UdonNode udonNode = UdonNode.CreateNode(nodeData, this);
-                    AddElement(udonNode);
-                    if (udonNode != null) continue;
-                    Debug.Log($"Removing null node '{nodeData.fullName}'");
-                    graphData.nodes.RemoveAt(i);
+                    try
+                    {
+                        UdonNode udonNode = UdonNode.CreateNode(nodeData, this);
+                        AddElement(udonNode);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError($"Error Loading Node {nodeData.fullName} : {e.Message}");
+                        nodesToDelete.Add(nodeData);
+                        continue;
+                    }
                 }
             }
-            //return;
+
+            // Delete old comments and data that could not be turned into an UdonNode
+            foreach (UdonNodeData nodeData in nodesToDelete)
+            {
+                if (graphData.nodes.Remove(nodeData))
+                {
+                    Debug.Log($"removed node {nodeData.fullName}");
+                }
+            }
+
             // reconnect nodes
             nodes.ForEach((genericNode) =>
             {
                 UdonNode udonNode = (UdonNode)genericNode;
                 udonNode.RestoreConnections();
             });
-
+            
             // Add all Graph Elements
             if (graphProgramAsset.graphElementData != null)
             {
-                foreach (var elementData in graphProgramAsset.graphElementData)
+                var orderedElements = graphProgramAsset.graphElementData.ToList().OrderByDescending(e => e.type);
+                foreach (var elementData in orderedElements)
                 {
-
                     GraphElement element = RestoreElementFromData(elementData);
                     if (element != null)
                     {
                         AddElement(element);
+                        if (element is UdonGroup group)
+                        {
+                            group.Initialize();
+                        }
                     }
-
                 }
             }
-
+            
             _reloading = false;
-            ReSerializeData(false);
+            Compile();
         }
 
         // TODO: create generic to restore any supported element from UdonGraphElementData?
@@ -744,11 +897,6 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
                 case UdonGraphElementType.GraphElement:
                     {
                         return null;
-                    }
-
-                case UdonGraphElementType.UdonStackNode:
-                    {
-                        return UdonStackNode.Create(data, this);
                     }
 
                 case UdonGraphElementType.UdonGroup:
@@ -777,20 +925,39 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
 
         private void OnUndoRedo()
         {
-            graphData = new UdonGraphData(graphProgramAsset.GetGraphData());
             Reload();
         }
 
-        private void RefreshVariables()
+        public void RefreshVariables(bool recompile = true)
         {
+            // we want internal variables at the end of the list so they can be trivially filtered out
             _variableNodes = graphData.nodes
-                .Where(n => n.fullName.StartsWithCached("Variable_")).Where(n => n.nodeValues.Length > 1 && n.nodeValues[1] != null).ToList();
-            _variablePopupOptions =
-                _variableNodes.Select(s => (string)s.nodeValues[1].Deserialize()).ToList();
+                .Where(n => n.fullName.StartsWithCached("Variable_"))
+                .Where(n => n.nodeValues.Length > 1 && n.nodeValues[1] != null)
+                .OrderBy(n => ((string)n.nodeValues[1].Deserialize()).StartsWith("__"))
+                .ToList();
+            _variableNames = ImmutableList.Create(
+                _variableNodes.Select(s => (string) s.nodeValues[1].Deserialize()).ToArray()
+            );
+
+            // Refresh variable options in popup
+            nodes.ForEach(node =>
+            {
+                if (node is UdonNode udonNode && udonNode.IsVariableNode)
+                {
+                    udonNode.RefreshVariablePopup();
+                }
+            });
+            
+            // We usually want to compile after a Refresh
+            if(recompile)
+                Compile();
+            DoDelayedReload();
         }
 
         // Returns UID of newly created variable
-        public string AddNewVariable(string typeName = "Variable_SystemString", string variableName = "", bool isPublic = false)
+        public string AddNewVariable(string typeName = "Variable_SystemString", string variableName = "",
+            bool isPublic = false)
         {
             // Figure out unique variable name to use
             string newVariableName = string.IsNullOrEmpty(variableName) ? "newVariable" : variableName;
@@ -813,195 +980,128 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
             };
 
             graphData.nodes.Add(newNodeData);
-            ReSerializeData(false);
-            Reload();
-
+            _blackboard.AddFromData(newNodeData);
+            RefreshVariables(true);
             return newVarUid;
         }
 
-        public void RemoveNodeData(UdonNodeData nodeData)
-        {
-            if (graphData.nodes.Contains(nodeData))
+        public void RemoveNodeAndData(UdonNodeData nodeData)
             {
+            Undo.RecordObject(graphProgramAsset, $"Removing {nodeData.fullName}");
+
+            if (nodeData.fullName.StartsWithCached("Variable_"))
+                {
+                var allVariableNodes = new HashSet<Node>();
+                // Find all get/set variable nodes that reference this node
+                nodes.ForEach((graphNode =>
+                {
+                    UdonNode udonNode = graphNode as UdonNode;
+                    if (udonNode != null && udonNode.IsVariableNode)
+                    {
+                        // Get variable uid and recursively remove all nodes that refer to it
+                        var values = udonNode.data.nodeValues[0].stringValue.Split('|');
+                        if (values.Length > 1)
+                {
+                            string targetVariable = values[1];
+                            if (targetVariable.CompareTo(nodeData.uid) == 0)
+                {
+                                // We have a match! Delete this node
+                                allVariableNodes.Add(graphNode);
+                                RemoveNodeAndData(udonNode.data);
+                    }
+                }
+                }
+                }));
+
+                // remove each edge connected to a Get/Set Variable node which will be deleted
+                edges.ForEach(edge =>
+                {
+                    if (allVariableNodes.Contains(edge.input.node) || allVariableNodes.Contains(edge.output.node))
+                    {
+                        (edge.output as UdonPort)?.Disconnect(edge);
+                        (edge.input as UdonPort)?.Disconnect(edge);
+                        RemoveElement(edge);
+                    }
+                });
+                
+                // remove from existing blackboard
+                _blackboard.RemoveByID(nodeData.uid);
+                RefreshVariables(true);
+            }
+            
+            UdonNode node = (UdonNode)GetNodeByGuid(nodeData.uid);
+            if (node != null)
+                            {
+                node.RemoveFromHierarchy();
+                    }
+
+            if (graphData.nodes.Contains(nodeData))
+                {
                 graphData.nodes.Remove(nodeData);
             }
-            Reload();
+            }
+
+        public void Compile()
+            {
+            UdonEditorManager.Instance.QueueAndRefreshProgram(graphProgramAsset);
         }
 
-        public void ReSerializeData(bool saveNewData = true)
+        private bool ShouldUpdateAsset => !IsReloading && graphProgramAsset != null;
+
+        private readonly HashSet<UdonGraphElementType> singleElementTypes = new HashSet<UdonGraphElementType>()
         {
-            // While reloading, we delete and re-add all the data, so we don't want to serialize during that time.
-            if (_reloading)
+            UdonGraphElementType.Minimap, UdonGraphElementType.VariablesWindow
+        };
+        
+        public void SaveGraphElementData(IUdonGraphElementDataProvider provider)
+        {
+            if (ShouldUpdateAsset)
             {
-                return;
-            }
-
-            if (graphProgramAsset == null)
-            {
-                Debug.LogError("Can't Reserialize without an asset");
-                return;
-            }
-
-            SerializedObject serializedGraphProgramAsset = new SerializedObject((UdonGraphProgramAsset)graphProgramAsset);
-            SerializedProperty graphDataProperty = serializedGraphProgramAsset.FindProperty("graphData");
-            SerializedProperty nodesProperty = graphDataProperty.FindPropertyRelative("nodes");
-
-            if (nodesProperty.arraySize > graphData.nodes.Count)
-            {
-                nodesProperty.ClearArray();
-            }
-
-            for (int i = 0; i < graphData.nodes.ToList().Count; i++)
-            {
-                if (nodesProperty.arraySize < graphData.nodes.Count)
+                UdonGraphElementData newData = provider.GetData();
+                if (graphProgramAsset.graphElementData == null)
                 {
-                    nodesProperty.InsertArrayElementAtIndex(i);
+                    graphProgramAsset.graphElementData = new UdonGraphElementData[0];
                 }
-
-                SerializedProperty nodeProperty = nodesProperty.GetArrayElementAtIndex(i);
-
-                SerializedProperty fullNameProperty = nodeProperty.FindPropertyRelative("fullName");
-                fullNameProperty.stringValue = graphData.nodes[i].fullName;
-
-                SerializedProperty uidProperty = nodeProperty.FindPropertyRelative("uid");
-                uidProperty.stringValue = graphData.nodes[i].uid;
-
-                SerializedProperty positionProperty = nodeProperty.FindPropertyRelative("position");
-                positionProperty.vector2Value = graphData.nodes[i].position;
-
-                SerializedProperty nodeUIDsProperty = nodeProperty.FindPropertyRelative("nodeUIDs");
-                while (nodeUIDsProperty.arraySize > graphData.nodes[i].nodeUIDs.Length)
+                
+                int index = -1;
+                // Some elements like minimap and variables window should only ever have one entry, so find by type
+                if (singleElementTypes.Contains(newData.type))
                 {
-                    nodeUIDsProperty.DeleteArrayElementAtIndex(nodeUIDsProperty.arraySize - 1);
+                    index = Array.FindIndex(graphProgramAsset.graphElementData, e => e.type == newData.type);
                 }
-
-                for (int j = 0; j < graphData.nodes[i].nodeUIDs.Length; j++)
+                // other elements can have multiples, so find by uid
+                else
                 {
-                    if (nodeUIDsProperty.arraySize < graphData.nodes[i].nodeUIDs.Length)
-                    {
-                        nodeUIDsProperty.InsertArrayElementAtIndex(j);
-                        nodeUIDsProperty.GetArrayElementAtIndex(j).stringValue = "";
-                    }
-
-                    SerializedProperty nodeUIDProperty = nodeUIDsProperty.GetArrayElementAtIndex(j);
-                    nodeUIDProperty.stringValue = graphData.nodes[i].nodeUIDs[j];
+                    index = Array.FindIndex(graphProgramAsset.graphElementData, e => e.uid == newData.uid);
                 }
-
-                SerializedProperty flowUIDsProperty = nodeProperty.FindPropertyRelative("flowUIDs");
-                while (flowUIDsProperty.arraySize > graphData.nodes[i].flowUIDs.Length)
+                if (index > -1)
                 {
-                    flowUIDsProperty.DeleteArrayElementAtIndex(flowUIDsProperty.arraySize - 1);
+                    // Update
+                    graphProgramAsset.graphElementData[index] = newData;
                 }
-
-                for (int j = 0; j < graphData.nodes[i].flowUIDs.Length; j++)
+                else
                 {
-                    if (flowUIDsProperty.arraySize < graphData.nodes[i].flowUIDs.Length)
-                    {
-                        flowUIDsProperty.InsertArrayElementAtIndex(j);
-                        flowUIDsProperty.GetArrayElementAtIndex(j).stringValue = "";
-                    }
-
-                    SerializedProperty flowUIDProperty = flowUIDsProperty.GetArrayElementAtIndex(j);
-                    flowUIDProperty.stringValue = graphData.nodes[i].flowUIDs[j];
+                    // Add
+                    int arrayLength = graphProgramAsset.graphElementData.Length;
+                    Array.Resize(ref graphProgramAsset.graphElementData, arrayLength+1);
+                    graphProgramAsset.graphElementData[arrayLength] = newData;
                 }
-
-                SerializedProperty nodeValuesProperty = nodeProperty.FindPropertyRelative("nodeValues");
-                while (nodeValuesProperty.arraySize > graphData.nodes[i].nodeValues.Length)
-                {
-                    nodeValuesProperty.DeleteArrayElementAtIndex(nodeValuesProperty.arraySize - 1);
-                }
-
-                for (int j = 0; j < graphData.nodes[i].nodeValues.Length; j++)
-                {
-                    if (nodeValuesProperty.arraySize < graphData.nodes[i].nodeValues.Length)
-                    {
-                        nodeValuesProperty.InsertArrayElementAtIndex(j);
-                        nodeValuesProperty.GetArrayElementAtIndex(j).FindPropertyRelative("unityObjectValue").objectReferenceValue = null;
-                        nodeValuesProperty.GetArrayElementAtIndex(j).FindPropertyRelative("stringValue").stringValue = "";
-                    }
-
-                    SerializedProperty nodeValueProperty = nodeValuesProperty.GetArrayElementAtIndex(j);
-
-                    if (graphData.nodes[i].nodeValues[j] == null)
-                    {
-                        continue;
-                    }
-                    object nodeValue = graphData.nodes[i].nodeValues[j].Deserialize();
-                    if (nodeValue != null)
-                    {
-                        if (nodeValue is UnityEngine.Object value)
-                        {
-                            if (value != null)
-                            {
-                                nodeValueProperty.FindPropertyRelative("unityObjectValue").objectReferenceValue =
-                                    graphData.nodes[i].nodeValues[j].unityObjectValue;
-                            }
-                        }
-                    }
-                    nodeValueProperty.FindPropertyRelative("stringValue").stringValue =
-                        graphData.nodes[i].nodeValues[j].stringValue;
-                }
-
-                var baseNode = GetNodeByGuid(graphData.nodes[i].uid);
-                if (baseNode != null)
-                {
-                    UdonNode node = baseNode as UdonNode;
-                    node.data = graphData.nodes[i];
-                }
-            }
-
-            serializedGraphProgramAsset.ApplyModifiedProperties();
-
-            if (saveNewData)
-            {
-                SaveNewData();
-            }
-
-            if (graphProgramAsset is AbstractUdonProgramSource udonProgramSource)
-            {
-                UdonEditorManager.Instance.QueueAndRefreshProgram(udonProgramSource);
+                SaveGraphToDisk();
             }
         }
 
-        // Copied from source code, this is what happens when you press 'a' on the keyboard
-        public void Recenter()
+        public void DeleteGraphElementData(IUdonGraphElementDataProvider provider, bool save = true)
         {
-            Rect rectToFit;
-            Vector3 frameTranslation = Vector3.zero;
-            Vector3 frameScaling = Vector3.one;
-
-            rectToFit = CalculateRectToFitAll(contentViewContainer);
-            CalculateFrameTransform(rectToFit, layout, 30, out frameTranslation, out frameScaling);
-
-            Matrix4x4.TRS(frameTranslation, Quaternion.identity, frameScaling);
-
-            UpdateViewTransform(frameTranslation, frameScaling);
-
-            contentViewContainer.MarkDirtyRepaint();
-        }
-
-        public void SaveNewData()
-        {
-            List<UdonGraphElementData> elementData = new List<UdonGraphElementData>();
-            graphElements.ForEach((element) =>
+            int index = Array.FindIndex(graphProgramAsset.graphElementData, e => e.uid == provider.GetData().uid);
+            // remove if found
+            if (index > -1)
             {
-                // save data from each element that can provide UdonGraphElementData
-                if (element is IUdonGraphElementDataProvider)
-                {
-                    var data = ((IUdonGraphElementDataProvider)element).GetData();
-                    elementData.Add(data);
-                }
-            });
-            // add blackboard data
-            elementData.Add(_blackboard.GetData());
-            elementData.Add(_map.GetData());
+                graphProgramAsset.graphElementData = graphProgramAsset.graphElementData.Where((source, i) => i != index).ToArray();
+            }
 
-            // Save new data to asset
-            if (graphProgramAsset != null)
+            if (save)
             {
-                graphProgramAsset.graphElementData = elementData.ToArray();
-                EditorUtility.SetDirty(graphProgramAsset);
-                AssetDatabase.SaveAssets();
+                SaveGraphToDisk();
             }
         }
 
@@ -1009,30 +1109,40 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
 
         private void SetupDragAndDrop()
         {
+            RegisterCallback<DragEnterEvent>(OnDragEnter);
             RegisterCallback<DragPerformEvent>(OnDragPerform, TrickleDown.TrickleDown);
             RegisterCallback<DragUpdatedEvent>(OnDragUpdated);
             RegisterCallback<DragExitedEvent>(OnDragExited);
             RegisterCallback<DragLeaveEvent>((e)=>OnDragExited(null));
         }
 
-        private void OnDragUpdated(DragUpdatedEvent e)
+        private void OnDragEnter(DragEnterEvent e)
         {
+            OnDragEnter(e.mousePosition, e.ctrlKey, e.altKey);
+        }
 
-            MoveMouseTip(e.mousePosition);
+        private void OnDragEnter(Vector2 mousePosition, bool ctrlKey, bool altKey)
+        {
+            MoveMouseTip(mousePosition);
 
             var dragData = DragAndDrop.GetGenericData("DragSelection") as List<ISelectable>;
-            bool dragging = false;
+            _dragging = false;
 
             if (dragData != null)
             {
                 // Handle drag from exposed parameter view
                 if (dragData.OfType<UdonParameterField>().Any())
                 {
-                    dragging = true;
-                    SetMouseTip(e.ctrlKey ? 
-                        "Set Variable" : 
-                        "Get Variable\n+Ctrl: Set Variable"
-                    );
+                    _dragging = true;
+                    string tip = "Get Variable\n+Ctrl: Set Variable\n+Alt: On Var Change";
+                    if (ctrlKey)
+                    {
+                        tip = "Set Variable";
+                    } else if (altKey)
+                    {
+                        tip = "On Variable Changed";
+                    }
+                    SetMouseTip(tip);
                 }
             }
 
@@ -1043,19 +1153,39 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
                 {
                     case GameObject g:
                     case Component c:
-                        dragging = true;
+                    {
+                        string type = GetDefinitionNameForType(target.GetType());
+                        if (UdonEditorManager.Instance.GetNodeDefinition(type) != null)
+                        {
+                            _dragging = true;
+                        }
                         break;
+                    }
                 }
             }
 
-            if (dragging)
+            if (_dragging)
             {
+                DragAndDrop.visualMode = ctrlKey ? DragAndDropVisualMode.Link : DragAndDropVisualMode.Copy;
+            }
+        }
+
+        private void OnDragUpdated(DragUpdatedEvent e)
+        {
+            if (_dragging)
+            {
+                MoveMouseTip(e.mousePosition);
                 DragAndDrop.visualMode = e.ctrlKey ? DragAndDropVisualMode.Link : DragAndDropVisualMode.Copy;
+            }
+            else
+            {
+                OnDragEnter(e.mousePosition, e.ctrlKey, e.altKey);
             }
         }
 
         private void OnDragPerform(DragPerformEvent e)
         {
+            if (!_dragging) return;
             var graphMousePosition = this.contentViewContainer.WorldToLocal(e.mousePosition);
             var draggedVariables = DragAndDrop.GetGenericData("DragSelection") as List<ISelectable>;
 
@@ -1065,16 +1195,19 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
                 var parameters = draggedVariables.OfType<UdonParameterField>();
                 if (parameters.Any())
                 {
-                    RefreshVariables();
-                    var nodes = new List<UdonNode>();
+                    RefreshVariables(false);
+                    VariableNodeType nodeType = VariableNodeType.Getter;
+                    if (e.ctrlKey) nodeType = VariableNodeType.Setter;
+                    else if (e.altKey) nodeType = VariableNodeType.Change;
                     foreach (var parameter in parameters)
                     {
-                        // Make Setter if ctrl is held, otherwise make Getter
-                        UdonNode udonNode = MakeVariableNode(parameter.Data.uid, graphMousePosition, !e.ctrlKey);
-                        AddElement(udonNode);
+                        UdonNode udonNode = MakeVariableNode(parameter.Data.uid, graphMousePosition, nodeType);
+                        if (udonNode != null)
+                        {
+                            AddElement(udonNode);
+                        }
                     }
-
-                    ReSerializeData();
+                    RefreshVariables(true);
                 }
             }
 
@@ -1093,36 +1226,101 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
                     break;
                 }
             }
+
+            _dragging = false;
         }
 
         private void OnDragExited(DragExitedEvent e)
         {
             SetMouseTip("");
+            _dragging = false;
         }
 
         #endregion
-
-        public UdonNode MakeVariableNode(string selectedUid, Vector2 graphMousePosition, bool isGetter)
+        public enum VariableNodeType
         {
-            string defName = isGetter ? "Get_Variable" : "Set_Variable";
-            var definition = UdonEditorManager.Instance.GetNodeDefinition(defName);
+            Getter,
+            Setter,
+            Return,
+            Change,
+        }
+
+        public string GetVariableName(string uid)
+        {
+            var targetNode = GetVariableNodes.Where(n => n.uid == uid).First();
+            try
+            {
+                return targetNode.nodeValues[1].Deserialize() as string;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Couldn't find variable name for {uid}: {e.Message}");
+                return "";
+            }
+        }
+
+        public UdonNode MakeVariableNode(string selectedUid, Vector2 graphMousePosition, VariableNodeType nodeType)
+        {
+            string definitionName = "";
+            switch (nodeType)
+            {
+                case VariableNodeType.Getter:
+                    definitionName = "Get_Variable";
+                    break;
+                case VariableNodeType.Setter:
+                    definitionName = "Set_Variable";
+                    break;
+                case VariableNodeType.Return:
+                    definitionName = "Set_ReturnValue";
+                    break;
+                case VariableNodeType.Change:
+                    definitionName = "Event_OnVariableChange";
+                    break;
+            }
+
+            if (nodeType == VariableNodeType.Change)
+            {
+                string variableName = GetVariableName(selectedUid);
+                if (!string.IsNullOrWhiteSpace(variableName))
+                {
+                    string eventName = UdonGraphExtensions.GetVariableChangeEventName(variableName);
+                    if (IsDuplicateEventNode(eventName, selectedUid))
+                    {
+                        return null;
+                    }
+                }
+            }
+
+            var definition = UdonEditorManager.Instance.GetNodeDefinition(definitionName);
             var nodeData = this.graphData.AddNode(definition.fullName);
-            nodeData.nodeValues = new SerializableObjectContainer[1];
+            nodeData.nodeValues = new SerializableObjectContainer[2];
             nodeData.nodeUIDs = new string[1];
             nodeData.nodeValues[0] = SerializableObjectContainer.Serialize(selectedUid);
             nodeData.position = graphMousePosition;
 
+            Undo.RecordObject(graphProgramAsset, "Add Variable");
             var udonNode = UdonNode.CreateNode(nodeData, this);
             return udonNode;
         }
 
-        private string GetUnusedVariableNameLike(string newVariableName)
+        public string GetUnusedVariableNameLike(string newVariableName)
         {
-            int defaultCount = _variableNodes.Count(n => ((string)n.nodeValues[1].Deserialize()).Contains(newVariableName));
-            if (defaultCount > 0)
+            RefreshVariables(false);
+
+            while (GetVariableNames.Contains(newVariableName))
             {
-                newVariableName = string.Concat(newVariableName, defaultCount + 1);
+                char lastChar = newVariableName[newVariableName.Length - 1];
+                if(char.IsDigit(lastChar))
+                {
+                    string newLastChar = (int.Parse(lastChar.ToString()) + 1).ToString();
+                    newVariableName = newVariableName.Substring(0, newVariableName.Length - 1) + newLastChar;
+                } 
+                else
+                {
+                    newVariableName = $"{newVariableName}_1";   
+                }
             }
+
             return newVariableName;
         }
 
@@ -1142,7 +1340,7 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
                 if (!success) return;
 
                 //TODO: get actual variable name in case it was auto-changed on add
-                var result = _udonBehaviour.publicVariables.TrySetVariableValue(variableName, target);
+                var result = udonBehaviour.publicVariables.TrySetVariableValue(variableName, target);
                 if (result)
                 {
                     graphProgramAsset.OnAssemble -= listener;
@@ -1155,25 +1353,31 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
             graphProgramAsset.RefreshProgram();
         }
 
+        private string GetDefinitionNameForType(Type t)
+        {
+            string variableType = $"Variable_{t}".SanitizeVariableName();
+            variableType = variableType.Replace("UdonBehaviour", "CommonInterfacesIUdonEventReceiver");
+            return variableType;
+        }
+
         private void SetupDraggedObject(UnityEngine.Object o, Vector2 graphMousePosition)
         {
+            // Ensure variable type is allowed
+            
             // create new Component variable and add to graph
-            string variableType = $"Variable_{o.GetType()}".SanitizeVariableName();
-            // handle special case for UdonBehaviours
-            variableType = variableType.Replace("UdonBehaviour", "CommonInterfacesIUdonEventReceiver");
+            string variableType = GetDefinitionNameForType(o.GetType());
             string variableName = GetUnusedVariableNameLike(o.name.SanitizeVariableName());
 
             SetMouseTip($"Made {variableName}");
 
             string uid = AddNewVariable(variableType, variableName, true);
-            RefreshVariables();
+            RefreshVariables(false);
 
             object target = o;
             // Cast component to expected type
             if (o is Component) target = Convert.ChangeType(o, o.GetType());
-            var variableNode = MakeVariableNode(uid, graphMousePosition, true);
+            var variableNode = MakeVariableNode(uid, graphMousePosition, UdonGraph.VariableNodeType.Getter);
             AddElement(variableNode);
-            variableNode.Reserialize();
 
             LinkAfterCompile(variableName, target);
         }

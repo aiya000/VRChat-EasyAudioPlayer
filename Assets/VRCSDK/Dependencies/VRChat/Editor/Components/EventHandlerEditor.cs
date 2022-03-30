@@ -5,12 +5,13 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using System.Collections.Generic;
 using System.Linq;
+using VRC.SDKBase;
 
 namespace VRCSDK2
 {
 #if VRC_SDK_VRCSDK2
     [CustomEditor(typeof(VRCSDK2.VRC_EventHandler))]
-    public class EventHandlerEditor : Editor
+    public class EventHandlerEditor : UnityEditor.Editor
     {
         bool showDeferredEvents = false;
 
@@ -324,7 +325,7 @@ namespace VRCSDK2
     }
 
     [CustomEditor(typeof(VRC.SDKBase.VRC_EventHandler))]
-    public class SDKBaseEventHandlerEditor : Editor
+    public class SDKBaseEventHandlerEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {
@@ -340,7 +341,7 @@ namespace VRCSDK2
 #else
 
     [CustomEditor(typeof(VRC.SDKBase.VRC_EventHandler))]
-    public class SDKBaseEventHandlerEditor : Editor
+    public class SDKBaseEventHandlerEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {

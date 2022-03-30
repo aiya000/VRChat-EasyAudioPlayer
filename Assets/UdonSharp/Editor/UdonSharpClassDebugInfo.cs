@@ -1,11 +1,11 @@
 ﻿
 
+using JetBrains.Annotations;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace UdonSharp
+namespace UdonSharp.Compiler
 {
     [System.Serializable]
     public class ClassDebugInfo
@@ -22,7 +22,7 @@ namespace UdonSharp
             public int line = 0;
             public int lineChar = 0;
 
-            public string spanCodeSection = "";
+            //public string spanCodeSection = "";
         }
 
         [UnityEngine.SerializeField]
@@ -38,7 +38,7 @@ namespace UdonSharp
         private List<DebugLineSpan> debugSpans;
         private bool includeInlineCode;
 
-        public ClassDebugInfo(string source, bool includeInlineCodeIn)
+        internal ClassDebugInfo(string source, bool includeInlineCodeIn)
         {
             sourceText = source;
             mostRecentSpanStart = 0;
@@ -46,12 +46,12 @@ namespace UdonSharp
             includeInlineCode = includeInlineCodeIn;
         }
 
-        public void UpdateSyntaxNode(SyntaxNode node)
+        internal void UpdateSyntaxNode(SyntaxNode node)
         {
             if (debugSpans.Count == 0)
                 debugSpans.Add(new DebugLineSpan());
 
-            int nodeSpanStart = node.Span.Start;
+            int nodeSpanStart = node.SpanStart;
 
             if (nodeSpanStart < mostRecentSpanStart || nodeSpanStart >= sourceText.Length)
                 return;
@@ -61,12 +61,12 @@ namespace UdonSharp
             DebugLineSpan lastLineSpan = debugSpans.Last();
 
             lastLineSpan.endInstruction = assemblyBuilder.programCounter - 1;
-            lastLineSpan.endSourceChar = node.SpanStart;
-            lastLineSpan.spanCodeSection = sourceText.Substring(lastLineSpan.startSourceChar, lastLineSpan.endSourceChar - lastLineSpan.startSourceChar);
+            lastLineSpan.endSourceChar = nodeSpanStart;
+            //lastLineSpan.spanCodeSection = sourceText.Substring(lastLineSpan.startSourceChar, lastLineSpan.endSourceChar - lastLineSpan.startSourceChar);
 
             DebugLineSpan nextLineSpan = new DebugLineSpan();
             nextLineSpan.startInstruction = assemblyBuilder.programCounter;
-            nextLineSpan.startSourceChar = node.SpanStart;
+            nextLineSpan.startSourceChar = nodeSpanStart;
 
             debugSpans.Add(nextLineSpan);
 
@@ -103,7 +103,7 @@ namespace UdonSharp
             }
         }
 
-        public void FinalizeDebugInfo()
+        internal void FinalizeDebugInfo()
         {
             serializedDebugSpans = new DebugLineSpan[debugSpans.Count];
 
@@ -139,6 +139,25 @@ namespace UdonSharp
                 serializedDebugSpans[i].line = lineCount;
                 serializedDebugSpans[i].lineChar = lineChar;
             }
+        }
+
+        /// <summary>
+        /// Gets the debug line span from a given program counter
+        /// </summary>
+        /// <param name="programCounter"></param>
+        /// <returns></returns>
+        [PublicAPI]
+        public DebugLineSpan GetLineFromProgramCounter(int programCounter)
+        {
+            int debugSpanIdx = System.Array.BinarySearch(DebugLineSpans.Select(e => e.endInstruction).ToArray(), programCounter);
+            if (debugSpanIdx < 0)
+                debugSpanIdx = ~debugSpanIdx;
+
+            debugSpanIdx = UnityEngine.Mathf.Clamp(debugSpanIdx, 0, DebugLineSpans.Length - 1);
+
+            ClassDebugInfo.DebugLineSpan debugLineSpan = DebugLineSpans[debugSpanIdx];
+
+            return debugLineSpan;
         }
     }
 }

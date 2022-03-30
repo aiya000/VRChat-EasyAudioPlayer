@@ -3,15 +3,16 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f742c36dce5730f4d96e37d82c330584, type: 3}
   m_Name: Poor_Quest
   m_EditorClassIdentifier: 
-  polyCount: 10000
+  polyCount: 20000
   aabb:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 2.5, y: 3, z: 2.5}

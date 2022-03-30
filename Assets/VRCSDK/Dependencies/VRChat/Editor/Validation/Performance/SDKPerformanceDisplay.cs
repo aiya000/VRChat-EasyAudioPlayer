@@ -1,6 +1,6 @@
-using VRCSDK2.Validation.Performance.Stats;
+using VRC.SDKBase.Validation.Performance.Stats;
 
-namespace VRCSDK2.Validation.Performance
+namespace VRC.SDKBase.Validation.Performance
 {
     public static class SDKPerformanceDisplay
     {

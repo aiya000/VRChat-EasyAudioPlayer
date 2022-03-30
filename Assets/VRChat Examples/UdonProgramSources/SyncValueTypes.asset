@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f11136daadff0b44ac2278a314682ab, type: 3}
   m_Name: SyncValueTypes
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: 35dd7d91978975d43aa50ced6e23c7ee,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: ae7e5ee69e8a38c49a0fed7d2505d95e,
     type: 2}
   udonAssembly: ".data_start\r\n\r\n    .export uiText\r\n    .sync boolValue, none\r\n
     \   .sync intValue, none\r\n    .sync floatValue, none\r\n    .sync stringValue,
@@ -53,10 +53,10 @@ MonoBehaviour:
     \       PUSH, Boolean_2\r\n        EXTERN, \"UnityEngineInput.__GetKeyDown__UnityEngineKeyCode__SystemBoolean\"\r\n
     \       PUSH, Boolean_1\r\n        PUSH, Boolean_2\r\n        PUSH, Boolean_0\r\n
     \       EXTERN, \"SystemBoolean.__op_ConditionalAnd__SystemBoolean_SystemBoolean__SystemBoolean\"\r\n
-    \       PUSH, Boolean_0\r\n        JUMP_IF_FALSE, 0x000168\r\n        PUSH, Single_0\r\n
-    \       EXTERN, \"UnityEngineRandom.__get_value__SystemSingle\"\r\n        PUSH,
-    Single_0\r\n        PUSH, Single_1\r\n        PUSH, boolValue\r\n        EXTERN,
-    \"SystemSingle.__op_GreaterThan__SystemSingle_SystemSingle__SystemBoolean\"\r\n
+    \       PUSH, Boolean_0\r\n        JUMP_IF_FALSE, 0x00000168\r\n        PUSH,
+    Single_0\r\n        EXTERN, \"UnityEngineRandom.__get_value__SystemSingle\"\r\n
+    \       PUSH, Single_0\r\n        PUSH, Single_1\r\n        PUSH, boolValue\r\n
+    \       EXTERN, \"SystemSingle.__op_GreaterThan__SystemSingle_SystemSingle__SystemBoolean\"\r\n
     \       PUSH, min_0\r\n        PUSH, max_0\r\n        PUSH, intValue\r\n        EXTERN,
     \"UnityEngineRandom.__Range__SystemInt32_SystemInt32__SystemInt32\"\r\n        PUSH,
     min_1\r\n        PUSH, max_1\r\n        PUSH, floatValue\r\n        EXTERN, \"UnityEngineRandom.__Range__SystemSingle_SystemSingle__SystemSingle\"\r\n
@@ -68,7 +68,7 @@ MonoBehaviour:
     \       PUSH, hueMin_0\r\n        PUSH, hueMax_0\r\n        PUSH, saturationMin_0\r\n
     \       PUSH, saturationMax_0\r\n        PUSH, valueMin_0\r\n        PUSH, valueMax_0\r\n
     \       PUSH, colorValue\r\n        EXTERN, \"UnityEngineRandom.__ColorHSV__SystemSingle_SystemSingle_SystemSingle_SystemSingle_SystemSingle_SystemSingle__UnityEngineColor\"\r\n
-    \       JUMP, 0x000168\r\n        JUMP, 0xFFFFFFFC\r\n    \r\n    .export _lateUpdate\r\n
+    \       JUMP, 0x00000168\r\n        JUMP, 0xFFFFFFFC\r\n    \r\n    .export _lateUpdate\r\n
     \   \r\n    _lateUpdate:\r\n    \r\n        PUSH, uiText\r\n        PUSH, instance_1\r\n
     \       COPY\r\n        PUSH, format_0\r\n        PUSH, boolValue\r\n        PUSH,
     str0_1\r\n        EXTERN, \"SystemString.__Format__SystemString_SystemObject__SystemString\"\r\n
@@ -855,5 +855,10 @@ MonoBehaviour:
       nodeValues:
       - unityObjectValue: {fileID: 0}
         stringValue: System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|9ac1b6df-3a90-47ab-b4d5-8ed39c123b0c
+    updateOrder: 0
   graphElementData: []
+  viewTransform:
+    position: {x: 0, y: 0}
+    scale: 1
+  version: 1.0.0
   showAssembly: 0

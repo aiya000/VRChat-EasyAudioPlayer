@@ -1,9 +1,9 @@
 using System.Collections;
 using UnityEngine;
-using VRCSDK2.Validation.Performance.Scanners;
-using VRCSDK2.Validation.Performance.Stats;
+using VRC.SDKBase.Validation.Performance.Scanners;
+using VRC.SDKBase.Validation.Performance.Stats;
 
-namespace VRCSDK2.Validation.Performance
+namespace VRC.SDKBase.Validation.Performance
 {
     #if VRC_CLIENT
     [CreateAssetMenu(

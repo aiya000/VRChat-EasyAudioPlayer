@@ -30,7 +30,12 @@ namespace VRC.Udon.Serialization.Formatters
             IUdonSymbolTable symbolTable = _udonSymbolTableReaderWriter.ReadValue(reader);
             IUdonSyncMetadataTable syncMetadataTable = _udonSyncMetadataTableReaderWriter.ReadValue(reader);
 
-            value = new UdonProgram(instructionSetIdentifier, instructionSetVersion, byteCode, heap, entryPoints, symbolTable, syncMetadataTable);
+            if(!reader.ReadInt32(out int updateOrder))
+            {
+                updateOrder = 0;
+            }
+
+            value = new UdonProgram(instructionSetIdentifier, instructionSetVersion, byteCode, heap, entryPoints, symbolTable, syncMetadataTable, updateOrder);
 
             RegisterReferenceID(value, reader);
             InvokeOnDeserializingCallbacks(ref value, reader.Context);
@@ -45,6 +50,7 @@ namespace VRC.Udon.Serialization.Formatters
             _udonSymbolTableReaderWriter.WriteValue("EntryPoints", value.EntryPoints, writer);
             _udonSymbolTableReaderWriter.WriteValue("SymbolTable", value.SymbolTable, writer);
             _udonSyncMetadataTableReaderWriter.WriteValue("SyncMetadataTable", value.SyncMetadataTable, writer);
+            writer.WriteInt32("UpdateOrder", value.UpdateOrder);
         }
     }
 }

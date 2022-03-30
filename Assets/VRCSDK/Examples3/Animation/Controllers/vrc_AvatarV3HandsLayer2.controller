@@ -4766,7 +4766,7 @@ AnimatorState:
   m_StateMachineBehaviours: []
   m_Position: {x: 264, y: 276, z: 0}
   m_IKOnFeet: 0
-  m_WriteDefaultValues: 1
+  m_WriteDefaultValues: 0
   m_Mirror: 0
   m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0
@@ -4792,7 +4792,7 @@ AnimatorState:
   m_StateMachineBehaviours: []
   m_Position: {x: 264, y: 36, z: 0}
   m_IKOnFeet: 0
-  m_WriteDefaultValues: 1
+  m_WriteDefaultValues: 0
   m_Mirror: 0
   m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0
@@ -4870,7 +4870,7 @@ AnimatorState:
   m_StateMachineBehaviours: []
   m_Position: {x: 264, y: 336, z: 0}
   m_IKOnFeet: 0
-  m_WriteDefaultValues: 1
+  m_WriteDefaultValues: 0
   m_Mirror: 0
   m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0
@@ -4896,7 +4896,7 @@ AnimatorState:
   m_StateMachineBehaviours: []
   m_Position: {x: 264, y: 336, z: 0}
   m_IKOnFeet: 0
-  m_WriteDefaultValues: 1
+  m_WriteDefaultValues: 0
   m_Mirror: 0
   m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0
@@ -4922,7 +4922,7 @@ AnimatorState:
   m_StateMachineBehaviours: []
   m_Position: {x: -60, y: 192, z: 0}
   m_IKOnFeet: 0
-  m_WriteDefaultValues: 1
+  m_WriteDefaultValues: 0
   m_Mirror: 0
   m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0
@@ -4948,7 +4948,7 @@ AnimatorState:
   m_StateMachineBehaviours: []
   m_Position: {x: 264, y: 276, z: 0}
   m_IKOnFeet: 0
-  m_WriteDefaultValues: 1
+  m_WriteDefaultValues: 0
   m_Mirror: 0
   m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0
@@ -4974,7 +4974,7 @@ AnimatorState:
   m_StateMachineBehaviours: []
   m_Position: {x: 264, y: 156, z: 0}
   m_IKOnFeet: 0
-  m_WriteDefaultValues: 1
+  m_WriteDefaultValues: 0
   m_Mirror: 0
   m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0
@@ -5000,12 +5000,12 @@ AnimatorState:
   m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
-  m_WriteDefaultValues: 1
+  m_WriteDefaultValues: 0
   m_Mirror: 0
   m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
-  m_TimeParameterActive: 0
+  m_TimeParameterActive: 1
   m_Motion: {fileID: 7400000, guid: 61a99b5de5e4b6d4c8ed51d9dfd9ddc7, type: 2}
   m_Tag: 
   m_SpeedParameter: 
@@ -5026,7 +5026,7 @@ AnimatorState:
   m_StateMachineBehaviours: []
   m_Position: {x: 264, y: 36, z: 0}
   m_IKOnFeet: 0
-  m_WriteDefaultValues: 1
+  m_WriteDefaultValues: 0
   m_Mirror: 0
   m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0
@@ -5130,7 +5130,7 @@ AnimatorState:
   m_StateMachineBehaviours: []
   m_Position: {x: -60, y: 192, z: 0}
   m_IKOnFeet: 0
-  m_WriteDefaultValues: 1
+  m_WriteDefaultValues: 0
   m_Mirror: 0
   m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0
@@ -5182,12 +5182,12 @@ AnimatorState:
   m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
-  m_WriteDefaultValues: 1
+  m_WriteDefaultValues: 0
   m_Mirror: 0
   m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
-  m_TimeParameterActive: 0
+  m_TimeParameterActive: 1
   m_Motion: {fileID: 7400000, guid: 61a99b5de5e4b6d4c8ed51d9dfd9ddc7, type: 2}
   m_Tag: 
   m_SpeedParameter: 
@@ -5286,7 +5286,7 @@ AnimatorState:
   m_StateMachineBehaviours: []
   m_Position: {x: 264, y: 216, z: 0}
   m_IKOnFeet: 0
-  m_WriteDefaultValues: 1
+  m_WriteDefaultValues: 0
   m_Mirror: 0
   m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0
@@ -5312,7 +5312,7 @@ AnimatorState:
   m_StateMachineBehaviours: []
   m_Position: {x: 264, y: 96, z: 0}
   m_IKOnFeet: 0
-  m_WriteDefaultValues: 1
+  m_WriteDefaultValues: 0
   m_Mirror: 0
   m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0
@@ -5364,7 +5364,7 @@ AnimatorState:
   m_StateMachineBehaviours: []
   m_Position: {x: 264, y: 156, z: 0}
   m_IKOnFeet: 0
-  m_WriteDefaultValues: 1
+  m_WriteDefaultValues: 0
   m_Mirror: 0
   m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0
@@ -5390,7 +5390,7 @@ AnimatorState:
   m_StateMachineBehaviours: []
   m_Position: {x: 264, y: 216, z: 0}
   m_IKOnFeet: 0
-  m_WriteDefaultValues: 1
+  m_WriteDefaultValues: 0
   m_Mirror: 0
   m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0
@@ -5416,7 +5416,7 @@ AnimatorState:
   m_StateMachineBehaviours: []
   m_Position: {x: 264, y: 96, z: 0}
   m_IKOnFeet: 0
-  m_WriteDefaultValues: 1
+  m_WriteDefaultValues: 0
   m_Mirror: 0
   m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0

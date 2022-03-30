@@ -1,5 +1,4 @@
-﻿#if VRC_SDK_VRCSDK2
-#if UNITY_EDITOR
+#if VRC_SDK_VRCSDK2 && UNITY_EDITOR
 
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,6 +8,8 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
 using System;
+using VRC.SDKBase;
+using VRC.SDKBase.Editor;
 
 namespace VRCSDK2
 {
@@ -48,7 +49,7 @@ namespace VRCSDK2
     }
 
     [CustomEditor(typeof(VRCSDK2.VRC_Trigger)), CanEditMultipleObjects]
-    public class VRC_TriggerEditor : Editor
+    public class VRC_TriggerEditor : UnityEditor.Editor
     {
         private List<VRCSDK2.VRC_Trigger.TriggerType> ActiveTypes
         {
@@ -173,7 +174,7 @@ namespace VRCSDK2
 
         private void RenderHelpBox(string message, MessageType messageType)
         {
-            if (VRCSettings.Get().DisplayHelpBoxes || messageType == MessageType.Error || messageType == MessageType.Warning)
+            if (VRCSettings.DisplayHelpBoxes || messageType == MessageType.Error || messageType == MessageType.Warning)
                 EditorGUILayout.HelpBox(message, messageType);
         }
 
@@ -1520,5 +1521,4 @@ namespace VRCSDK2
         }
     }
 }
-#endif
 #endif

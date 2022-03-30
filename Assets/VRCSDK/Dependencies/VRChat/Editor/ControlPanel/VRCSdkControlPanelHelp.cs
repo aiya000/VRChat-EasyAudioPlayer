@@ -12,33 +12,33 @@ public partial class VRCSdkControlPanel : EditorWindow
     [MenuItem("VRChat SDK/Help/Developer FAQ")]
     public static void ShowDeveloperFAQ()
     {
-        if (!RemoteConfig.IsInitialized())
+        if (!ConfigManager.RemoteConfig.IsInitialized())
         {
-            RemoteConfig.Init(() => ShowDeveloperFAQ());
+            ConfigManager.RemoteConfig.Init(() => ShowDeveloperFAQ());
             return;
         }
 
-        Application.OpenURL(RemoteConfig.GetString("sdkDeveloperFaqUrl"));
+        Application.OpenURL(ConfigManager.RemoteConfig.GetString("sdkDeveloperFaqUrl"));
     }
 
     [MenuItem("VRChat SDK/Help/VRChat Discord")]
     public static void ShowVRChatDiscord()
     {
-        if (!RemoteConfig.IsInitialized())
+        if (!ConfigManager.RemoteConfig.IsInitialized())
         {
-            RemoteConfig.Init(() => ShowVRChatDiscord());
+            ConfigManager.RemoteConfig.Init(() => ShowVRChatDiscord());
             return;
         }
 
-        Application.OpenURL(RemoteConfig.GetString("sdkDiscordUrl"));
+        Application.OpenURL(ConfigManager.RemoteConfig.GetString("sdkDiscordUrl"));
     }
 
     [MenuItem("VRChat SDK/Help/Avatar Optimization Tips")]
     public static void ShowAvatarOptimizationTips()
     {
-        if (!RemoteConfig.IsInitialized())
+        if (!ConfigManager.RemoteConfig.IsInitialized())
         {
-            RemoteConfig.Init(() => ShowAvatarOptimizationTips());
+            ConfigManager.RemoteConfig.Init(() => ShowAvatarOptimizationTips());
             return;
         }
 
@@ -48,9 +48,9 @@ public partial class VRCSdkControlPanel : EditorWindow
     [MenuItem("VRChat SDK/Help/Avatar Rig Requirements")]
     public static void ShowAvatarRigRequirements()
     {
-        if (!RemoteConfig.IsInitialized())
+        if (!ConfigManager.RemoteConfig.IsInitialized())
         {
-            RemoteConfig.Init(() => ShowAvatarRigRequirements());
+            ConfigManager.RemoteConfig.Init(() => ShowAvatarRigRequirements());
             return;
         }
 

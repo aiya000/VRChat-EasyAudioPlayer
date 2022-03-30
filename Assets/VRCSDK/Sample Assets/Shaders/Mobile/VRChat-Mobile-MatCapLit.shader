@@ -24,7 +24,8 @@ Shader "VRChat/Mobile/MatCap Lit"
             #pragma vertex vert
             #pragma fragment frag
 
-            #pragma multi_compile_fwdbase 
+            #pragma multi_compile_fwdbase
+            #pragma multi_compile_instancing
             #pragma skip_variants SHADOWS_SHADOWMASK SHADOWS_SCREEN SHADOWS_DEPTH SHADOWS_CUBE
 
             #include "UnityPBSLighting.cginc"
@@ -36,6 +37,7 @@ Shader "VRChat/Mobile/MatCap Lit"
                 float2 uv : TEXCOORD0;
                 float3 normal : NORMAL;
                 float4 color : COLOR;
+                UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
             struct VertexOutput
@@ -48,6 +50,8 @@ Shader "VRChat/Mobile/MatCap Lit"
                 float4 direct : TEXCOORD4;
                 float2 matcapUV : TEXCOORD5;
                 SHADOW_COORDS(7)
+                UNITY_VERTEX_INPUT_INSTANCE_ID
+                UNITY_VERTEX_OUTPUT_STEREO
             };
 
             UNITY_DECLARE_TEX2D(_MainTex); 
@@ -67,6 +71,10 @@ Shader "VRChat/Mobile/MatCap Lit"
             VertexOutput vert (VertexInput v)
             {
                 VertexOutput o;
+                UNITY_SETUP_INSTANCE_ID(v);
+                UNITY_INITIALIZE_OUTPUT(VertexOutput, o);
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
+
                 o.pos = UnityObjectToClipPos(v.vertex);
                 o.worldPos = mul(unity_ObjectToWorld, v.vertex);
                 o.uv = v.uv;
@@ -106,5 +114,6 @@ Shader "VRChat/Mobile/MatCap Lit"
             ENDCG
         }
     }
+
     Fallback "VRChat/Mobile/Diffuse"
 }

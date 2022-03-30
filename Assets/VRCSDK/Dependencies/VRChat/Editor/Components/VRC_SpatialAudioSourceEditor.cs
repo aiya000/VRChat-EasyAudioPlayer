@@ -1,5 +1,4 @@
-﻿#if VRC_SDK_VRCSDK2
-#if UNITY_EDITOR
+#if VRC_SDK_VRCSDK2 && UNITY_EDITOR
 
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +8,7 @@ using System;
 namespace VRCSDK2
 {
     [CustomEditor(typeof(VRCSDK2.VRC_SpatialAudioSource))]
-    public class VRC_SpatialAudioSourceEditor : Editor
+    public class VRC_SpatialAudioSourceEditor : UnityEditor.Editor
     {
         private bool showAdvancedOptions = false;
         private SerializedProperty gainProperty;
@@ -56,5 +55,4 @@ namespace VRCSDK2
         }
     }
 }
-#endif
 #endif

@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis;
+﻿
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
@@ -6,9 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using static UdonSharp.UdonSharpCompiler;
+using static UdonSharp.Compiler.UdonSharpCompiler;
 
-namespace UdonSharp
+namespace UdonSharp.Compiler
 {
 
     /// <summary>
@@ -17,7 +18,6 @@ namespace UdonSharp
     public class CompilationModule
     {
         public UdonSharpProgramAsset programAsset { get; private set; }
-        private string sourceCode;
         UdonSharpSettings settings;
 
         public ResolverContext resolver { get; private set; }
@@ -40,54 +40,44 @@ namespace UdonSharp
 
             if (programAsset.sourceCsScript == null)
                 throw new System.ArgumentException($"Asset '{AssetDatabase.GetAssetPath(programAsset)}' does not have a valid program source to compile from");
-
-
-            sourceCode = UdonSharpUtils.ReadFileTextSync(AssetDatabase.GetAssetPath(programAsset.sourceCsScript));
             
             settings = UdonSharpSettings.GetSettings();
         }
 
-        public CompileTaskResult Compile(List<ClassDefinition> classDefinitions)
+        void LogException(CompileTaskResult result, System.Exception e, SyntaxNode node, out string logMessage)
         {
-            programAsset.compileErrors.Clear();
-            
-            Microsoft.CodeAnalysis.SyntaxTree tree = CSharpSyntaxTree.ParseText(sourceCode);
+            logMessage = "";
 
+            if (node != null)
+            {
+                FileLinePositionSpan lineSpan = node.GetLocation().GetLineSpan();
+
+                CompileError error = new CompileError();
+                error.script = programAsset.sourceCsScript;
+                error.errorStr = $"{e.GetType()}: {e.Message}";
+                error.lineIdx = lineSpan.StartLinePosition.Line;
+                error.charIdx = lineSpan.StartLinePosition.Character;
+
+                result.compileErrors.Add(error);
+            }
+            else
+            {
+                logMessage = e.ToString();
+                Debug.LogException(e);
+            }
+#if UDONSHARP_DEBUG
+            Debug.LogException(e);
+            Debug.LogError(e.StackTrace);
+#endif
+
+        }
+
+        public CompileTaskResult Compile(List<ClassDefinition> classDefinitions, Microsoft.CodeAnalysis.SyntaxTree syntaxTree, string sourceCode, bool isEditorBuild)
+        {
             CompileTaskResult result = new CompileTaskResult();
             result.programAsset = programAsset;
 
-            int errorCount = 0;
-
-            foreach (Diagnostic diagnostic in tree.GetDiagnostics())
-            {
-                if (diagnostic.Severity == DiagnosticSeverity.Error)
-                {
-                    errorCount++;
-
-                    LinePosition linePosition = diagnostic.Location.GetLineSpan().StartLinePosition;
-
-                    CompileError error = new CompileError();
-                    error.script = programAsset.sourceCsScript;
-                    error.errorStr = $"error {diagnostic.Descriptor.Id}: {diagnostic.GetMessage()}";
-                    error.lineIdx = linePosition.Line;
-                    error.charIdx = linePosition.Character;
-
-                    result.compileErrors.Add(error);
-                }
-            }
-
-            if (errorCount > 0)
-            {
-                return result;
-            }
-
             moduleSymbols.OpenSymbolTable();
-            
-            UdonSharpFieldVisitor fieldVisitor = new UdonSharpFieldVisitor(fieldsWithInitializers);
-            fieldVisitor.Visit(tree.GetRoot());
-
-            MethodVisitor methodVisitor = new MethodVisitor(resolver, moduleSymbols, moduleLabels);
-            methodVisitor.Visit(tree.GetRoot());
 
             ClassDebugInfo debugInfo = null;
 
@@ -96,54 +86,86 @@ namespace UdonSharp
                 debugInfo = new ClassDebugInfo(sourceCode, settings == null || settings.includeInlineCode);
             }
 
-            ASTVisitor visitor = new ASTVisitor(resolver, moduleSymbols, moduleLabels, methodVisitor.definedMethods, classDefinitions, debugInfo);
+            MethodVisitor methodVisitor = new MethodVisitor(resolver, moduleSymbols, moduleLabels);
 
             try
             {
-                visitor.Visit(tree.GetRoot());
+                methodVisitor.Visit(syntaxTree.GetRoot());
+            }
+            catch (System.Exception e)
+            {
+                LogException(result, e, methodVisitor.visitorContext.currentNode, out string logMessage);
+
+                programAsset.compileErrors.Add(logMessage);
+
+                ErrorCount++;
+            }
+
+            if (ErrorCount > 0)
+                return result;
+
+            PropertyVisitor propertyVisitor = new PropertyVisitor(resolver, moduleSymbols, moduleLabels);
+
+            try
+            {
+                propertyVisitor.Visit(syntaxTree.GetRoot());
+            }
+            catch (System.Exception e)
+            {
+                LogException(result, e, propertyVisitor.visitorContext.currentNode, out string logMessage);
+
+                programAsset.compileErrors.Add(logMessage);
+
+                ErrorCount++;
+            }
+
+            if (ErrorCount > 0)
+                return result;
+
+            UdonSharpFieldVisitor fieldVisitor = new UdonSharpFieldVisitor(fieldsWithInitializers, resolver, moduleSymbols, moduleLabels, classDefinitions, debugInfo);
+            fieldVisitor.visitorContext.definedProperties = propertyVisitor.definedProperties;
+
+            try
+            {
+                fieldVisitor.Visit(syntaxTree.GetRoot());
+            }
+            catch (System.Exception e)
+            {
+                LogException(result, e, fieldVisitor.visitorContext.currentNode, out string logMessage);
+
+                programAsset.compileErrors.Add(logMessage);
+
+                ErrorCount++;
+            }
+
+            if (ErrorCount > 0)
+                return result;
+
+            ASTVisitor visitor = new ASTVisitor(resolver, moduleSymbols, moduleLabels, methodVisitor.definedMethods, propertyVisitor.definedProperties, classDefinitions, debugInfo);
+            visitor.visitorContext.onModifyCallbackFields = fieldVisitor.visitorContext.onModifyCallbackFields;
+
+            try
+            {
+                visitor.Visit(syntaxTree.GetRoot());
                 visitor.VerifyIntegrity();
             }
             catch (System.Exception e)
             {
-                SyntaxNode currentNode = visitor.visitorContext.currentNode;
-
-                string logMessage = "";
-
-                if (currentNode != null)
-                {
-                    FileLinePositionSpan lineSpan = currentNode.GetLocation().GetLineSpan();
-
-                    CompileError error = new CompileError();
-                    error.script = programAsset.sourceCsScript;
-                    error.errorStr = $"{e.GetType()}: {e.Message}";
-                    error.lineIdx = lineSpan.StartLinePosition.Line;
-                    error.charIdx = lineSpan.StartLinePosition.Character;
-
-                    result.compileErrors.Add(error);
-                }
-                else
-                {
-                    logMessage = e.ToString();
-                    Debug.LogException(e);
-                }
-#if UDONSHARP_DEBUG
-                Debug.LogException(e);
-                Debug.LogError(e.StackTrace);
-#endif
-
+                LogException(result, e, visitor.visitorContext.currentNode, out string logMessage);
+                
                 programAsset.compileErrors.Add(logMessage);
 
-                errorCount++;
+                ErrorCount++;
             }
 
-            if (errorCount > 0)
+            if (ErrorCount > 0)
             {
                 return result;
             }
 
             moduleSymbols.CloseSymbolTable();
 
-            if (errorCount == 0)
+            if (ErrorCount == 0)
             {
                 compiledClassDefinition = classDefinitions.Find(e => e.userClassType == visitor.visitorContext.behaviourUserType);
 
@@ -155,12 +177,13 @@ namespace UdonSharp
 
                 programAsset.behaviourIDHeapVarName = visitor.GetIDHeapVarName();
 
-                programAsset.fieldDefinitions = visitor.visitorContext.localFieldDefinitions;
+                programAsset.fieldDefinitions = fieldVisitor.visitorContext.localFieldDefinitions;
+                programAsset.behaviourSyncMode = visitor.visitorContext.behaviourSyncMode;
 
                 if (debugInfo != null)
                     debugInfo.FinalizeDebugInfo();
 
-                programAsset.debugInfo = debugInfo;
+                UdonSharpEditorCache.Instance.SetDebugInfo(programAsset, isEditorBuild ? UdonSharpEditorCache.DebugInfoType.Editor : UdonSharpEditorCache.DebugInfoType.Client, debugInfo);
             }
 
             return result;
@@ -193,16 +216,18 @@ namespace UdonSharp
             // Prettify the symbol order in the data block
             // Reflection info goes first so that we can use it for knowing what script threw an error from in game logs
             foreach (SymbolDefinition symbol in moduleSymbols.GetAllUniqueChildSymbols()
-                .OrderBy(e => e.declarationType.HasFlag(SymbolDeclTypeFlags.Reflection))
-                .ThenBy(e => e.declarationType.HasFlag(SymbolDeclTypeFlags.Public))
-                .ThenBy(e => e.declarationType.HasFlag(SymbolDeclTypeFlags.Private))
-                .ThenBy(e => e.declarationType.HasFlag(SymbolDeclTypeFlags.This))
-                .ThenBy(e => !e.declarationType.HasFlag(SymbolDeclTypeFlags.Internal))
-                .ThenBy(e => e.declarationType.HasFlag(SymbolDeclTypeFlags.Constant))
+                .OrderBy(e => (e.declarationType & SymbolDeclTypeFlags.Reflection) != 0)
+                .ThenBy(e => (e.declarationType & SymbolDeclTypeFlags.Public) != 0)
+                .ThenBy(e => (e.declarationType & SymbolDeclTypeFlags.Private) != 0)
+                .ThenBy(e => (e.declarationType & SymbolDeclTypeFlags.This) != 0)
+                .ThenBy(e => (e.declarationType & SymbolDeclTypeFlags.Internal) == 0)
+                .ThenBy(e => (e.declarationType &SymbolDeclTypeFlags.Constant) != 0)
                 .ThenByDescending(e => e.symbolCsType.Name)
-                .ThenByDescending(e => e.symbolUniqueName).Reverse())
+                //.ThenByDescending(e => e.symbolUniqueName)
+                .Reverse()
+            )
             {
-                if (symbol.declarationType.HasFlag(SymbolDeclTypeFlags.This))
+                if ((symbol.declarationType & SymbolDeclTypeFlags.This) != 0)
                     builder.AppendLine($"{symbol.symbolUniqueName}: %{symbol.symbolResolvedTypeName}, this", 1);
                 else
                     builder.AppendLine($"{symbol.symbolUniqueName}: %{symbol.symbolResolvedTypeName}, null", 1);

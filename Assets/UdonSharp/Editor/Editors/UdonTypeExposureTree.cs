@@ -68,7 +68,10 @@ namespace UdonSharp.Editors
             }
             else
             {
-                rowLabelStyle.normal.textColor = itemMetadata.rowColor;
+                if (args.selected)
+                    rowLabelStyle.normal.textColor = Color.white;
+                else
+                    rowLabelStyle.normal.textColor = itemMetadata.rowColor;
 
                 if (itemMetadata.isType)
                 {
@@ -327,7 +330,7 @@ namespace UdonSharp.Editors
             if (obsoleteAttribute != null)
                 return;
 
-            if (memberInfo.MemberType == MemberTypes.Property && !((PropertyInfo)memberInfo).GetGetMethod().IsPublic)
+            if (memberInfo.MemberType == MemberTypes.Property && (!((PropertyInfo)memberInfo).GetGetMethod()?.IsPublic ?? false))
                 return;
 
             if (memberInfo.DeclaringType.IsEnum)
@@ -336,8 +339,17 @@ namespace UdonSharp.Editors
             if (ShouldHideMemberTopLevel(memberInfo))
                 return;
 
-            TreeViewItem memberItem = new TreeViewItem(currentID++, parentItem.depth + 1, $"<{memberInfo.MemberType}> {memberInfo.ToString()}");
-            parentItem.AddChild(memberItem);
+            string staticStr = "";
+            {
+                if ((memberInfo is FieldInfo fieldInfo && fieldInfo.IsStatic) ||
+                    (memberInfo is PropertyInfo propertyInfo && (propertyInfo.GetGetMethod()?.IsStatic ?? false)) ||
+                    (memberInfo is MethodInfo methodInfo && methodInfo.IsStatic))
+                {
+                    staticStr = "<Static>";
+                }
+            }
+
+            TreeViewItem memberItem = new TreeViewItem(currentID++, parentItem.depth + 1, $"<{memberInfo.MemberType}>{staticStr} {memberInfo.ToString()}");
 
             TypeItemMetadata itemMetadata = new TypeItemMetadata();
             itemMetadata.member = memberInfo;
@@ -357,7 +369,12 @@ namespace UdonSharp.Editors
                     itemMetadata.exposed = resolver.IsValidUdonMethod(getAccessor);
                     break;
                 case MemberTypes.Property:
-                    string getProperty = resolver.GetUdonMethodName(((PropertyInfo)memberInfo).GetGetMethod(), false);
+                    var getMethod = ((PropertyInfo) memberInfo).GetGetMethod();
+
+                    if (getMethod == null)
+                        return;
+                    
+                    string getProperty = resolver.GetUdonMethodName(getMethod, false);
                     exposedUdonExterns.Remove(getProperty);
 
                     if (((PropertyInfo)memberInfo).GetSetMethod() != null)
@@ -369,6 +386,8 @@ namespace UdonSharp.Editors
                     itemMetadata.exposed = resolver.IsValidUdonMethod(getProperty);
                     break;
             }
+            
+            parentItem.AddChild(memberItem);
 
             itemMetadatas.Add(memberItem, itemMetadata);
 
@@ -573,6 +592,9 @@ namespace UdonSharp.Editors
 
                         foreach (FieldInfo field in type.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static))
                         {
+                            if (field.DeclaringType?.FullName == null) // Fix szome weird types in Odin that don't have a name for their declaring type
+                                continue;
+
                             if (resolver.IsValidUdonMethod(resolver.GetUdonFieldAccessorName(field, FieldAccessorType.Get, false)))
                             {
                                 System.Type returnType = field.FieldType;
@@ -682,7 +704,7 @@ namespace UdonSharp.Editors
                 //itemMetadatas.Add(typeDef, new TypeItemMetadata() { exposed = resolver.ValidateUdonTypeName(resolver.GetUdonTypeName(type), UdonReferenceType.Type) });
 
                 // Internal type
-                TreeViewItem internalTypeDef = new TreeViewItem(currentID++, typeParent.depth + 1, "<type> " + type.Name);
+                TreeViewItem internalTypeDef = new TreeViewItem(currentID++, typeParent.depth + 1, "<Type> " + type.Name);
                 typeParent.AddChild(internalTypeDef);
                 itemMetadatas.Add(internalTypeDef, new TypeItemMetadata() { exposed = UdonEditorManager.Instance.GetTypeFromTypeString(resolver.GetUdonTypeName(type)) != null });
 

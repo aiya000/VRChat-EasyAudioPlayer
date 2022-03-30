@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace VRCSDK2
+namespace VRC.SDKBase
 {
     public class AudioManagerSettings
     {

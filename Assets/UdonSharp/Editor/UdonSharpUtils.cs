@@ -1,12 +1,15 @@
 ﻿
 using Microsoft.CodeAnalysis;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace UdonSharp
 {
-    public static class UdonSharpUtils
+    internal static class UdonSharpUtils
     {
         /// <summary>
         /// Apparently anything that takes a parameter is 5, and anything that doesn't is 1. So These are probably 1 byte per instruction, and 4 bytes per parameter
@@ -144,7 +147,7 @@ namespace UdonSharp
 
         public static bool IsNumericType(System.Type type)
         {
-            return implicitBuiltinConversions.ContainsKey(type);
+            return IsIntegerType(type) || IsFloatType(type);
         }
 
         public static bool IsNumericImplicitCastValid(System.Type targetType, System.Type sourceType)
@@ -198,6 +201,10 @@ namespace UdonSharp
             if (IsNumericImplicitCastValid(targetType, assignee))
                 return true;
 
+            // We use void as a placeholder for a null constant value getting passed in, if null is passed in and the target type is a reference type then we assume they are compatible
+            if (assignee == typeof(void) && !targetType.IsValueType)
+                return true;
+
             // Handle user-defined implicit conversion operators defined on both sides
             // Roughly follows https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/conversions#processing-of-user-defined-implicit-conversions
 
@@ -220,6 +227,60 @@ namespace UdonSharp
             foreach (System.Type operatorType in operatorTypes)
             {
                 IEnumerable<MethodInfo> methods = operatorType.GetMethods(BindingFlags.Public | BindingFlags.Static).Where(e => e.Name == "op_Implicit");
+
+                foreach (MethodInfo methodInfo in methods)
+                {
+                    if (methodInfo.ReturnType == targetType && (methodInfo.GetParameters()[0].ParameterType == assignee || methodInfo.GetParameters()[0].ParameterType == typeof(UnityEngine.Object)))
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static bool IsExplicitlyAssignableFrom(this System.Type targetType, System.Type assignee)
+        {
+            // Normal explicit assign
+            if (targetType.IsAssignableFrom(assignee))
+                return true;
+
+            // Numeric conversions
+            if (IsNumericType(targetType) && IsNumericType(assignee))
+                return true;
+
+            // Handle user-defined implicit conversion operators defined on both sides
+            // Roughly follows https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/conversions#processing-of-user-defined-implicit-conversions
+
+            // I doubt I'll ever deal with properly supporting nullable but ¯\_(ツ)_/¯
+            if (System.Nullable.GetUnderlyingType(targetType) != null)
+                targetType = System.Nullable.GetUnderlyingType(targetType);
+            if (System.Nullable.GetUnderlyingType(assignee) != null)
+                assignee = System.Nullable.GetUnderlyingType(assignee);
+
+            List<System.Type> operatorTypes = new List<System.Type>();
+            operatorTypes.Add(targetType);
+
+            System.Type currentSourceType = assignee;
+            while (currentSourceType != null)
+            {
+                operatorTypes.Add(currentSourceType);
+                currentSourceType = currentSourceType.BaseType;
+            }
+
+            foreach (System.Type operatorType in operatorTypes)
+            {
+                IEnumerable<MethodInfo> methods = operatorType.GetMethods(BindingFlags.Public | BindingFlags.Static).Where(e => e.Name == "op_Implicit");
+
+                foreach (MethodInfo methodInfo in methods)
+                {
+                    if (methodInfo.ReturnType == targetType && (methodInfo.GetParameters()[0].ParameterType == assignee || methodInfo.GetParameters()[0].ParameterType == typeof(UnityEngine.Object)))
+                        return true;
+                }
+            }
+
+            foreach (System.Type operatorType in operatorTypes)
+            {
+                IEnumerable<MethodInfo> methods = operatorType.GetMethods(BindingFlags.Public | BindingFlags.Static).Where(e => e.Name == "op_Explicit");
 
                 foreach (MethodInfo methodInfo in methods)
                 {
@@ -289,26 +350,6 @@ namespace UdonSharp
                 first = typeof(object).GetMethod(first.Name, first.GetParameters().Select(p => p.ParameterType).ToArray());
 
             return first == second;
-        }
-
-        private static readonly HashSet<System.Type> udonSyncTypes = new HashSet<System.Type>()
-        {
-            typeof(bool),
-            typeof(char),
-            typeof(byte), typeof(sbyte),
-            typeof(int), typeof(uint),
-            typeof(long), typeof(ulong),
-            typeof(float), typeof(double),
-            typeof(short), typeof(ushort),
-            typeof(string),
-            typeof(UnityEngine.Vector2), typeof(UnityEngine.Vector3), typeof(UnityEngine.Vector4),
-            typeof(UnityEngine.Quaternion),
-            typeof(UnityEngine.Color32), typeof(UnityEngine.Color),
-        };
-
-        public static bool IsUdonSyncedType(System.Type type)
-        {
-            return udonSyncTypes.Contains(type);
         }
 
         private static readonly HashSet<System.Type> builtinTypes = new HashSet<System.Type>
@@ -421,38 +462,117 @@ namespace UdonSharp
                    IsUserJaggedArray(type);
         }
 
-        // Doesn't work in a multi threaded context, todo: consider making this a concurrent collection or making one for each thread.
-        //private static Dictionary<System.Type, System.Type> userTypeToUdonTypeCache = new Dictionary<System.Type, System.Type>();
-
-        public static System.Type UserTypeToUdonType(System.Type type)
+        public static bool IsUdonWorkaroundType(System.Type type)
         {
-            System.Type udonType = null;
-            //if (!userTypeToUdonTypeCache.TryGetValue(type, out udonType))
+            return type == typeof(VRC.SDK3.Video.Components.VRCUnityVideoPlayer) || type == typeof(VRC.SDK3.Video.Components.AVPro.VRCAVProVideoPlayer);
+        }
+
+        public static System.Type GetRootElementType(System.Type type)
+        {
+            while (type.IsArray)
+                type = type.GetElementType();
+
+            return type;
+        }
+        
+        private static Dictionary<System.Type, System.Type> inheritedTypeMap = null;
+        private readonly static object inheritedTypeMapLock = new object();
+
+        private static Dictionary<System.Type, System.Type> GetInheritedTypeMap()
+        {
+            if (inheritedTypeMap != null)
+                return inheritedTypeMap;
+            
+            lock (inheritedTypeMapLock)
             {
-                if (IsUserDefinedType(type))
+                if (inheritedTypeMap != null)
+                    return inheritedTypeMap;
+                
+                Dictionary<System.Type, System.Type> typeMap = new Dictionary<System.Type, System.Type>();
+
+                IEnumerable<System.Type> typeList = System.AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "VRCSDK3").GetTypes().Where(t => t != null && t.Namespace != null && t.Namespace.StartsWith("VRC.SDK3.Components"));
+
+                foreach (System.Type childType in typeList)
                 {
-                    if (type.IsArray)
+                    if (childType.BaseType != null && childType.BaseType.Namespace.StartsWith("VRC.SDKBase"))
                     {
-                        if (!type.GetElementType().IsArray)
-                        {
-                            udonType = typeof(UnityEngine.Component[]);// Hack because VRC doesn't expose the array type of UdonBehaviour
-                        }
-                        else // Jagged arrays
-                        {
-                            udonType = typeof(object[]);
-                        }
-                    }
-                    else
-                    {
-                        udonType = typeof(VRC.Udon.UdonBehaviour);
+                        typeMap.Add(childType.BaseType, childType);
                     }
                 }
 
-                if (udonType == null)
-                    udonType = type;
+                typeMap.Add(typeof(VRC.SDK3.Video.Components.VRCUnityVideoPlayer), typeof(VRC.SDK3.Video.Components.Base.BaseVRCVideoPlayer));
+                typeMap.Add(typeof(VRC.SDK3.Video.Components.AVPro.VRCAVProVideoPlayer), typeof(VRC.SDK3.Video.Components.Base.BaseVRCVideoPlayer));
 
-                //userTypeToUdonTypeCache.Add(type, udonType);
+                inheritedTypeMap = typeMap;
             }
+
+            return inheritedTypeMap;
+        }
+
+        internal static System.Type RemapBaseType(System.Type type)
+        {
+            var typeMap = GetInheritedTypeMap();
+
+            int arrayDepth = 0;
+            System.Type currentType = type;
+            while (currentType.IsArray)
+            {
+                currentType = currentType.GetElementType();
+                ++arrayDepth;
+            }
+
+            if (typeMap.ContainsKey(currentType))
+            {
+                type = typeMap[currentType];
+
+                while (arrayDepth-- > 0)
+                    type = type.MakeArrayType();
+            }
+
+            return type;
+        }
+        
+        [ThreadStatic]
+        private static Dictionary<System.Type, System.Type> userTypeToUdonTypeCache;
+
+        public static System.Type UserTypeToUdonType(System.Type type)
+        {
+            if (type == null)
+                return null;
+
+            if (userTypeToUdonTypeCache == null)
+                userTypeToUdonTypeCache = new Dictionary<Type, Type>();
+
+            if (userTypeToUdonTypeCache.TryGetValue(type, out System.Type foundType))
+                return foundType;
+            
+            System.Type udonType = null;
+
+            if (IsUserDefinedType(type))
+            {
+                if (type.IsArray)
+                {
+                    if (!type.GetElementType().IsArray)
+                    {
+                        udonType = typeof(UnityEngine.Component[]);// Hack because VRC doesn't expose the array type of UdonBehaviour
+                    }
+                    else // Jagged arrays
+                    {
+                        udonType = typeof(object[]);
+                    }
+                }
+                else
+                {
+                    udonType = typeof(VRC.Udon.UdonBehaviour);
+                }
+            }
+
+            if (udonType == null)
+                udonType = type;
+
+            udonType = RemapBaseType(udonType);
+            
+            userTypeToUdonTypeCache.Add(type, udonType);
 
             return udonType;
         }
@@ -462,6 +582,21 @@ namespace UdonSharp
             MethodInfo buildErrorLogMethod = typeof(UnityEngine.Debug).GetMethod("LogPlayerBuildError", BindingFlags.NonPublic | BindingFlags.Static);
 
             string errorMessage = $"[<color=#FF00FF>UdonSharp</color>] {filePath}({line + 1},{character}): {message}";
+
+            buildErrorLogMethod.Invoke(null, new object[] {
+                        errorMessage,
+                        filePath,
+                        line + 1,
+                        character });
+
+            return errorMessage;
+        }
+
+        public static string LogRuntimeError(string message, string prefix, string filePath, int line, int character)
+        {
+            MethodInfo buildErrorLogMethod = typeof(UnityEngine.Debug).GetMethod("LogPlayerBuildError", BindingFlags.NonPublic | BindingFlags.Static);
+
+            string errorMessage = $"[<color=#FF00FF>UdonSharp</color>]{prefix} {filePath}({line + 1},{character}): {message}";
 
             buildErrorLogMethod.Invoke(null, new object[] {
                         errorMessage,
@@ -492,25 +627,127 @@ namespace UdonSharp
                 catch (System.IO.IOException e)
                 {
                     exception = e;
+
+                    if (e is System.IO.FileNotFoundException ||
+                        e is System.IO.DirectoryNotFoundException)
+                        throw e;
                 }
 
                 if (sourceLoaded)
                     break;
                 else
                     System.Threading.Thread.Sleep(20);
-
-                // 2 second timeout
+                
                 System.TimeSpan timeFromStart = System.DateTime.Now - startTime;
 
                 if (timeFromStart.TotalSeconds > timeoutSeconds)
                 {
-                    UnityEngine.Debug.LogError("Timeout when attempting to read modified C# source file");
+                    UnityEngine.Debug.LogError($"Timeout when attempting to read file {filePath}");
                     if (exception != null)
                         throw exception;
                 }
             }
 
             return fileText;
+        }
+
+        internal static string HashString(string stringToHash)
+        {
+            using (SHA1Managed sha256 = new SHA1Managed())
+            {
+                return BitConverter.ToString(sha256.ComputeHash(Encoding.UTF8.GetBytes(stringToHash))).Replace("-", "");
+            }
+        }
+
+        /// <summary>
+        /// Returns if a normal System.Object is null, and handles when a UnityEngine.Object referenced as a System.Object is null
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        internal static bool IsUnityObjectNull(this object value)
+        {
+            if (value == null)
+                return true;
+
+            if (value is UnityEngine.Object unityEngineObject && unityEngineObject == null)
+                return true;
+
+            return false;
+        }
+
+        internal static string[] GetProjectDefines(bool editorBuild)
+        {
+            List<string> defines = new List<string>();
+
+            foreach (string define in UnityEditor.EditorUserBuildSettings.activeScriptCompilationDefines)
+            {
+                if (!editorBuild)
+                    if (define.StartsWith("UNITY_EDITOR"))
+                        continue;
+
+                defines.Add(define);
+            }
+
+            defines.Add("COMPILER_UDONSHARP");
+
+            return defines.ToArray();
+        }
+
+        internal static void ShowEditorNotification(string notificationString)
+        {
+            typeof(UnityEditor.SceneView).GetMethod("ShowNotification", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static).Invoke(null, new object[] { notificationString });
+        }
+
+        static PropertyInfo getLoadedAssembliesProp;
+        static object getLoadedAssembliesLock = new object();
+
+        internal static Assembly[] GetLoadedEditorAssemblies()
+        {
+            lock (getLoadedAssembliesLock)
+            {
+                if (getLoadedAssembliesProp == null)
+                {
+                    Assembly editorAssembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(e => e.GetName().Name == "UnityEditor");
+
+                    System.Type editorAssembliesType = editorAssembly.GetType("UnityEditor.EditorAssemblies");
+
+                    getLoadedAssembliesProp = editorAssembliesType.GetProperty("loadedAssemblies", BindingFlags.Static | BindingFlags.NonPublic);
+                }
+            }
+
+            return (Assembly[])getLoadedAssembliesProp.GetValue(null);
+        }
+
+        /// <summary>
+        /// Used to prevent Odin's DefaultSerializationBinder from getting a callback to register an assembly in specific cases where it will explode due to https://github.com/mono/mono/issues/20968
+        /// </summary>
+        internal class UdonSharpAssemblyLoadStripScope : IDisposable
+        {
+            Delegate[] originalDelegates;
+
+            public UdonSharpAssemblyLoadStripScope()
+            {
+                FieldInfo info = AppDomain.CurrentDomain.GetType().GetField("AssemblyLoad", BindingFlags.GetField | BindingFlags.NonPublic | BindingFlags.Instance);
+
+                AssemblyLoadEventHandler handler = info.GetValue(AppDomain.CurrentDomain) as AssemblyLoadEventHandler;
+
+                originalDelegates = handler?.GetInvocationList();
+
+                if (originalDelegates != null)
+                {
+                    foreach (Delegate del in originalDelegates)
+                        AppDomain.CurrentDomain.AssemblyLoad -= (AssemblyLoadEventHandler)del;
+                }
+            }
+
+            public void Dispose()
+            {
+                if (originalDelegates != null)
+                {
+                    foreach (Delegate del in originalDelegates)
+                        AppDomain.CurrentDomain.AssemblyLoad += (AssemblyLoadEventHandler)del;
+                }
+            }
         }
     }
 }

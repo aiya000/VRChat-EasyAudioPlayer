@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace VRCSDK2.Validation
+namespace VRC.SDKBase.Validation
 {
     public static class ShaderValidation
     {

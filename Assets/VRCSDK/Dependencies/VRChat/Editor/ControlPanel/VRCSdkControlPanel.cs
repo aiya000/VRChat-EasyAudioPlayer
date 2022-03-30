@@ -1,6 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 using VRC.Core;
+using VRC.SDKBase.Editor;
 
 [ExecuteInEditMode]
 public partial class VRCSdkControlPanel : EditorWindow
@@ -10,10 +11,10 @@ public partial class VRCSdkControlPanel : EditorWindow
     [MenuItem("VRChat SDK/Show Control Panel", false, 600)]
     static void ShowControlPanel()
     {
-        if (!RemoteConfig.IsInitialized())
+        if (!ConfigManager.RemoteConfig.IsInitialized())
         {
             VRC.Core.API.SetOnlineMode(true, "vrchat");
-            RemoteConfig.Init(() => ShowControlPanel());
+            ConfigManager.RemoteConfig.Init(() => ShowControlPanel());
             return;
         }
 
@@ -23,11 +24,6 @@ public partial class VRCSdkControlPanel : EditorWindow
         window.maxSize = new Vector2(SdkWindowWidth + 4, 2000);
         window.Init();
         window.Show();
-    }
-
-    void Update()
-    {
-        Repaint();
     }
 
     public static GUIStyle titleGuiStyle;
@@ -150,6 +146,17 @@ public partial class VRCSdkControlPanel : EditorWindow
 
     public const int SdkWindowWidth = 518;
 
+    private readonly GUIContent[] _toolbarLabels = new GUIContent[4]
+    {
+        new GUIContent("Authentication"),
+        new GUIContent("Builder"),
+        new GUIContent("Content Manager"),
+        new GUIContent("Settings")
+    };
+
+    private readonly bool[] _toolbarOptionsLoggedIn = new bool[4] {true, true, true, true};
+    private readonly bool[] _toolbarOptionsNotLoggedIn = new bool[4] {true, false, false, true};
+
     void OnGUI()
     {
         if (window == null)
@@ -159,7 +166,7 @@ public partial class VRCSdkControlPanel : EditorWindow
         }
 
         if (_bannerImage == null)
-            _bannerImage = AssetDatabase.LoadAssetAtPath("Assets/VRCSDK/Dependencies/VRChat/SdkGraphics/SDK_Panel_Banner.png", typeof(Texture2D)) as Texture2D;
+            _bannerImage = Resources.Load<Texture2D>("SDK_Panel_Banner");
 
         GUILayout.BeginHorizontal();
         GUILayout.FlexibleSpace();
@@ -183,22 +190,22 @@ public partial class VRCSdkControlPanel : EditorWindow
 
         EnvConfig.SetActiveSDKDefines();
 
-        #if VRC_SDK_VRCSDK2
-            VRCSettings.Get().activeWindowPanel = GUILayout.Toolbar(VRCSettings.Get().activeWindowPanel, new string[] { "Authentication", "Builder", "Content Manager", "Settings" }, GUILayout.Width(SdkWindowWidth));
-            int showPanel = VRCSettings.Get().activeWindowPanel;
-        #elif VRC_SDK_VRCSDK3
-            VRC.SDK3.Editor.VRCSettings.Get().activeWindowPanel = GUILayout.Toolbar(VRC.SDK3.Editor.VRCSettings.Get().activeWindowPanel, new string[] { "Authentication", "Builder", "Content Manager", "Settings" }, GUILayout.Width(SdkWindowWidth));
-            int showPanel = VRC.SDK3.Editor.VRCSettings.Get().activeWindowPanel;
-        #else
-            int showPanel = 0;
-        #endif
+        int showPanel = GUILayout.Toolbar(VRCSettings.ActiveWindowPanel, _toolbarLabels, APIUser.IsLoggedIn ? _toolbarOptionsLoggedIn : _toolbarOptionsNotLoggedIn,  null, GUILayout.Width(SdkWindowWidth));
+
+        // Only show Account or Settings panels if not logged in
+        if (APIUser.IsLoggedIn == false && showPanel != 3)
+        {
+            showPanel = 0;
+        }
+
+        if (showPanel != VRCSettings.ActiveWindowPanel)
+        {
+            VRCSettings.ActiveWindowPanel = showPanel;
+        }
 
         GUILayout.EndVertical();
         GUILayout.FlexibleSpace();
         GUILayout.EndHorizontal();
-
-        if (APIUser.IsLoggedInWithCredentials == false && showPanel != 3)
-            showPanel = 0;
 
         switch (showPanel)
         {

@@ -1,27 +1,28 @@
-﻿using System;
+﻿#if UNITY_2019_3_OR_NEWER
+using UnityEngine.UIElements;
+using UnityEditor.UIElements;
+#else
+using UnityEngine.Experimental.UIElements;
+using UnityEditor.Experimental.UIElements;
+#endif
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
-using UnityEditor.Experimental.UIElements.GraphView;
 using UnityEngine;
-using UnityEngine.Experimental.UIElements;
-using VRC.Udon.Common.Interfaces;
-using VRC.Udon.Graph;
-using VRC.Udon.Serialization;
-using UnityEditor.Experimental.UIElements;
-using System.Collections;
 
 namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
 {
     public class UdonArrayInspector<T> : VisualElement, IArrayProvider
     {
         private ScrollView _scroller;
-        private VisualContainer _container;
-        private List<INotifyValueChanged<T>> _fields = new List<INotifyValueChanged<T>>();
+        private List<VisualElement> _fields = new List<VisualElement>();
         private IntegerField _sizeField;
+        private Action<object> _setValueCallback;
 
-        public UdonArrayInspector(object value)
+        public UdonArrayInspector(Action<object> valueChangedAction, object value)
         {
+            _setValueCallback = valueChangedAction;
+            
             AddToClassList("input-inspector");
             var resizeContainer = new VisualElement()
             {
@@ -31,7 +32,11 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
 
             _sizeField = new IntegerField();
             _sizeField.isDelayed = true;
+            #if UNITY_2019_3_OR_NEWER
+            _sizeField.RegisterValueChangedCallback((evt) =>
+            #else
             _sizeField.OnValueChanged((evt) =>
+            #endif
             {
                 ResizeTo(evt.newValue);
             });
@@ -43,9 +48,6 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
                 name = "array-scroll",
             };
             Add(_scroller);
-
-            _container = new VisualContainer();
-            _scroller.SetContents(_container);
 
             if (value == null)
             {
@@ -63,15 +65,13 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
                 }
 
                 // Populate fields and their values from passed-in array
-                _fields = new List<INotifyValueChanged<T>>();
+                _fields = new List<VisualElement>();
                 foreach (var item in values)
                 {
-                    var field = GetValueField() as INotifyValueChanged<T>;
-                    field.value = (T)item;
-
+                    var field = GetValueField(item);
                     _fields.Add(field);
 
-                    _container.Add(field as VisualElement);
+                    _scroller.contentContainer.Add(field);
                 }
 
                 _sizeField.value = values.Count();
@@ -87,12 +87,12 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
             if(_fields == null)
             {
                 Debug.Log($"Creating from Scratch");
-                _fields = new List<INotifyValueChanged<T>>();
+                _fields = new List<VisualElement>();
                 for (int i = 0; i < newValue; i++)
                 {
-                    var field = GetValueField() as INotifyValueChanged<T>;
+                    var field = GetValueField(null);
                     _fields.Add(field);
-                    _container.Add(field as VisualElement);
+                    _scroller.contentContainer.Add(field as VisualElement);
                 }
                 return;
             }
@@ -115,7 +115,7 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
                 int numberToAdd = newValue - _fields.Count;
                 for (int i = 0; i < numberToAdd; i++)
                 {
-                    var field = GetValueField() as INotifyValueChanged<T>;
+                    var field = GetValueField(null);
                     if (field == null)
                     {
                         Debug.LogWarning($"Sorry, can't edit object of type {typeof(T).ToString()} yet.");
@@ -123,50 +123,16 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
                     }
                     _fields.Add(field);
 
-                    _container.Add(field as VisualElement);
+                    _scroller.contentContainer.Add(field as VisualElement);
                 }
                 MarkDirtyRepaint();
                 return;
             }
         }
 
-        private INotifyValueChanged<T> GetValueField()
+        private VisualElement GetValueField(object value)
         {
-            var typeString = typeof(T).ToString();
-            switch (typeString)
-            {
-                case "UnityEngine.Bounds":
-                    return new BoundsField() as INotifyValueChanged<T>;
-                case "UnityEngine.Color":
-                    return new ColorField() as INotifyValueChanged<T>;
-                case "UnityEngine.AnimationCurve":
-                    return new CurveField() as INotifyValueChanged<T>;
-                case "System.Double":
-                    return new DoubleField() as INotifyValueChanged<T>;
-                case "System.Single":
-                    return new FloatField() as INotifyValueChanged<T>;
-                case "UnityEngine.Gradient":
-                    return new GradientField() as INotifyValueChanged<T>;
-                case "System.Int32":
-                    return new IntegerField() as INotifyValueChanged<T>;
-                case "System.Int64":
-                    return new LongField() as INotifyValueChanged<T>;
-                case "UnityEngine.Rect":
-                    return new RectField() as INotifyValueChanged<T>;
-                case "System.String":
-                    return new TextField() as INotifyValueChanged<T>;
-                case "UnityEngine.Vector2":
-                    return new Vector2Field() as INotifyValueChanged<T>;
-                case "UnityEngine.Vector3":
-                    return new Vector3Field() as INotifyValueChanged<T>;
-                case "UnityEngine.Vector4":
-                    return new Vector4Field() as INotifyValueChanged<T>;
-                case "System.Boolean":
-                    return new Toggle() as INotifyValueChanged<T>;
-                default:
-                    Debug.LogWarning($"Couldn't find field for type {typeString}");
-                    return null;
-            }
+            return UdonFieldFactory.CreateField(typeof(T), value, _setValueCallback);
         }
 
         public object GetValues()
@@ -174,7 +140,8 @@ namespace VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView
             var result = new List<T>();
             for (int i = 0; i < _fields.Count; i++)
             {
-                result.Add(_fields[i].value);
+                var f = (_fields[i] as INotifyValueChanged<T>);
+                result.Add(f.value);
             }
             return result.ToArray();
         }

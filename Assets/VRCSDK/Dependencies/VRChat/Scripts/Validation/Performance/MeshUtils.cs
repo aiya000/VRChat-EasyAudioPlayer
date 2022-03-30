@@ -1,7 +1,6 @@
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace VRCSDK2.Validation.Performance
+namespace VRC.SDKBase.Validation.Performance
 {
     public static class MeshUtils
     {

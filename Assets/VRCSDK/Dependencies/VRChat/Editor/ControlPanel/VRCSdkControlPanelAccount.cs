@@ -2,6 +2,7 @@
 using UnityEditor;
 using VRC.Core;
 using System.Text.RegularExpressions;
+using VRC.SDKBase.Editor;
 
 public partial class VRCSdkControlPanel : EditorWindow
 {
@@ -12,21 +13,17 @@ public partial class VRCSdkControlPanel : EditorWindow
 
     public static bool FutureProofPublishEnabled { get { return UnityEditor.EditorPrefs.GetBool("futureProofPublish", DefaultFutureProofPublishEnabled); } }
     //public static bool DefaultFutureProofPublishEnabled { get { return !SDKClientUtilities.IsInternalSDK(); } }
-    public static bool DefaultFutureProofPublishEnabled { get { return true; } }
+    public static bool DefaultFutureProofPublishEnabled { get { return false; } }
 
     static string storedUsername
     {
         get
         {
-            if (EditorPrefs.HasKey("sdk#username"))
-                return EditorPrefs.GetString("sdk#username");
             return null;
         }
         set
         {
-            EditorPrefs.SetString("sdk#username", value);
-            if (string.IsNullOrEmpty(value))
-                EditorPrefs.DeleteKey("sdk#username");
+            EditorPrefs.DeleteKey("sdk#username");
         }
     }
 
@@ -34,52 +31,16 @@ public partial class VRCSdkControlPanel : EditorWindow
     {
         get
         {
-            if (EditorPrefs.HasKey("sdk#password"))
-                return EditorPrefs.GetString("sdk#password");
             return null;
         }
         set
         {
-            EditorPrefs.SetString("sdk#password", value);
-            if (string.IsNullOrEmpty(value))
-                EditorPrefs.DeleteKey("sdk#password");
+            EditorPrefs.DeleteKey("sdk#password");
         }
     }
 
-    static string _username = null;
-    static string _password = null;
-
-    static string username
-    {
-        get
-        {
-            if (!string.IsNullOrEmpty(_username))
-                return _username;
-            else
-                _username = storedUsername;
-            return _username;
-        }
-        set
-        {
-            _username = value;
-        }
-    }
-
-    static string password
-    {
-        get
-        {
-            if (!string.IsNullOrEmpty(_password))
-                return _password;
-            else
-                _password = storedPassword;
-            return _password;
-        }
-        set
-        {
-            _password = value;
-        }
-    }
+    static string username { get; set; } = null;
+    static string password { get; set; } = null;
 
     static ApiServerEnvironment serverEnvironment
     {
@@ -124,8 +85,8 @@ public partial class VRCSdkControlPanel : EditorWindow
         if (isInitialized)
             return;
 
-        if (!APIUser.IsLoggedInWithCredentials && ApiCredentials.Load())
-            APIUser.FetchCurrentUser((c) => AnalyticsSDK.LoggedInUserChanged(c.Model as APIUser), null);
+        if (!APIUser.IsLoggedIn && ApiCredentials.Load())
+            APIUser.InitialFetchCurrentUser((c) => AnalyticsSDK.LoggedInUserChanged(c.Model as APIUser), null);
 
         clientInstallPath = SDKClientUtilities.GetSavedVRCInstallPath();
         if (string.IsNullOrEmpty(clientInstallPath))
@@ -145,14 +106,14 @@ public partial class VRCSdkControlPanel : EditorWindow
 
         EditorGUILayout.BeginVertical();
 
-        if (APIUser.IsLoggedInWithCredentials)
+        if (APIUser.IsLoggedIn)
         {
             OnCreatorStatusGUI();
         }
 
         EditorGUILayout.EndVertical();
 
-        return APIUser.IsLoggedInWithCredentials;
+        return APIUser.IsLoggedIn;
     }
 
     static bool OnAccountGUI()
@@ -173,7 +134,7 @@ public partial class VRCSdkControlPanel : EditorWindow
         {
             EditorGUILayout.LabelField("Signing in as " + username + ".");
         }
-        else if (APIUser.IsLoggedInWithCredentials)
+        else if (APIUser.IsLoggedIn)
         {
             if (Status != "Connected")
                 EditorGUILayout.LabelField(Status);
@@ -199,23 +160,18 @@ public partial class VRCSdkControlPanel : EditorWindow
             InitAccount();
 
             ApiServerEnvironment newEnv = ApiServerEnvironment.Release;
-            #if VRC_SDK_VRCSDK2
-                if (VRCSettings.Get().DisplayAdvancedSettings)
+                if (VRCSettings.DisplayAdvancedSettings)
                     newEnv = (ApiServerEnvironment)EditorGUILayout.EnumPopup("Use API", serverEnvironment);
-            #elif VRC_SDK_VRCSDK3
-                if (VRC.SDK3.Editor.VRCSettings.Get().DisplayAdvancedSettings)
-                    newEnv = (ApiServerEnvironment)EditorGUILayout.EnumPopup("Use API", serverEnvironment);
-            #endif
             if (serverEnvironment != newEnv)
                 serverEnvironment = newEnv;
 
-            username = EditorGUILayout.TextField("Username", username);
+            username = EditorGUILayout.TextField("Username/Email", username);
             password = EditorGUILayout.PasswordField("Password", password);
 
             if (GUILayout.Button("Sign In"))
                 SignIn(true);
             if (GUILayout.Button("Sign up"))
-                Application.OpenURL("http://vrchat.com/register");
+                Application.OpenURL("https://vrchat.com/register");
         }
 
         if (showTwoFactorAuthenticationEntry)
@@ -259,11 +215,11 @@ public partial class VRCSdkControlPanel : EditorWindow
 
     void ShowAccount()
     {
-        if (VRC.Core.RemoteConfig.IsInitialized())
+        if (VRC.Core.ConfigManager.RemoteConfig.IsInitialized())
         {
-            if (VRC.Core.RemoteConfig.HasKey("sdkUnityVersion"))
+            if (VRC.Core.ConfigManager.RemoteConfig.HasKey("sdkUnityVersion"))
             {
-                string sdkUnityVersion = VRC.Core.RemoteConfig.GetString("sdkUnityVersion");
+                string sdkUnityVersion = VRC.Core.ConfigManager.RemoteConfig.GetString("sdkUnityVersion");
                 if (string.IsNullOrEmpty(sdkUnityVersion))
                     EditorGUILayout.LabelField("Could not fetch remote config.");
                 else if (Application.unityVersion != sdkUnityVersion)
@@ -276,7 +232,7 @@ public partial class VRCSdkControlPanel : EditorWindow
         else
         {
             VRC.Core.API.SetOnlineMode(true, "vrchat");
-            VRC.Core.RemoteConfig.Init();
+            VRC.Core.ConfigManager.RemoteConfig.Init();
         }
 
         OnAccountGUI();
@@ -498,7 +454,7 @@ public partial class VRCSdkControlPanel : EditorWindow
     {
         get
         {
-            if (!APIUser.IsLoggedInWithCredentials)
+            if (!APIUser.IsLoggedIn)
                 return error == null ? "Please log in." : "Error in authenticating: " + error;
             if (signingIn)
                 return "Logging in.";
@@ -522,14 +478,16 @@ public partial class VRCSdkControlPanel : EditorWindow
             delegate (ApiModelContainer<APIUser> c)
             {
                 APIUser user = c.Model as APIUser;
-                if (c.Cookies.ContainsKey("auth"))
+                if (c.Cookies.ContainsKey("twoFactorAuth"))
+                    ApiCredentials.Set(user.username, username, "vrchat", c.Cookies["auth"], c.Cookies["twoFactorAuth"]);
+                else if (c.Cookies.ContainsKey("auth"))
                     ApiCredentials.Set(user.username, username, "vrchat", c.Cookies["auth"]);
                 else
                     ApiCredentials.SetHumanName(user.username);
                 signingIn = false;
                 error = null;
-                storedUsername = username;
-                storedPassword = password;
+                storedUsername = null;
+                storedPassword = null;
                 AnalyticsSDK.LoggedInUserChanged(user);
 
                 if (!APIUser.CurrentUser.canPublishAllContent)
@@ -564,9 +522,8 @@ public partial class VRCSdkControlPanel : EditorWindow
         lock (syncObject)
         {
             if (signingIn
-                || APIUser.IsLoggedInWithCredentials
-                || (!explicitAttempt && string.IsNullOrEmpty(storedUsername))
-                || (!explicitAttempt && string.IsNullOrEmpty(storedPassword)))
+                || APIUser.IsLoggedIn
+                || (!explicitAttempt && string.IsNullOrEmpty(storedUsername)))
                 return;
 
             signingIn = true;

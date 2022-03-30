@@ -2,8 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using VRC.Core;
+using VRC.SDKBase;
 
 namespace VRCSDK2
 {
@@ -27,6 +27,7 @@ namespace VRCSDK2
         public Toggle developerAvatar;
         public Toggle sharePrivate;
         public Toggle sharePublic;
+        public Toggle tagFallback;
 
         public UnityEngine.UI.Button uploadButton;
 
@@ -64,7 +65,7 @@ namespace VRCSDK2
             if (!ApiCredentials.Load())
                 LoginErrorCallback("Not logged in");
             else
-                APIUser.FetchCurrentUser(
+                APIUser.InitialFetchCurrentUser(
                     delegate (ApiModelContainer<APIUser> c)
                     {
                         pipelineManager.user = c.Model as APIUser;
@@ -122,15 +123,36 @@ namespace VRCSDK2
                         developerAvatar.isOn = apiAvatar.tags.Contains("developer");
                         sharePrivate.isOn = apiAvatar.releaseStatus.Contains("private");
                         sharePublic.isOn = apiAvatar.releaseStatus.Contains("public");
+
+                        tagFallback.isOn = apiAvatar.tags.Contains("author_quest_fallback");
+                        tagFallback.transform.parent.gameObject.SetActive(true);
+
+                        switch (pipelineManager.fallbackStatus)
+                        {
+                            case PipelineManager.FallbackStatus.Valid:
+#if UNITY_ANDROID
+                                tagFallback.interactable = true;
+                                tagFallback.GetComponentInChildren<Text>().text = "Use for Fallback";
+#else
+                                tagFallback.interactable = false;
+                                tagFallback.GetComponentInChildren<Text>().text = "Use for Fallback (change only with Android upload)";
+#endif
+                                break;
+                            case PipelineManager.FallbackStatus.InvalidPerformance:
+                            case PipelineManager.FallbackStatus.InvalidRig:
+                                tagFallback.isOn = false; // need to remove tag on this upload, the updated version is not up-to-spec
+                                tagFallback.interactable = false;
+                                tagFallback.GetComponentInChildren<Text>().text = "Use for Fallback (avatar not valid, tag will be cleared)";
+                                break;
+                        }
+
                         blueprintDescription.text = apiAvatar.description;
                         shouldUpdateImageToggle.interactable = true;
                         shouldUpdateImageToggle.isOn = false;
                         liveBpImage.enabled = false;
                         bpImage.enabled = true;
 
-                        ImageDownloader.DownloadImage(apiAvatar.imageUrl, 0, delegate (Texture2D obj) {
-                            bpImage.texture = obj;
-                        });
+                        ImageDownloader.DownloadImage(apiAvatar.imageUrl, 0, (Texture2D obj) => bpImage.texture = obj, null);
                     }
                     else // user does not own apiAvatar id associated with descriptor
                     {
@@ -146,6 +168,36 @@ namespace VRCSDK2
                     shouldUpdateImageToggle.isOn = true;
                     liveBpImage.enabled = true;
                     bpImage.enabled = false;
+                    tagFallback.isOn = false;
+                    
+                    // Janky fix for an avatar's blueprint image not showing up the very first time you press publish in a project until you resize the window
+                    // can remove if we fix the underlying issue or move publishing out of Play Mode
+                    string firstTimeResize = $"{Application.identifier}-firstTimeResize";
+                    if (!PlayerPrefs.HasKey(firstTimeResize))
+                    {
+                        GameViewMethods.ResizeGameView();
+                        PlayerPrefs.SetInt(firstTimeResize, 1);
+                    }
+
+                    tagFallback.transform.parent.gameObject.SetActive(true);
+                    switch (pipelineManager.fallbackStatus)
+                    {
+                        case PipelineManager.FallbackStatus.Valid:
+#if UNITY_ANDROID
+                            tagFallback.interactable = true;
+                            tagFallback.GetComponentInChildren<Text>().text = "Use for Fallback";
+#else
+                            tagFallback.interactable = false;
+                            tagFallback.GetComponentInChildren<Text>().text = "Use for Fallback (change only with Android upload)";
+#endif
+                            break;
+                        case PipelineManager.FallbackStatus.InvalidPerformance:
+                        case PipelineManager.FallbackStatus.InvalidRig:
+                            tagFallback.transform.parent.gameObject.SetActive(true);
+                            tagFallback.interactable = false;
+                            tagFallback.GetComponentInChildren<Text>().text = "Use for Fallback (avatar not valid, tag will be cleared)";
+                            break;
+                    }
                 }
             }
             else
@@ -175,7 +227,6 @@ namespace VRCSDK2
             UnityEditor.EditorPrefs.SetBool("VRCSDK2_content_violence", contentViolence.isOn);
             UnityEditor.EditorPrefs.SetBool("VRCSDK2_content_gore", contentGore.isOn);
             UnityEditor.EditorPrefs.SetBool("VRCSDK2_content_other", contentOther.isOn);
-
 
             if (string.IsNullOrEmpty(apiAvatar.id))
             {
@@ -260,6 +311,9 @@ namespace VRCSDK2
                 if (developerAvatar.isOn)
                     tags.Add("developer");
             }
+
+            if (tagFallback.isOn)
+                tags.Add("author_quest_fallback");
 
             return tags;
         }
@@ -351,9 +405,7 @@ namespace VRCSDK2
             {
                 bpImage.enabled = true;
                 liveBpImage.enabled = false;
-                ImageDownloader.DownloadImage(apiAvatar.imageUrl, 0, delegate (Texture2D obj) {
-                    bpImage.texture = obj;
-                });
+                ImageDownloader.DownloadImage(apiAvatar.imageUrl, 0, obj => bpImage.texture = obj, null);
             }
         }
 

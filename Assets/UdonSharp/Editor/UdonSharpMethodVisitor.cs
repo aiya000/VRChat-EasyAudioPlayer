@@ -4,111 +4,75 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace UdonSharp
+namespace UdonSharp.Compiler
 {
-    public class MethodVisitor : CSharpSyntaxWalker
+    public class MethodVisitor : UdonSharpSyntaxWalker
     {
         public List<MethodDefinition> definedMethods = new List<MethodDefinition>();
-        private ASTVisitorContext visitorContext;
-        
-        private Stack<string> namespaceStack = new Stack<string>();
 
         public MethodVisitor(ResolverContext resolver, SymbolTable rootTable, LabelTable labelTable)
-            : base(SyntaxWalkerDepth.Node)
+            : base(UdonSharpSyntaxWalkerDepth.ClassDefinitions, resolver, rootTable, labelTable)
         {
-            visitorContext = new ASTVisitorContext(resolver, rootTable, labelTable);
         }
 
-        public override void VisitUsingDirective(UsingDirectiveSyntax node)
+        readonly string[] builtinMethodNames = new string[]
         {
-            using (ExpressionCaptureScope namespaceCapture = new ExpressionCaptureScope(visitorContext, null))
+            "SendCustomEvent",
+            "SendCustomNetworkEvent",
+            "SetProgramVariable",
+            "GetProgramVariable",
+            "VRCInstantiate",
+            "GetUdonTypeID",
+            "GetUdonTypeName",
+        };
+
+        bool HasRecursiveMethodAttribute(MethodDeclarationSyntax node)
+        {
+            if (node.AttributeLists != null)
             {
-                Visit(node.Name);
-
-                if (!namespaceCapture.IsNamespace())
-                    throw new System.Exception("Did not capture a valid namespace");
-
-                visitorContext.resolverContext.AddNamespace(namespaceCapture.captureNamespace);
-            }
-        }
-
-        public override void VisitNamespaceDeclaration(NamespaceDeclarationSyntax node)
-        {
-            string[] namespaces = node.Name.ToFullString().TrimEnd('\r', '\n', ' ').Split('.');
-
-            foreach (string currentNamespace in namespaces)
-                namespaceStack.Push(currentNamespace);
-
-            base.VisitNamespaceDeclaration(node);
-
-            for (int i = 0; i < namespaces.Length; ++i)
-                namespaceStack.Pop();
-        }
-
-        public override void VisitClassDeclaration(ClassDeclarationSyntax node)
-        {
-            using (ExpressionCaptureScope classTypeCapture = new ExpressionCaptureScope(visitorContext, null))
-            {
-                foreach (string namespaceToken in namespaceStack.Reverse())
+                foreach (AttributeListSyntax attributeList in node.AttributeLists)
                 {
-                    classTypeCapture.ResolveAccessToken(namespaceToken);
+                    foreach (AttributeSyntax attribute in attributeList.Attributes)
+                    {
+                        using (ExpressionCaptureScope attributeTypeCapture = new ExpressionCaptureScope(visitorContext, null))
+                        {
+                            attributeTypeCapture.isAttributeCaptureScope = true;
+                            Visit(attribute.Name);
 
-                    if (classTypeCapture.IsNamespace())
-                        visitorContext.resolverContext.AddNamespace(classTypeCapture.captureNamespace);
+                            if (attributeTypeCapture.captureType == typeof(RecursiveMethodAttribute))
+                                return true;
+                        }
+                    }
                 }
-
-                visitorContext.resolverContext.AddNamespace(classTypeCapture.captureNamespace);
-
-                classTypeCapture.ResolveAccessToken(node.Identifier.ValueText);
-
-                if (!classTypeCapture.IsType())
-                    throw new System.Exception($"User type {node.Identifier.ValueText} could not be found");
             }
 
-            base.VisitClassDeclaration(node);
-        }
-
-        public override void VisitIdentifierName(IdentifierNameSyntax node)
-        {
-            if (visitorContext.topCaptureScope != null)
-                visitorContext.topCaptureScope.ResolveAccessToken(node.Identifier.ValueText);
-        }
-
-        public override void VisitPredefinedType(PredefinedTypeSyntax node)
-        {
-            if (visitorContext.topCaptureScope != null)
-                visitorContext.topCaptureScope.ResolveAccessToken(node.Keyword.ValueText);
-        }
-
-        public override void VisitArrayType(ArrayTypeSyntax node)
-        {
-            using (ExpressionCaptureScope arrayTypeCaptureScope = new ExpressionCaptureScope(visitorContext, visitorContext.topCaptureScope))
-            {
-                Visit(node.ElementType);
-
-                for (int i = 0; i < node.RankSpecifiers.Count; ++i)
-                    arrayTypeCaptureScope.MakeArrayType();
-            }
-        }
-
-        public override void VisitArrayRankSpecifier(ArrayRankSpecifierSyntax node)
-        {
-            foreach (ExpressionSyntax size in node.Sizes)
-                Visit(size);
+            return false;
         }
 
         public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
         {
+            UpdateSyntaxNode(node);
+
             MethodDefinition methodDefinition = new MethodDefinition();
 
             methodDefinition.declarationFlags = node.Modifiers.HasModifier("public") ? MethodDeclFlags.Public : MethodDeclFlags.Private;
+            if (HasRecursiveMethodAttribute(node))
+                methodDefinition.declarationFlags |= MethodDeclFlags.RecursiveMethod;
+
             methodDefinition.methodUdonEntryPoint = visitorContext.labelTable.GetNewJumpLabel("udonMethodEntryPoint");
             methodDefinition.methodUserCallStart = visitorContext.labelTable.GetNewJumpLabel("userMethodCallEntry");
             methodDefinition.methodReturnPoint = visitorContext.labelTable.GetNewJumpLabel("methodReturnPoint");
-            
-            methodDefinition.originalMethodName = node.Identifier.ValueText;
+
+            string methodName = node.Identifier.ValueText;
+            methodDefinition.originalMethodName = methodName;
             methodDefinition.uniqueMethodName = methodDefinition.originalMethodName;
             visitorContext.resolverContext.ReplaceInternalEventName(ref methodDefinition.uniqueMethodName);
+
+            foreach (string builtinMethodName in builtinMethodNames)
+            {
+                if (methodName == builtinMethodName)
+                    throw new System.Exception($"Cannot define method '{methodName}' with the same name as a built-in UdonSharpBehaviour method");
+            }
 
             // Resolve the type arguments
             using (ExpressionCaptureScope returnTypeCapture = new ExpressionCaptureScope(visitorContext, null))
@@ -117,8 +81,10 @@ namespace UdonSharp
 
                 if (returnTypeCapture.captureType != typeof(void))
                 {
-                    //methodDefinition.returnType = returnTypeCapture.captureType;
                     methodDefinition.returnSymbol = visitorContext.topTable.CreateNamedSymbol("returnValSymbol", returnTypeCapture.captureType, SymbolDeclTypeFlags.Internal);
+
+                    if (!visitorContext.resolverContext.IsValidUdonType(returnTypeCapture.captureType))
+                        throw new System.NotSupportedException($"Udon does not support return values of type '{returnTypeCapture.captureType.Name}' yet");
                 }
             }
 
@@ -133,9 +99,16 @@ namespace UdonSharp
                 using (ExpressionCaptureScope paramTypeCapture = new ExpressionCaptureScope(visitorContext, null))
                 {
                     Visit(parameter.Type);
+
+                    if (!paramTypeCapture.IsType())
+                        throw new System.TypeLoadException($"The type or namespace name '{parameter.Type}' could not be found (are you missing a using directive?)");
+
+                    if (!visitorContext.resolverContext.IsValidUdonType(paramTypeCapture.captureType))
+                        throw new System.NotSupportedException($"Udon does not support method parameters of type '{paramTypeCapture.captureType.Name}' yet");
+
                     paramDef.type = paramTypeCapture.captureType;
                     paramDef.symbolName = parameter.Identifier.ValueText;
-                    paramDef.paramSymbol = visitorContext.topTable.CreateNamedSymbol(parameter.Identifier.ValueText, paramDef.type, SymbolDeclTypeFlags.Local);
+                    paramDef.paramSymbol = visitorContext.topTable.CreateNamedSymbol(parameter.Identifier.ValueText, paramDef.type, SymbolDeclTypeFlags.Local | SymbolDeclTypeFlags.MethodParameter);
                 }
 
                 methodDefinition.parameters[i] = paramDef;

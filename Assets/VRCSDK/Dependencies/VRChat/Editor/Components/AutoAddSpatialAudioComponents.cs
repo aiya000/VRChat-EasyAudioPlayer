@@ -11,8 +11,8 @@ public class AutoAddSpatialAudioComponents
 
     static AutoAddSpatialAudioComponents()
     {
-        EditorApplication.hierarchyWindowChanged += OnHierarchyWindowChanged;
-		EditorApplication.projectWindowChanged += OnProjectWindowChanged;
+        EditorApplication.hierarchyChanged += OnHierarchyWindowChanged;
+		EditorApplication.projectChanged += OnProjectWindowChanged;
 		RegisterCallbacks();
     }
 
@@ -20,7 +20,7 @@ public class AutoAddSpatialAudioComponents
     {
         if (!Enabled)
         {
-            EditorApplication.hierarchyWindowChanged -= OnHierarchyWindowChanged;
+            EditorApplication.hierarchyChanged -= OnHierarchyWindowChanged;
             return;
         }
 
@@ -83,9 +83,9 @@ public class AutoAddSpatialAudioComponents
         {
             bool isAvatar = audioSrc.GetComponentInParent<VRC.SDKBase.VRC_AvatarDescriptor>();
 
-            vrcsp.Gain = isAvatar ? VRCSDK2.AudioManagerSettings.AvatarAudioMaxGain : VRCSDK2.AudioManagerSettings.RoomAudioGain;
+            vrcsp.Gain = isAvatar ? AudioManagerSettings.AvatarAudioMaxGain : AudioManagerSettings.RoomAudioGain;
             vrcsp.Near = 0;
-            vrcsp.Far = isAvatar ? VRCSDK2.AudioManagerSettings.AvatarAudioMaxRange : VRCSDK2.AudioManagerSettings.RoomAudioMaxRange;
+            vrcsp.Far = isAvatar ? AudioManagerSettings.AvatarAudioMaxRange : AudioManagerSettings.RoomAudioMaxRange;
             vrcsp.UseAudioSourceVolumeCurve = false;
         }
 
@@ -198,21 +198,33 @@ public class AutoAddSpatialAudioComponents
         var vrcsp = src.gameObject.GetComponent<VRC.SDKBase.VRC_SpatialAudioSource>();
         if (vrcsp != null) return;
 
-        vrcsp = src.gameObject.AddComponent<VRC.SDKBase.VRC_SpatialAudioSource>();
+#if VRC_SDK_VRCSDK2
+        vrcsp = src.gameObject.AddComponent<VRCSDK2.VRC_SpatialAudioSource>();
+#elif UDON
+        vrcsp = src.gameObject.AddComponent<VRC.SDK3.Components.VRCSpatialAudioSource>();
+#endif
 
         // add default values
         bool isAvatar = src.gameObject.GetComponentInParent<VRC.SDKBase.VRC_AvatarDescriptor>();
 
-        vrcsp.Gain = isAvatar ? VRCSDK2.AudioManagerSettings.AvatarAudioMaxGain : VRCSDK2.AudioManagerSettings.RoomAudioGain;
+        vrcsp.Gain = isAvatar ? AudioManagerSettings.AvatarAudioMaxGain : AudioManagerSettings.RoomAudioGain;
         vrcsp.Near = 0;
-        vrcsp.Far = isAvatar ? VRCSDK2.AudioManagerSettings.AvatarAudioMaxRange : VRCSDK2.AudioManagerSettings.RoomAudioMaxRange;
+        vrcsp.Far = isAvatar ? AudioManagerSettings.AvatarAudioMaxRange : AudioManagerSettings.RoomAudioMaxRange;
         vrcsp.UseAudioSourceVolumeCurve = false;
 
         // enable spatialization if src is not 2D
+        vrcsp.EnableSpatialization = false;
         AnimationCurve curve = src.GetCustomCurve(AudioSourceCurveType.SpatialBlend);
-        if (src.spatialBlend == 0 || (curve == null || curve.keys.Length <= 1))
-            vrcsp.EnableSpatialization = false;
-        else
-            vrcsp.EnableSpatialization = true;
+        if (curve != null)
+        {
+            foreach (var key in curve.keys)
+            {
+                if (key.value != 0 || key.inTangent != 0)
+                {
+                    vrcsp.EnableSpatialization = true;
+                    break;
+                }
+            }
+        }
     }
 }

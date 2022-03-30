@@ -8,7 +8,7 @@ using System;
 namespace VRCSDK2
 {
 	[CustomEditor(typeof(VRCSDK2.VRC_PlayerMods))]
-	public class VRCPlayerModsEditor : Editor 
+	public class VRCPlayerModsEditor : UnityEditor.Editor
 	{
         VRCSDK2.VRC_PlayerMods myTarget;
 

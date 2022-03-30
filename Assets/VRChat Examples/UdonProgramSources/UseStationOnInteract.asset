@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f11136daadff0b44ac2278a314682ab, type: 3}
   m_Name: UseStationOnInteract
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: 4fe7b821fb1b9104c8d37ae8c00a34fd,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: 198ae55fdaf889d4f9f3f0e23941388d,
     type: 2}
   udonAssembly: ".data_start\r\n\r\n    \r\n    instance_0: %VRCSDKBaseVRCPlayerApi,
     null\r\n\r\n.data_end\r\n\r\n.code_start\r\n\r\n    .export _interact\r\n    \r\n
@@ -47,4 +47,8 @@ MonoBehaviour:
       - unityObjectValue: {fileID: 0}
         stringValue: 
   graphElementData: []
+  viewTransform:
+    position: {x: 0, y: 0}
+    scale: 1
+  version: 1.0.0
   showAssembly: 0

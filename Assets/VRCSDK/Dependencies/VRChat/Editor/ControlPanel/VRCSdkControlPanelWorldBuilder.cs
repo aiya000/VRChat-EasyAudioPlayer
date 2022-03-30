@@ -1,40 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
-using VRC.SDK3.Editor;
-#if VRC_SDK_VRCSDK3
-using VRC.SDK3.Editor;
-using VRC.SDK3.Components;    
-#endif
-using VRC.SDKBase.Editor;
-using VRC.SDKBase.Editor.BuildPipeline;
-#if UDON
-using VRC.Udon;
-using VRC.Udon.Common.Interfaces;
-#endif
 using Object = UnityEngine.Object;
-
-[assembly: VRCSdkControlPanelBuilder(typeof(VRCSdkControlPanelWorldBuilder))]
 
 namespace VRC.SDKBase.Editor
 {
     public class VRCSdkControlPanelWorldBuilder : IVRCSdkControlPanelBuilder
     {
         private static Type _postProcessVolumeType;
-        private VRCSdkControlPanel _builder;
+        protected VRCSdkControlPanel _builder;
         private VRC_SceneDescriptor[] _scenes;
         private Vector2 _scrollPos;
-        private Vector2 _builderScrollPos;
-        private int _numClients = 1;
-        private bool _forceNoVr;
+        protected Vector2 _builderScrollPos;
         
-        public void SelectAllComponents()
+        public virtual void SelectAllComponents()
         {
             List<Object> show = new List<Object>(Selection.objects);
             foreach (VRC_SceneDescriptor s in _scenes)
@@ -42,7 +26,7 @@ namespace VRC.SDKBase.Editor
             Selection.objects = show.ToArray();
         }
         
-        public void ShowSettingsOptions()
+        public virtual void ShowSettingsOptions()
         {
             EditorGUILayout.BeginVertical(VRCSdkControlPanel.boxGuiStyle);
             GUILayout.Label("World Options", EditorStyles.boldLabel);
@@ -74,21 +58,15 @@ namespace VRC.SDKBase.Editor
             EditorGUILayout.EndVertical();
         }
         
-        public bool IsValidBuilder(out string message)
+        public virtual bool IsValidBuilder(out string message)
         {
             FindScenes();
             message = null;
             if (_scenes != null && _scenes.Length > 0) return true;
-            
-#if VRC_SDK_VRCSDK2
-            message = "A VRC_SceneDescriptor or VRC_AvatarDescriptor\nis required to build VRChat SDK Content";
-#elif VRC_SDK_VRCSDK3
-            message = "A VRCSceneDescriptor or VRCAvatarDescriptor\nis required to build VRChat SDK Content";
-#endif
             return false;
         }
 
-        public void ShowBuilder()
+        public virtual void ShowBuilder()
         {
             if (_postProcessVolumeType != null)
             {
@@ -101,22 +79,6 @@ namespace VRC.SDKBase.Editor
                     );
                 }
             }
-
-#if UDON
-            {
-                List<UdonBehaviour> failedBehaviours = ShouldShowPrimitivesWarning();
-                if (failedBehaviours.Count > 0)
-                {
-                    _builder.OnGUIWarning(null,
-                        "Udon Objects reference builtin Unity mesh assets, this won't work. Consider making a copy of the mesh to use instead.",
-                        () =>
-                        {
-                            Selection.objects = failedBehaviours.Select(s => s.gameObject).Cast<Object>().ToArray();
-                        }, FixPrimitivesWarning);
-                }
-            }
-#endif
-
 
             if (_scenes.Length > 1)
             {
@@ -188,7 +150,7 @@ namespace VRC.SDKBase.Editor
             }
         }
 
-        public void RegisterBuilder(VRCSdkControlPanel baseBuilder)
+        public virtual void RegisterBuilder(VRCSdkControlPanel baseBuilder)
         {
             _builder = baseBuilder;
         }
@@ -244,135 +206,7 @@ namespace VRC.SDKBase.Editor
                 // -> post processing not installed
             }
         }
-
-#if UDON
-
-        private static Mesh[] _primitiveMeshes;
-
-        private static List<UdonBehaviour> ShouldShowPrimitivesWarning()
-        {
-            if (_primitiveMeshes == null)
-            {
-                PrimitiveType[] primitiveTypes = (PrimitiveType[]) Enum.GetValues(typeof(PrimitiveType));
-                _primitiveMeshes = new Mesh[primitiveTypes.Length];
-
-                for (int i = 0; i < primitiveTypes.Length; i++)
-                {
-                    PrimitiveType primitiveType = primitiveTypes[i];
-                    GameObject go = GameObject.CreatePrimitive(primitiveType);
-                    _primitiveMeshes[i] = go.GetComponent<MeshFilter>().sharedMesh;
-                    Object.DestroyImmediate(go);
-                }
-            }
-
-            UdonBehaviour[] allBehaviours = Object.FindObjectsOfType<UdonBehaviour>();
-            List<UdonBehaviour> failedBehaviours = new List<UdonBehaviour>(allBehaviours.Length);
-            foreach (UdonBehaviour behaviour in allBehaviours)
-            {
-                IUdonVariableTable publicVariables = behaviour.publicVariables;
-                foreach (string symbol in publicVariables.VariableSymbols)
-                {
-                    if (!publicVariables.TryGetVariableValue(symbol, out Mesh mesh))
-                    {
-                        continue;
-                    }
-
-                    if (mesh == null)
-                    {
-                        continue;
-                    }
-
-                    bool all = true;
-                    foreach (Mesh primitiveMesh in _primitiveMeshes)
-                    {
-                        if (mesh != primitiveMesh)
-                        {
-                            continue;
-                        }
-
-                        all = false;
-                        break;
-                    }
-
-                    if (all)
-                    {
-                        continue;
-                    }
-
-                    failedBehaviours.Add(behaviour);
-                }
-            }
-
-            return failedBehaviours;
-        }
-
-        private void FixPrimitivesWarning()
-        {
-            UdonBehaviour[] allObjects = Object.FindObjectsOfType<UdonBehaviour>();
-            foreach (UdonBehaviour behaviour in allObjects)
-            {
-                IUdonVariableTable publicVariables = behaviour.publicVariables;
-                foreach (string symbol in publicVariables.VariableSymbols)
-                {
-                    if (!publicVariables.TryGetVariableValue(symbol, out Mesh mesh))
-                    {
-                        continue;
-                    }
-
-                    if (mesh == null)
-                    {
-                        continue;
-                    }
-
-                    bool all = true;
-                    foreach (Mesh primitiveMesh in _primitiveMeshes)
-                    {
-                        if (mesh != primitiveMesh)
-                        {
-                            continue;
-                        }
-
-                        all = false;
-                        break;
-                    }
-
-                    if (all)
-                    {
-                        continue;
-                    }
-
-                    Mesh clone = Object.Instantiate(mesh);
-
-                    Scene scene = behaviour.gameObject.scene;
-                    string scenePath = Path.GetDirectoryName(scene.path) ?? "Assets";
-
-                    string folderName = $"{scene.name}_MeshClones";
-                    string folderPath = Path.Combine(scenePath, folderName);
-
-                    if (!AssetDatabase.IsValidFolder(folderPath))
-                    {
-                        AssetDatabase.CreateFolder(scenePath, folderName);
-                    }
-
-                    string assetPath = Path.Combine(folderPath, $"{clone.name}.asset");
-
-                    Mesh existingClone = AssetDatabase.LoadAssetAtPath<Mesh>(assetPath);
-                    if (existingClone == null)
-                    {
-                        AssetDatabase.CreateAsset(clone, assetPath);
-                        AssetDatabase.Refresh();
-                    }
-                    else
-                    {
-                        clone = existingClone;
-                    }
-
-                    publicVariables.TrySetVariableValue(symbol, clone);
-                    EditorSceneManager.MarkSceneDirty(behaviour.gameObject.scene);
-                }
-            }
-        }
-#endif
+        
         private void FindScenes()
         {
             VRC_SceneDescriptor[] newScenes = Tools.FindSceneObjectsOfTypeAll<VRC_SceneDescriptor>();
@@ -472,20 +306,17 @@ namespace VRC.SDKBase.Editor
 
             return mandatoryExpand;
         }
+        
+        protected virtual bool IsSDK3Scene()
+        {
+            return false;
+        }
 
-        private void OnGUISceneCheck(VRC_SceneDescriptor scene)
+        protected virtual void OnGUISceneCheck(VRC_SceneDescriptor scene)
         {
             CheckUploadChanges(scene);
-
-#if !VRC_SDK_VRCSDK2 && !VRC_SDK_VRCSDK3
-        bool isSdk3Scene = false;
-#elif VRC_SDK_VRCSDK2 && !VRC_SDK_VRCSDK3
-        bool isSdk3Scene = false;
-#elif !VRC_SDK_VRCSDK2 && VRC_SDK_VRCSDK3
-            bool isSdk3Scene = true; //Do we actually use this variable anywhere?
-#else
-        bool isSdk3Scene = scene as VRCSceneDescriptor != null;
-#endif
+            
+            bool isSdk3Scene = IsSDK3Scene();
 
             List<VRC_EventHandler> sdkBaseEventHandlers =
                 new List<VRC_EventHandler>(Object.FindObjectsOfType<VRC_EventHandler>());
@@ -603,16 +434,6 @@ namespace VRC.SDKBase.Editor
                     null);
             }
 
-#if VRC_SDK_VRCSDK2
-        foreach (VRC_DataStorage ds in Object.FindObjectsOfType<VRC_DataStorage>())
-        {
-            VRCSDK2.VRC_ObjectSync os = ds.GetComponent<VRCSDK2.VRC_ObjectSync>();
-            if (os != null && os.SynchronizePhysics)
-                _builder.OnGUIWarning(scene, ds.name + " has a VRC_DataStorage and VRC_ObjectSync, with SynchronizePhysics enabled.",
-                    delegate { Selection.activeObject = os.gameObject; }, null);
-        }
-#endif
-
             string vrcFilePath = UnityWebRequest.UnEscapeURL(EditorPrefs.GetString("lastVRCPath"));
             if (!string.IsNullOrEmpty(vrcFilePath) &&
                 ValidationHelpers.CheckIfAssetBundleFileTooLarge(ContentType.World, vrcFilePath, out int fileSize))
@@ -628,7 +449,7 @@ namespace VRC.SDKBase.Editor
                 {
                     // check root game objects
 #if UNITY_ANDROID
-                IEnumerable<Shader> illegalShaders = VRCSDK2.Validation.WorldValidation.FindIllegalShaders(go);
+                IEnumerable<Shader> illegalShaders = VRC.SDKBase.Validation.WorldValidation.FindIllegalShaders(go);
                 foreach (Shader s in illegalShaders)
                 {
                     _builder.OnGUIWarning(scene, "World uses unsupported shader '" + s.name + "'. This could cause low performance or future compatibility issues.", null, null);
@@ -647,8 +468,8 @@ namespace VRC.SDKBase.Editor
 #if VRC_SDK_VRCSDK2
                     bool allowedType = (t.GetComponent<VRCSDK2.VRC_ObjectSync>()
                         || t.GetComponent<VRCSDK2.VRC_SyncAnimation>()
-                        || t.GetComponent<VRC_SyncVideoPlayer>()
-                        || t.GetComponent<VRC_SyncVideoStream>());
+                        || t.GetComponent<VRCSDK2.VRC_SyncVideoPlayer>()
+                        || t.GetComponent<VRCSDK2.VRC_SyncVideoStream>());
                     if (t.name != go.transform.name || allowedType) continue;
 #else
                         if (t.name != go.transform.name) continue;
@@ -770,7 +591,7 @@ namespace VRC.SDKBase.Editor
                     if (scene.apiWorld == null)
                     {
                         Core.ApiWorld world = Core.API.FromCacheOrNew<Core.ApiWorld>(pms[0].blueprintId);
-                        world.Fetch(null, null,
+                        world.Fetch(null,
                             (c) => scene.apiWorld = c.Model as Core.ApiWorld,
                             (c) =>
                             {
@@ -808,166 +629,9 @@ namespace VRC.SDKBase.Editor
             GUILayout.EndHorizontal();
         }
 
-        void OnGUIScene()
+        public virtual void OnGUIScene()
         {
-            GUILayout.Label("", VRCSdkControlPanel.scrollViewSeparatorStyle);
-
-            _builderScrollPos = GUILayout.BeginScrollView(_builderScrollPos, false, false, GUIStyle.none,
-                GUI.skin.verticalScrollbar, GUILayout.Width(VRCSdkControlPanel.SdkWindowWidth),
-                GUILayout.MinHeight(217));
-
-            GUILayout.BeginVertical(VRCSdkControlPanel.boxGuiStyle, GUILayout.Width(VRCSdkControlPanel.SdkWindowWidth));
-            GUILayout.BeginHorizontal();
-            GUILayout.BeginVertical(GUILayout.Width(300));
-            EditorGUILayout.Space();
-            GUILayout.Label("Local Testing", VRCSdkControlPanel.infoGuiStyle);
-            GUILayout.Label(
-                "Before uploading your world you may build and test it in the VRChat client. You won't be able to invite anyone from online but you can launch multiple of your own clients.",
-                VRCSdkControlPanel.infoGuiStyle);
-            GUILayout.EndVertical();
-            GUILayout.BeginVertical(GUILayout.Width(200));
-            EditorGUILayout.Space();
-            _numClients = EditorGUILayout.IntField("Number of Clients", _numClients, GUILayout.MaxWidth(190));
-            EditorGUILayout.Space();
-            _forceNoVr = EditorGUILayout.Toggle("Force Non-VR", _forceNoVr, GUILayout.MaxWidth(190));
-            EditorGUILayout.Space();
-
-            GUI.enabled = _builder.NoGuiErrorsOrIssues();
-
-            string lastUrl = VRC_SdkBuilder.GetLastUrl();
-
-            bool lastBuildPresent = lastUrl != null;
-            if (lastBuildPresent == false)
-                GUI.enabled = false;
-            if (VRCSettings.Get().DisplayAdvancedSettings)
-            {
-                if (GUILayout.Button("Last Build"))
-                {
-                    VRC_SdkBuilder.shouldBuildUnityPackage = false;
-                    VRC_SdkBuilder.SetNumClients(_numClients);
-                    VRC_SdkBuilder.forceNoVR = _forceNoVr;
-                    VRC_SdkBuilder.RunLastExportedSceneResource();
-                }
-
-                if (Core.APIUser.CurrentUser.hasSuperPowers)
-                {
-                    if (GUILayout.Button("Copy Test URL"))
-                    {
-                        TextEditor te = new TextEditor {text = lastUrl};
-                        te.SelectAll();
-                        te.Copy();
-                    }
-                }
-            }
-
-            GUI.enabled = _builder.NoGuiErrorsOrIssues() ||
-                          Core.APIUser.CurrentUser.developerType == Core.APIUser.DeveloperType.Internal;
-
-#if UNITY_ANDROID
-        EditorGUI.BeginDisabledGroup(true);
-#endif
-            if (GUILayout.Button("Build & Test"))
-            {
-                bool buildTestBlocked = !VRCBuildPipelineCallbacks.OnVRCSDKBuildRequested(VRCSDKRequestedBuildType.Scene);
-                if (!buildTestBlocked)
-                {
-#if VRC_SDK_VRCSDK2
-                    EnvConfig.ConfigurePlayerSettings();
-                    VRC_SdkBuilder.shouldBuildUnityPackage = false;
-                    AssetExporter.CleanupUnityPackageExport(); // force unity package rebuild on next publish
-                    VRC_SdkBuilder.SetNumClients(_numClients);
-                    VRC_SdkBuilder.forceNoVR = _forceNoVr;
-                    VRC_SdkBuilder.PreBuildBehaviourPackaging();
-                    VRC_SdkBuilder.ExportSceneResourceAndRun();
-#elif VRC_SDK_VRCSDK3
-                    EnvConfig.ConfigurePlayerSettings();
-                    VRC_SdkBuilder.shouldBuildUnityPackage = false;
-                    AssetExporter.CleanupUnityPackageExport(); // force unity package rebuild on next publish
-                    VRC_SdkBuilder.SetNumClients(_numClients);
-                    VRC_SdkBuilder.forceNoVR = _forceNoVr;
-                    VRC_SdkBuilder.PreBuildBehaviourPackaging();
-                    VRC_SdkBuilder.ExportSceneResourceAndRun();
-#endif
-                }
-            }
-#if UNITY_ANDROID
-        EditorGUI.EndDisabledGroup();
-#endif
-
-            GUILayout.EndVertical();
-
-            if (Event.current.type != EventType.Used)
-            {
-                GUILayout.EndHorizontal();
-                EditorGUILayout.Space();
-                GUILayout.EndVertical();
-            }
-
-            EditorGUILayout.Space();
-
-            GUILayout.BeginVertical(VRCSdkControlPanel.boxGuiStyle, GUILayout.Width(VRCSdkControlPanel.SdkWindowWidth));
-
-            GUILayout.BeginHorizontal();
-            GUILayout.BeginVertical(GUILayout.Width(300));
-            EditorGUILayout.Space();
-            GUILayout.Label("Online Publishing", VRCSdkControlPanel.infoGuiStyle);
-            GUILayout.Label(
-                "In order for other people to enter your world in VRChat it must be built and published to our game servers.",
-                VRCSdkControlPanel.infoGuiStyle);
-            EditorGUILayout.Space();
-            GUILayout.EndVertical();
-            GUILayout.BeginVertical(GUILayout.Width(200));
-            EditorGUILayout.Space();
-
-            if (lastBuildPresent == false)
-                GUI.enabled = false;
-            if (VRCSettings.Get().DisplayAdvancedSettings)
-            {
-                if (GUILayout.Button("Last Build"))
-                {
-                    if (Core.APIUser.CurrentUser.canPublishWorlds)
-                    {
-                        EditorPrefs.SetBool("VRC.SDKBase_StripAllShaders", false);
-                        VRC_SdkBuilder.shouldBuildUnityPackage = VRCSdkControlPanel.FutureProofPublishEnabled;
-                        VRC_SdkBuilder.UploadLastExportedSceneBlueprint();
-                    }
-                    else
-                    {
-                        VRCSdkControlPanel.ShowContentPublishPermissionsDialog();
-                    }
-                }
-            }
-
-            GUI.enabled = _builder.NoGuiErrorsOrIssues() ||
-                          Core.APIUser.CurrentUser.developerType == Core.APIUser.DeveloperType.Internal;
-            if (GUILayout.Button(VRCSdkControlPanel.GetBuildAndPublishButtonString()))
-            {
-                bool buildBlocked = !VRCBuildPipelineCallbacks.OnVRCSDKBuildRequested(VRCSDKRequestedBuildType.Scene);
-                if (!buildBlocked)
-                {
-                    if (Core.APIUser.CurrentUser.canPublishWorlds)
-                    {
-                        EnvConfig.ConfigurePlayerSettings();
-                        EditorPrefs.SetBool("VRC.SDKBase_StripAllShaders", false);
-                        
-                        VRC_SdkBuilder.shouldBuildUnityPackage = VRCSdkControlPanel.FutureProofPublishEnabled;
-                        VRC_SdkBuilder.PreBuildBehaviourPackaging();
-                        VRC_SdkBuilder.ExportAndUploadSceneBlueprint();
-                    }
-                    else
-                    {
-                        VRCSdkControlPanel.ShowContentPublishPermissionsDialog();
-                    }
-                }
-            }
-
-            GUILayout.EndVertical();
-            GUI.enabled = true;
-
-            if (Event.current.type == EventType.Used) return;
-            GUILayout.EndHorizontal();
-            GUILayout.EndVertical();
-            GUILayout.EndScrollView();
+            // Stub, needs to be handled in SDK-specific overrides
         }
 
         private static void DrawContentInfoForWorld(Core.ApiWorld w)

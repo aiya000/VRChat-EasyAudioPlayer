@@ -1,8 +1,7 @@
-﻿#if VRC_SDK_VRCSDK2
-#if UNITY_EDITOR
+#if VRC_SDK_VRCSDK2 && UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
-using System.Linq;
+using VRC.SDKBase;
 
 namespace VRCSDK2
 {
@@ -77,7 +76,7 @@ namespace VRCSDK2
     }
 
     [CustomEditor(typeof(VRCSDK2.VRC_DataStorage)), CanEditMultipleObjects]
-    public class VRC_DataStorageEditor : Editor
+    public class VRC_DataStorageEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {
@@ -89,5 +88,4 @@ namespace VRCSDK2
         }
     }
 }
-#endif
 #endif

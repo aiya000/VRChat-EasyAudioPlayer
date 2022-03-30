@@ -156,6 +156,12 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.vrchat.vrcsdk3": {
+      "version": "file:com.vrchat.vrcsdk3",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "nuget.mono-cecil": {
       "version": "0.1.6-preview",
       "depth": 1,

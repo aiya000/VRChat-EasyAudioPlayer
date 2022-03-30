@@ -101,7 +101,7 @@ namespace VRCSDK2
             if (!ApiCredentials.Load())
                 onError("Not logged in");
             else
-                APIUser.FetchCurrentUser(
+                APIUser.InitialFetchCurrentUser(
                     delegate (ApiModelContainer<APIUser> c)
                     {
                         UserLoggedInCallback(c.Model as APIUser);
@@ -123,7 +123,7 @@ namespace VRCSDK2
 
             ApiWorld model = new ApiWorld();
             model.id = pipelineManager.blueprintId;
-            model.Fetch(null, null,
+            model.Fetch(null,
                 (c) =>
                 {
                     VRC.Core.Logger.Log("<color=magenta>Updating an existing world.</color>", DebugLevel.All);
@@ -191,11 +191,18 @@ namespace VRCSDK2
                             {
                                 HasExceededPublishLimit = true;
                             }
-                            SetupUI(hasSufficientTrustLevelToPublishToCommunityLabs, HasExceededPublishLimit);
+
+                            if(Application.isPlaying)
+                            {
+                                SetupUI(hasSufficientTrustLevelToPublishToCommunityLabs, HasExceededPublishLimit);
+                            }
                         },
                         (c) =>
                         {
-                            SetupUI(hasSufficientTrustLevelToPublishToCommunityLabs, HasExceededPublishLimit);
+                            if(Application.isPlaying)
+                            {
+                                SetupUI(hasSufficientTrustLevelToPublishToCommunityLabs, HasExceededPublishLimit);
+                            }
                         }
                     );
                 }
@@ -252,12 +259,9 @@ namespace VRCSDK2
                     {
                         contentFeatured.isOn = worldRecord.tags.Contains("content_featured");
                         contentSDKExample.isOn = worldRecord.tags.Contains("content_sdk_example");
-#if COMMUNITY_LABS_SDK
-                        releasePublic.gameObject.SetActive(false);
-#else
+
                         releasePublic.isOn = worldRecord.releaseStatus == "public";
                         releasePublic.gameObject.SetActive(true);
-#endif
                     }
 
                     // "show in worlds menu"
@@ -282,9 +286,7 @@ namespace VRCSDK2
                         userTags.text = userTags.text + " ";
                     }
 
-                    ImageDownloader.DownloadImage(worldRecord.imageUrl, 0, delegate (Texture2D obj) {
-                        bpImage.texture = obj;
-                    });
+                    ImageDownloader.DownloadImage(worldRecord.imageUrl, 0, obj => bpImage.texture = obj, null);
                 }
                 else // user does not own world id associated with descriptor
                 {
@@ -307,12 +309,8 @@ namespace VRCSDK2
                 }
                 else
                 {
-#if COMMUNITY_LABS_SDK
-                    releasePublic.gameObject.SetActive(false);
-#else
                     releasePublic.gameObject.SetActive(true);
                     releasePublic.isOn = false;
-#endif
                 }
             }
 
@@ -480,6 +478,8 @@ namespace VRCSDK2
                     tags.Add("content_featured");
                 if (contentSDKExample.isOn)
                     tags.Add("content_sdk_example");
+                if(releasePublic.isOn)
+                    tags.Add("admin_approved");
             }
 
             // "show in worlds menu"
@@ -638,9 +638,7 @@ namespace VRCSDK2
             {
                 bpImage.enabled = true;
                 liveBpImage.enabled = false;
-                ImageDownloader.DownloadImage(worldRecord.imageUrl, 0, delegate (Texture2D obj) {
-                    bpImage.texture = obj;
-                });
+                ImageDownloader.DownloadImage(worldRecord.imageUrl, 0, obj => bpImage.texture = obj, null);
             }
         }
 

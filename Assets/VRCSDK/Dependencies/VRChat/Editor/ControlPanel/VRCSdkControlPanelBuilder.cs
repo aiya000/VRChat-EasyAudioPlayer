@@ -1,13 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.SceneManagement;
-using VRCSDK2.Validation.Performance;
+using VRC.SDKBase.Validation.Performance;
 using Object = UnityEngine.Object;
-using VRC.SDK3.Editor;
 using VRC.SDKBase.Editor;
 
 public partial class VRCSdkControlPanel : EditorWindow
@@ -78,6 +77,11 @@ public partial class VRCSdkControlPanel : EditorWindow
     Dictionary<Object, List<Issue>> GUIInfos = new Dictionary<Object, List<Issue>>();
     Dictionary<Object, List<Issue>> GUILinks = new Dictionary<Object, List<Issue>>();
     Dictionary<Object, List<Issue>> GUIStats = new Dictionary<Object, List<Issue>>();
+
+    public bool NoGuiErrors()
+    {
+        return GUIErrors.Count == 0;
+    }
 
     public bool NoGuiErrorsOrIssues()
     {
@@ -169,7 +173,7 @@ public partial class VRCSdkControlPanel : EditorWindow
             VRCSdkControlPanelBuilderAttribute[] sdkBuilderAttributes;
             try
             {
-                sdkBuilderAttributes = (VRCSdkControlPanelBuilderAttribute[])assembly.GetCustomAttributes(sdkBuilderAttributeType, false);
+                sdkBuilderAttributes = (VRCSdkControlPanelBuilderAttribute[])assembly.GetCustomAttributes(sdkBuilderAttributeType, true);
             }
             catch
             {
@@ -217,9 +221,9 @@ public partial class VRCSdkControlPanel : EditorWindow
         GUILayout.FlexibleSpace();
         GUILayout.BeginVertical();
         
-        if (VRC.Core.RemoteConfig.IsInitialized())
+        if (VRC.Core.ConfigManager.RemoteConfig.IsInitialized())
         {
-            string sdkUnityVersion = VRC.Core.RemoteConfig.GetString("sdkUnityVersion");
+            string sdkUnityVersion = VRC.Core.ConfigManager.RemoteConfig.GetString("sdkUnityVersion");
             if (Application.unityVersion != sdkUnityVersion)
             {
                 OnGUIWarning(null, "You are not using the recommended Unity version for the VRChat SDK. Content built with this version may not work correctly. Please use Unity " + sdkUnityVersion,
@@ -288,18 +292,24 @@ public partial class VRCSdkControlPanel : EditorWindow
                 }
                 else
                 {
-                    errorMessage =
-                        "A Unity scene cannot contain a VRChat Scene Descriptor and also contain VRChat Avatar Descriptors";
+                     errorMessage =
+                         "A Unity scene cannot contain a VRChat Scene Descriptor and also contain VRChat Avatar Descriptors";
                 }
             }
         }
         if (selectedBuilder == null)
         {
+            string message = "";
 #if VRC_SDK_VRCSDK2
-            EditorGUILayout.LabelField("A VRC_SceneDescriptor or VRC_AvatarDescriptor\nis required to build VRChat SDK Content", titleGuiStyle, GUILayout.Width(SdkWindowWidth));
+            message = "A VRC_SceneDescriptor or VRC_AvatarDescriptor\nis required to build VRChat SDK Content";
+#elif UDON
+            message = "A VRCSceneDescriptor is required to build a World";
 #elif VRC_SDK_VRCSDK3
-            EditorGUILayout.LabelField("A VRCSceneDescriptor or VRCAvatarDescriptor\nis required to build VRChat SDK Content", titleGuiStyle, GUILayout.Width(SdkWindowWidth));
+            message = "A VRCAvatarDescriptor is required to build an Avatar";
+#else
+            message = "The SDK did not load properly. Try this - In the Project window, navigate to Assets/VRCSDK/Plugins. Select all the DLLs, then right click and choose 'Reimport'";
 #endif
+            EditorGUILayout.LabelField(message, titleGuiStyle, GUILayout.Width(SdkWindowWidth));
         }
         else if (errorMessage != null)
         {
@@ -552,12 +562,18 @@ public partial class VRCSdkControlPanel : EditorWindow
         if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.StandaloneWindows || EditorUserBuildSettings.activeBuildTarget == BuildTarget.StandaloneWindows64 && GUILayout.Button("Switch Build Target to Android"))
         {
             if (EditorUtility.DisplayDialog("Build Target Switcher", "Are you sure you want to switch your build target to Android? This could take a while.", "Confirm", "Cancel"))
+            {
+                EditorUserBuildSettings.selectedBuildTargetGroup = BuildTargetGroup.Android;
                 EditorUserBuildSettings.SwitchActiveBuildTargetAsync(BuildTargetGroup.Android, BuildTarget.Android);
+            }
         }
         if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android && GUILayout.Button("Switch Build Target to Windows"))
         {
             if (EditorUtility.DisplayDialog("Build Target Switcher", "Are you sure you want to switch your build target to Windows? This could take a while.", "Confirm", "Cancel"))
+            {
+                EditorUserBuildSettings.selectedBuildTargetGroup = BuildTargetGroup.Standalone;
                 EditorUserBuildSettings.SwitchActiveBuildTargetAsync(BuildTargetGroup.Standalone, BuildTarget.StandaloneWindows64);
+            }
         }
     }
 
@@ -619,13 +635,13 @@ public partial class VRCSdkControlPanel : EditorWindow
 
     public static void ShowContentPublishPermissionsDialog()
     {
-        if (!VRC.Core.RemoteConfig.IsInitialized())
+        if (!VRC.Core.ConfigManager.RemoteConfig.IsInitialized())
         {
-            VRC.Core.RemoteConfig.Init(() => ShowContentPublishPermissionsDialog());
+            VRC.Core.ConfigManager.RemoteConfig.Init(() => ShowContentPublishPermissionsDialog());
             return;
         }
 
-        string message = VRC.Core.RemoteConfig.GetString("sdkNotAllowedToPublishMessage");
+        string message = VRC.Core.ConfigManager.RemoteConfig.GetString("sdkNotAllowedToPublishMessage");
         int result = UnityEditor.EditorUtility.DisplayDialogComplex("VRChat SDK", message, "Developer FAQ", "VRChat Discord", "OK");
         if (result == 0)
         {

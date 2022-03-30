@@ -5,9 +5,9 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.Profiling;
-using VRCSDK2.Validation.Performance.Stats;
+using VRC.SDKBase.Validation.Performance.Stats;
 
-namespace VRCSDK2.Validation.Performance.Scanners
+namespace VRC.SDKBase.Validation.Performance.Scanners
 {
     #if VRC_CLIENT
     [CreateAssetMenu(

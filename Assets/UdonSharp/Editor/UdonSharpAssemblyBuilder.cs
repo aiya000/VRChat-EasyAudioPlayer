@@ -1,12 +1,13 @@
 ﻿
 //#define USE_UDON_LABELS
 
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text;
-using System.Text.RegularExpressions;
 
-namespace UdonSharp
+namespace UdonSharp.Compiler
 {
     public class AssemblyBuilder
     {
@@ -40,6 +41,8 @@ namespace UdonSharp
         }
 
 #if !USE_UDON_LABELS
+        private static readonly char[] _trimChars = new[] {' ', '\n', '\r'};
+        
         private string ReplaceLabels(string assemblyString, LabelTable labelTable)
         {
             StringBuilder newAssemblyBuilder = new StringBuilder();
@@ -50,26 +53,27 @@ namespace UdonSharp
 
                 while (currentLine != null)
                 {
-                    string line = currentLine.TrimStart(' ', '\n', '\r');
-                    if (line.StartsWith("JUMP_LABEL,"))
+                    string line = currentLine.TrimStart(_trimChars);
+                    if (line.StartsWith("JUMP_LABEL,", StringComparison.Ordinal))
                     {
                         int startIdx = line.IndexOf('[') + 1;
                         int endIdx = line.IndexOf(']');
                         string labelName = line.Substring(startIdx, endIdx - startIdx);
                         JumpLabel label = labelTable.GetLabel(labelName);
-                        newAssemblyBuilder.Append($"        JUMP, {label.AddresStr()}\n");
+                        newAssemblyBuilder.AppendFormat("        JUMP, {0}\n", label.AddresStr());
                     }
-                    else if (line.StartsWith("JUMP_IF_FALSE_LABEL,"))
+                    else if (line.StartsWith("JUMP_IF_FALSE_LABEL,", StringComparison.Ordinal))
                     {
                         int startIdx = line.IndexOf('[') + 1;
                         int endIdx = line.IndexOf(']');
                         string labelName = line.Substring(startIdx, endIdx - startIdx);
                         JumpLabel label = labelTable.GetLabel(labelName);
-                        newAssemblyBuilder.Append($"        JUMP_IF_FALSE, {label.AddresStr()}\n");
+                        newAssemblyBuilder.AppendFormat("        JUMP_IF_FALSE, {0}\n", label.AddresStr());
                     }
                     else
                     {
-                        newAssemblyBuilder.Append(currentLine + "\n");
+                        newAssemblyBuilder.Append(currentLine);
+                        newAssemblyBuilder.Append("\n");
                     }
 
                     currentLine = reader.ReadLine();
@@ -87,16 +91,13 @@ namespace UdonSharp
 
         public void AppendCommentedLine(string line, string comment, int indent = 2)
         {
-            // Make sure the comment stays on the same line
-            comment.Replace('\n', ' ');
-            comment.Replace('\r', ' ');
-
             //if (programCounter > 0)
             //    assemblyTextBuilder.AppendFormat("        # {0:X8}\n", programCounter);
 
             assemblyTextBuilder.Append($"{new string(' ', indent * 4)}{line}");
             if (comment.Length > 0)
-                assemblyTextBuilder.Append($" #{comment}");
+                assemblyTextBuilder.Append($" # {comment}");
+
             assemblyTextBuilder.Append("\n"); // Keep consistent between Linux/Windows
         }
 

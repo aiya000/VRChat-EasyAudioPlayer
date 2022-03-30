@@ -26,6 +26,8 @@ namespace VRC.Udon.Serialization.OdinSerializer
     using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
 
+#pragma warning disable 0649 // Field is never assigned to and will have its default value // VRC
+    
     /// <summary>
     /// Writes data to a stream that can be read by a <see cref="BinaryDataReader"/>.
     /// </summary>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.IO;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.Networking;
 using VRC.Core;
 
 public partial class VRCSdkControlPanel : EditorWindow
@@ -63,14 +64,14 @@ public partial class VRCSdkControlPanel : EditorWindow
 
     IEnumerator FetchUploadedData()
     {
-        if (!RemoteConfig.IsInitialized())
-            RemoteConfig.Init();
+        if (!ConfigManager.RemoteConfig.IsInitialized())
+            ConfigManager.RemoteConfig.Init();
 
-        if (!APIUser.IsLoggedInWithCredentials)
+        if (!APIUser.IsLoggedIn)
             yield break;
 
         ApiCache.ClearResponseCache();
-        VRCCachedWWW.ClearOld();
+        VRCCachedWebRequest.ClearOld();
 
         if (fetchingAvatars == null)
             fetchingAvatars = EditorCoroutine.Start(() => FetchAvatars());
@@ -84,7 +85,6 @@ public partial class VRCSdkControlPanel : EditorWindow
         ApiAvatar.FetchList(
             delegate (IEnumerable<ApiAvatar> obj)
             {
-                Debug.LogFormat("<color=yellow>Fetching Avatar Bucket {0}</color>", offset);
                 if (obj.FirstOrDefault() != null)
                     fetchingAvatars = EditorCoroutine.Start(() =>
                     {
@@ -124,7 +124,7 @@ public partial class VRCSdkControlPanel : EditorWindow
     private static void FetchTestAvatars()
     {
 #if VRC_SDK_VRCSDK3
-        string sdkAvatarFolder = VRC.SDK3.Editor.VRC_SdkBuilder.GetKnownFolderPath(VRC.SDK3.Editor.VRC_SdkBuilder.LocalLowGUID) + "/VRChat/vrchat/Avatars/";
+        string sdkAvatarFolder = VRC.SDKBase.Editor.VRC_SdkBuilder.GetKnownFolderPath(VRC.SDKBase.Editor.VRC_SdkBuilder.LocalLowGUID) + "/VRChat/vrchat/Avatars/";
         string[] sdkavatars = Directory.GetFiles(sdkAvatarFolder);
         string filename = "";
         List<ApiAvatar> avatars = new List<ApiAvatar>();
@@ -153,7 +153,6 @@ public partial class VRCSdkControlPanel : EditorWindow
         ApiWorld.FetchList(
             delegate (IEnumerable<ApiWorld> obj)
             {
-                Debug.LogFormat("<color=yellow>Fetching World Bucket {0}</color>", offset);
                 if (obj.FirstOrDefault() != null)
                     fetchingWorlds = EditorCoroutine.Start(() =>
                     {
@@ -181,6 +180,7 @@ public partial class VRCSdkControlPanel : EditorWindow
             offset,
             PageLimit,
             "",
+            null,
             null,
             null,
             null,
@@ -225,34 +225,30 @@ public partial class VRCSdkControlPanel : EditorWindow
         }
     }
 
-    static void DownloadImage(string id, string url)
+    private static void DownloadImage(string id, string url)
     {
         if (string.IsNullOrEmpty(url))
-            return;
-        if (ImageCache.ContainsKey(id) && ImageCache[id] != null)
-            return;
-
-        System.Action<WWW> onDone = (www) =>
         {
-            if (string.IsNullOrEmpty(www.error))
+            return;
+        }
+
+        if (ImageCache.ContainsKey(id) && ImageCache[id] != null)
+        {
+            return;
+        }
+        
+        EditorCoroutine.Start(VRCCachedWebRequest.Get(url, OnDone));
+        void OnDone(Texture2D texture)
+        {
+            if (texture != null)
             {
-                try
-                {   // converting Texture2D to use linear color space fixes issue with SDK world & avatar thumbnails appearing too dark (also enables mipmaps to improve appearance of thumbnails)
-                    Texture2D newTexture2DWithLinearEnabled;
-                    newTexture2DWithLinearEnabled = new Texture2D(4, 4, TextureFormat.DXT1, true, true);
-                    www.LoadImageIntoTexture(newTexture2DWithLinearEnabled);
-                    ImageCache[id] = newTexture2DWithLinearEnabled;
-                }
-                catch (System.Exception e)
-                {
-                    Debug.LogException(e);
-                }
+                ImageCache[id] = texture;
             }
             else if (ImageCache.ContainsKey(id))
+            {
                 ImageCache.Remove(id);
-        };
-
-        EditorCoroutine.Start(VRCCachedWWW.Get(url, onDone));
+            }
+        }
     }
 
     Vector2 contentScrollPos;
@@ -261,10 +257,10 @@ public partial class VRCSdkControlPanel : EditorWindow
     {
         bool updatedContent = false;
 
-        if (!RemoteConfig.IsInitialized())
-            RemoteConfig.Init();
+        if (!ConfigManager.RemoteConfig.IsInitialized())
+            ConfigManager.RemoteConfig.Init();
 
-        if (APIUser.IsLoggedInWithCredentials && uploadedWorlds != null && uploadedAvatars != null && testAvatars != null)
+        if (APIUser.IsLoggedIn && uploadedWorlds != null && uploadedAvatars != null && testAvatars != null)
         {
 
             bool expandedLayout = false; // (position.width > MAX_ALL_INFORMATION_WIDTH);    // uncomment for future wide layouts

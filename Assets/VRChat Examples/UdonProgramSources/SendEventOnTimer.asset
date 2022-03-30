@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f11136daadff0b44ac2278a314682ab, type: 3}
   m_Name: SendEventOnTimer
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: 98577586bafd69b40bf939d3b1bbdbf6,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: 819768fa99d39134e99d72edd1eea4f1,
     type: 2}
   udonAssembly: ".data_start\r\n\r\n    .export target\r\n    .export eventName\r\n
     \   .export duration\r\n    \r\n    Boolean_0: %SystemBoolean, null\r\n    Single_0:
@@ -27,12 +27,13 @@ MonoBehaviour:
     \"SystemSingle.__op_Subtraction__SystemSingle_SystemSingle__SystemSingle\"\r\n
     \       PUSH, Single_0\r\n        PUSH, duration\r\n        PUSH, Boolean_0\r\n
     \       EXTERN, \"SystemSingle.__op_GreaterThan__SystemSingle_SystemSingle__SystemBoolean\"\r\n
-    \       PUSH, Boolean_0\r\n        JUMP_IF_FALSE, 0x0000B8\r\n        PUSH, target\r\n
-    \       PUSH, instance_0\r\n        COPY\r\n        PUSH, eventName\r\n        PUSH,
-    eventName_0\r\n        COPY\r\n        PUSH, instance_0\r\n        PUSH, eventName_0\r\n
-    \       EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid\"\r\n
+    \       PUSH, Boolean_0\r\n        JUMP_IF_FALSE, 0x000000CC\r\n        PUSH,
+    target\r\n        PUSH, instance_0\r\n        COPY\r\n        PUSH, eventName\r\n
+    \       PUSH, eventName_0\r\n        COPY\r\n        PUSH, instance_0\r\n        PUSH,
+    eventName_0\r\n        EXTERN, \"VRCUdonCommonInterfacesIUdonEventReceiver.__SendCustomEvent__SystemString__SystemVoid\"\r\n
     \       PUSH, lastTimerTick\r\n        EXTERN, \"UnityEngineTime.__get_time__SystemSingle\"\r\n
-    \       JUMP, 0x0000B8\r\n        JUMP, 0xFFFFFFFC\r\n    \r\n\r\n.code_end\r\n"
+    \       PUSH, lastTimerTick\r\n        PUSH, lastTimerTick\r\n        COPY\r\n
+    \       JUMP, 0x000000CC\r\n        JUMP, 0xFFFFFFFC\r\n    \r\n\r\n.code_end\r\n"
   assemblyError: 
   graphData:
     name: 
@@ -237,6 +238,7 @@ MonoBehaviour:
       nodeUIDs: []
       flowUIDs: []
       nodeValues: []
+    updateOrder: 0
   graphElementData:
   - type: 2
     uid: 4093afd3-3b34-4458-bf51-c10d4dd55792

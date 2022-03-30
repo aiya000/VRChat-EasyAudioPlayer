@@ -1,7 +1,11 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using UnityEditor;
 using UnityEditor.Build;
@@ -36,7 +40,7 @@ namespace VRC.Udon.Editor
             public void OnProcessScene(Scene scene, BuildReport report)
             {
                 PopulateSceneSerializedProgramAssetReferences(scene);
-                PopulateAllPrefabSerializedProgramAssetReferences();
+                PopulateAssetDependenciesPrefabSerializedProgramAssetReferences(scene.path);
             }
         }
 
@@ -56,7 +60,9 @@ namespace VRC.Udon.Editor
 
         #region Private Fields
 
-        private readonly UdonEditorInterface _udonEditorInterface;
+        private Lazy<UdonEditorInterface> _udonEditorInterface;
+
+        private UdonEditorInterface UdonEditorInterface => _udonEditorInterface.Value;
 
         private readonly HashSet<AbstractUdonProgramSource> _programSourceRefreshQueue = new HashSet<AbstractUdonProgramSource>();
 
@@ -76,8 +82,19 @@ namespace VRC.Udon.Editor
 
         private UdonEditorManager()
         {
-            _udonEditorInterface = new UdonEditorInterface();
-            _udonEditorInterface.AddTypeResolver(new UdonBehaviourTypeResolver());
+            _udonEditorInterface = new Lazy<UdonEditorInterface>(() =>
+            {
+                var editorInterface = new UdonEditorInterface();
+                editorInterface.AddTypeResolver(new UdonBehaviourTypeResolver());
+
+                return editorInterface;
+            });
+            
+            // Async init the editor interface to avoid 1+ second delay added to assembly reload.
+            Task.Run(() =>
+            {
+                var _ = _udonEditorInterface.Value;
+            });
 
             EditorSceneManager.sceneOpened += OnSceneOpened;
             EditorSceneManager.sceneSaving += OnSceneSaving;
@@ -109,7 +126,7 @@ namespace VRC.Udon.Editor
                 }
                 catch(Exception e)
                 {
-                    Debug.LogError($"Failed to refresh program '{programSource.name}' due to exception '{e}'.");
+                    UnityEngine.Debug.LogError($"Failed to refresh program '{programSource.name}' due to exception '{e}'.");
                 }
             }
 
@@ -166,11 +183,57 @@ namespace VRC.Udon.Editor
             }
         }
 
+        [MenuItem("VRChat SDK/Utilities/Re-compile All Program Sources")]
+        public static void RecompileAllProgramSources()
+        {
+            string[] programSourceGUIDs = AssetDatabase.FindAssets("t:AbstractUdonProgramSource");
+            foreach(string guid in programSourceGUIDs)
+            {
+                string assetPath = AssetDatabase.GUIDToAssetPath(guid);
+                AbstractUdonProgramSource programSource = AssetDatabase.LoadAssetAtPath<AbstractUdonProgramSource>(assetPath);
+                if(programSource == null)
+                {
+                    continue;
+                }
+                programSource.RefreshProgram();
+            }
+
+            AssetDatabase.SaveAssets();
+
+            PopulateAllPrefabSerializedProgramAssetReferences();
+        }
+
         [PublicAPI]
         public static void PopulateAllPrefabSerializedProgramAssetReferences()
         {
             foreach(string prefabPath in GetAllPrefabAssetPaths())
             {
+                PopulatePrefabSerializedProgramAssetReferences(prefabPath);
+            }
+        }
+
+        private static List<UdonBehaviour> prefabBehavioursTempList = new List<UdonBehaviour>();
+
+        [PublicAPI]
+        public static void PopulateAssetDependenciesPrefabSerializedProgramAssetReferences(string assetPath)
+        {
+            IEnumerable<string> prefabDependencyPaths = AssetDatabase.GetDependencies(assetPath, true)
+                .Where(path => path.EndsWith(".prefab"))
+                .Where(path => path.StartsWith("Assets"));
+
+            foreach(string prefabPath in prefabDependencyPaths)
+            {
+                if(!(AssetDatabase.LoadMainAssetAtPath(prefabPath) is GameObject prefab))
+                {
+                    return;
+                }
+
+                prefab.GetComponentsInChildren<UdonBehaviour>(prefabBehavioursTempList);
+                if(prefabBehavioursTempList.Count < 1)
+                {
+                    return;
+                }
+
                 PopulatePrefabSerializedProgramAssetReferences(prefabPath);
             }
         }
@@ -183,19 +246,26 @@ namespace VRC.Udon.Editor
                 {
                     return;
                 }
-
-                UdonBehaviour[] udonBehaviours = editScope.PrefabRoot.GetComponentsInChildren<UdonBehaviour>();
-                if(udonBehaviours.Length <= 0)
+            
+                editScope.PrefabRoot.GetComponentsInChildren(prefabBehavioursTempList);
+                if(prefabBehavioursTempList.Count < 1)
                 {
                     return;
                 }
 
-                foreach(UdonBehaviour udonBehaviour in udonBehaviours)
+                bool dirty = false;
+                foreach(UdonBehaviour udonBehaviour in prefabBehavioursTempList)
                 {
-                    PopulateSerializedProgramAssetReference(udonBehaviour);
+                    if(PopulateSerializedProgramAssetReference(udonBehaviour))
+                    {
+                        dirty = true;
+                    }
                 }
 
-                editScope.MarkDirty();
+                if(dirty)
+                {
+                    editScope.MarkDirty();
+                }
             }
         }
 
@@ -214,19 +284,25 @@ namespace VRC.Udon.Editor
             RefreshQueuedProgramSources();
             PopulateSceneSerializedProgramAssetReferences(scene);
         }
-
+        
         private static void PopulateSceneSerializedProgramAssetReferences(Scene scene)
         {
+            if (!scene.IsValid())
+            {
+                return;
+            }
+            
             foreach(GameObject sceneGameObject in scene.GetRootGameObjects())
             {
-                foreach(UdonBehaviour udonBehaviour in sceneGameObject.GetComponentsInChildren<UdonBehaviour>())
+                foreach(UdonBehaviour udonBehaviour in sceneGameObject.GetComponentsInChildren<UdonBehaviour>(true))
                 {
                     PopulateSerializedProgramAssetReference(udonBehaviour);
                 }
             }
         }
 
-        private static void PopulateSerializedProgramAssetReference(UdonBehaviour udonBehaviour)
+        // Returns true if the serializedProgramProperty was changed, false otherwise.
+        private static bool PopulateSerializedProgramAssetReference(UdonBehaviour udonBehaviour)
         {
             SerializedObject serializedUdonBehaviour = new SerializedObject(udonBehaviour);
             SerializedProperty programSourceSerializedProperty = serializedUdonBehaviour.FindProperty("programSource");
@@ -234,16 +310,23 @@ namespace VRC.Udon.Editor
 
             if(!(programSourceSerializedProperty.objectReferenceValue is AbstractUdonProgramSource abstractUdonProgramSource))
             {
-                return;
+                return false;
             }
 
             if(abstractUdonProgramSource == null)
             {
-                return;
+                return false;
+            }
+
+            if(serializedProgramAssetSerializedProperty.objectReferenceValue == abstractUdonProgramSource.SerializedProgramAsset)
+            {
+                return false;
             }
 
             serializedProgramAssetSerializedProperty.objectReferenceValue = abstractUdonProgramSource.SerializedProgramAsset;
             serializedUdonBehaviour.ApplyModifiedPropertiesWithoutUndo();
+            return true;
+
         }
 
         #endregion
@@ -269,27 +352,27 @@ namespace VRC.Udon.Editor
 
         public IUdonVM ConstructUdonVM()
         {
-            return _udonEditorInterface.ConstructUdonVM();
+            return UdonEditorInterface.ConstructUdonVM();
         }
 
         public IUdonProgram Assemble(string assembly)
         {
-            return _udonEditorInterface.Assemble(assembly);
+            return UdonEditorInterface.Assemble(assembly);
         }
 
         public IUdonWrapper GetWrapper()
         {
-            return _udonEditorInterface.GetWrapper();
+            return UdonEditorInterface.GetWrapper();
         }
 
         public IUdonHeap ConstructUdonHeap()
         {
-            return _udonEditorInterface.ConstructUdonHeap();
+            return UdonEditorInterface.ConstructUdonHeap();
         }
 
         public IUdonHeap ConstructUdonHeap(uint heapSize)
         {
-            return _udonEditorInterface.ConstructUdonHeap(heapSize);
+            return UdonEditorInterface.ConstructUdonHeap(heapSize);
         }
 
         public string CompileGraph(
@@ -298,42 +381,42 @@ namespace VRC.Udon.Editor
             out Dictionary<string, (object value, Type type)> heapDefaultValues
         )
         {
-            return _udonEditorInterface.CompileGraph(graph, nodeRegistry, out linkedSymbols, out heapDefaultValues);
+            return UdonEditorInterface.CompileGraph(graph, nodeRegistry, out linkedSymbols, out heapDefaultValues);
         }
 
         public Type GetTypeFromTypeString(string typeString)
         {
-            return _udonEditorInterface.GetTypeFromTypeString(typeString);
+            return UdonEditorInterface.GetTypeFromTypeString(typeString);
         }
 
         public void AddTypeResolver(IUAssemblyTypeResolver typeResolver)
         {
-            _udonEditorInterface.AddTypeResolver(typeResolver);
+            UdonEditorInterface.AddTypeResolver(typeResolver);
         }
 
         public string[] DisassembleProgram(IUdonProgram program)
         {
-            return _udonEditorInterface.DisassembleProgram(program);
+            return UdonEditorInterface.DisassembleProgram(program);
         }
 
         public string DisassembleInstruction(IUdonProgram program, ref uint offset)
         {
-            return _udonEditorInterface.DisassembleInstruction(program, ref offset);
+            return UdonEditorInterface.DisassembleInstruction(program, ref offset);
         }
 
         public UdonNodeDefinition GetNodeDefinition(string identifier)
         {
-            return _udonEditorInterface.GetNodeDefinition(identifier);
+            return UdonEditorInterface.GetNodeDefinition(identifier);
         }
 
         public IEnumerable<UdonNodeDefinition> GetNodeDefinitions()
         {
-            return _udonEditorInterface.GetNodeDefinitions();
+            return UdonEditorInterface.GetNodeDefinitions();
         }
 
         public Dictionary<string, INodeRegistry> GetNodeRegistries()
         {
-            return _udonEditorInterface.GetNodeRegistries();
+            return UdonEditorInterface.GetNodeRegistries();
         }
 
         private IReadOnlyDictionary<string, ReadOnlyCollection<KeyValuePair<string, INodeRegistry>>> _topRegistries;
@@ -369,9 +452,18 @@ namespace VRC.Udon.Editor
                 {
                     topRegistries["UnityEngine"].Add(nodeRegistry);
                 }
+                else if (nodeRegistry.Key.StartsWith("Cinemachine"))
+                {
+                    topRegistries["UnityEngine"].Add(nodeRegistry);
+                }
+                else if (nodeRegistry.Key.StartsWith("TMPro"))
+                {
+                    topRegistries["UnityEngine"].Add(nodeRegistry);
+                }
                 else
                 {
-                    Debug.Log(nodeRegistry.Key);
+                    // Todo: note and handle these
+                    UnityEngine.Debug.Log($"The Registry {nodeRegistry.Key} needs to be Added Somewhere");
                 }
             }
 
@@ -414,7 +506,7 @@ namespace VRC.Udon.Editor
 
         public IEnumerable<UdonNodeDefinition> GetNodeDefinitions(string baseIdentifier)
         {
-            return _udonEditorInterface.GetNodeDefinitions(baseIdentifier);
+            return UdonEditorInterface.GetNodeDefinitions(baseIdentifier);
         }
 
         #endregion
@@ -469,7 +561,7 @@ namespace VRC.Udon.Editor
                     }
                     catch(Exception e)
                     {
-                        Debug.LogError($"Failed to save changes to prefab at '{_assetPath}' due to exception '{e}'.");
+                        UnityEngine.Debug.LogError($"Failed to save changes to prefab at '{_assetPath}' due to exception '{e}'.");
                     }
                 }
 

@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-namespace UdonSharp
+namespace UdonSharp.Compiler
 {
     [System.Serializable]
     public class FieldDefinition
@@ -56,5 +56,6 @@ namespace UdonSharp
 
         public List<FieldDefinition> fieldDefinitions = new List<FieldDefinition>();
         public List<MethodDefinition> methodDefinitions = new List<MethodDefinition>();
+        public List<PropertyDefinition> propertyDefinitions = new List<PropertyDefinition>();
     }
 }

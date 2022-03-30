@@ -8,7 +8,9 @@
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
-    "precompiledReferences": [],
+    "precompiledReferences": [
+        "VRCSDKBase-Editor.dll"
+    ],
     "autoReferenced": true,
     "defineConstraints": []
 }

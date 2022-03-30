@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
+using VRC.SDKBase;
 
 [CustomPropertyDrawer(typeof(VRCSDK2.VRC_SyncVideoPlayer.VideoEntry))]
 public class CustomVideoEntryDrawer : PropertyDrawer
@@ -36,7 +37,7 @@ public class CustomVideoEntryDrawer : PropertyDrawer
         float y = rect.y;
         float w = rect.width;
         float h = EditorGUI.GetPropertyHeight(source, new GUIContent("Source"), true) + EditorGUIUtility.standardVerticalSpacing;
-        VRCSDK2.VRC_EditorTools.FilteredEnumPopup<UnityEngine.Video.VideoSource>(new Rect(x, y, w, h), source, (e) => e == UnityEngine.Video.VideoSource.Url);
+        VRC_EditorTools.FilteredEnumPopup<UnityEngine.Video.VideoSource>(new Rect(x, y, w, h), source, (e) => e == UnityEngine.Video.VideoSource.Url);
         y += h;
 
         if (source.enumValueIndex == (int)UnityEngine.Video.VideoSource.Url)

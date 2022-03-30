@@ -1,4 +1,4 @@
-namespace VRCSDK2.Validation.Performance
+namespace VRC.SDKBase.Validation.Performance
 {
     public enum AvatarPerformanceCategory
     {

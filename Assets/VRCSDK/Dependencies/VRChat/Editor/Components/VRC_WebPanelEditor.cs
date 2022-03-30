@@ -1,16 +1,16 @@
-﻿#if VRC_SDK_VRCSDK2
-#if UNITY_EDITOR
+﻿#if VRC_SDK_VRCSDK2 && UNITY_EDITOR
 using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEditor.Build;
 using System;
 using System.Linq;
+using VRC.SDKBase.Editor;
 
 namespace VRCSDK2
 {
     [CustomEditor(typeof(VRCSDK2.VRC_WebPanel))]
-    public class VRC_WebPanelEditor : Editor
+    public class VRC_WebPanelEditor : UnityEditor.Editor
     {
         private void InspectorField(string propertyName, string humanName)
         {
@@ -66,7 +66,7 @@ namespace VRCSDK2
                 {
                     RenderWebRootSelector(serializedObject, "defaultUrl", "Start Page");
 
-                    if (VRCSettings.Get().DisplayHelpBoxes)
+                    if (VRCSettings.DisplayHelpBoxes)
                     {
                         EditorGUILayout.HelpBox("Javascript API bindings are called with engine.call('methodName', ...), which returns a promise-like object.", MessageType.Info);
                         EditorGUILayout.HelpBox("Javascript may call ListBindings() to discover available API bindings.", MessageType.Info);
@@ -212,5 +212,4 @@ namespace VRCSDK2
         }
     }
 }
-#endif
 #endif

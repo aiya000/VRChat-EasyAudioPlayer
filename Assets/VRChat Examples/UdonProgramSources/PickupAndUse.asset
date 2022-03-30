@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f11136daadff0b44ac2278a314682ab, type: 3}
   m_Name: PickupAndUse
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: 16095af54aa90ad43bd638ea24a5a492,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: 6f798adfc7148724c974ab0949729dcf,
     type: 2}
   udonAssembly: ".data_start\r\n\r\n    \r\n    instance_0: %UnityEngineMaterial,
     null\r\n    value_0: %UnityEngineColor, null\r\n    instance_1: %UnityEngineMaterial,
@@ -155,6 +155,7 @@ MonoBehaviour:
       nodeValues:
       - unityObjectValue: {fileID: 0}
         stringValue: System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|f75153ec-462f-41df-835e-046a120001cf
+    updateOrder: 0
   graphElementData:
   - type: 2
     uid: bde18abd-8bb5-4c57-9434-cd97abb451b9
